@@ -24,8 +24,16 @@ class Parcheesi implements _Game {
 				let dice: [number, number] = [Math.floor(6 * Math.random()), Math.floor(6 * Math.random())];
 				let moves: [_Move, _Move] = player.doMove(this.board, dice);
 
-				if (moves.filter(this.isCheat).length > 0) {
-					
+				if (this.isCheat(moves, dice, player)){
+					// kick player out of game
+					delete this.board.pawns[player.color];
+
+					let index: number = this.players.indexOf(player);
+					this.players.splice(index, 1);
+				}
+				else {
+					// TODO: make each move, reward bops and doubles appropriately
+
 				}
 			});
 		}
@@ -33,19 +41,17 @@ class Parcheesi implements _Game {
 	};
 
 	isCheat(moves: [_Move, _Move], dice: [number, number], player: _Player): boolean {
-		return this.enteredWithoutFive(moves, dice) || this.moveUnenteredPawn(moves) || this.invalidColor(moves, player) 
-					 || this.ranIntoBlockade(moves, dice) || this.invalidStartPosition(moves, dice) || this.invalidPositionDelta(moves, dice);
+		return this.enteredWithoutFive(moves, dice) || this.moveUnenteredPawn(moves) || this.invalidColor(moves, player)
+					 || this.invalidStartPosition(moves) || this.invalidPositionDelta(moves, dice) || this.ranIntoBlockade(moves);
 	}
 
 	enteredWithoutFive (moves: [_Move, _Move], dice: [number, number]): boolean {
 		let enters = dice.filter(function(die) {return die == 5;}).length;
 		moves.forEach(move => {
-			if(move instanceof EnterMove && enters > 0) {
+			if(move instanceof EnterMove && enters > 0)
 				enters--;
-			}
-			else {
+			else
 				return true;
-			}
 		});
 		return false;
 	}
@@ -60,23 +66,8 @@ class Parcheesi implements _Game {
 		return moves.filter(move => {return move.pawn.get_color() == player.color;}).length != 2;
 	}
 
-	ranIntoBlockade (moves: [_Move, _Move], dice: [number, number]): boolean {
-		let blockades: BoardPawn[] = this.board.findBlockades();
-		return moves.filter(move => {
-			let hit_blockade = false;
-			let move_board_pawn: BoardPawn = this.board.get_matching_board_pawn(move.pawn);
-			let moved_board_pawn: BoardPawn = new BoardPawn(move_board_pawn.get_position(), move_board_pawn.get_id(), move_board_pawn.get_color());
-			blockades.forEach(blockade_pawn => {
-				if(this.board.checkIntersection(blockade_pawn, moved_board_pawn)) {
-					hit_blockade = true;
-				}
-			});
-			return hit_blockade;
-		}).length > 0;
-	}
-
 	// they must specify start as offset from their home
-	invalidStartPosition (moves: [_Move, _Move], dice: [number, number]): boolean {
+	invalidStartPosition (moves: [_Move, _Move]): boolean {
 		return moves.filter(move => {
 			return this.board.get_matching_board_pawn(move.pawn).position == move.start;
 		}).length > 0;
@@ -90,6 +81,21 @@ class Parcheesi implements _Game {
 				dice_two.splice(matched_die_index, 1);
 			}
 			return matched_die_index == -1 ? true : false;
+		}).length > 0;
+	}
+
+	ranIntoBlockade (moves: [_Move, _Move]): boolean {
+		let blockades: BoardPawn[] = this.board.findBlockades();
+		return moves.filter(move => {
+			let hit_blockade = false;
+			let move_board_pawn: BoardPawn = this.board.get_matching_board_pawn(move.pawn);
+			let moved_board_pawn: BoardPawn = new BoardPawn(move_board_pawn.get_position(), move_board_pawn.get_id(), move_board_pawn.get_color());
+			blockades.forEach(blockade_pawn => {
+				if(this.board.checkIntersection(blockade_pawn, moved_board_pawn)) {
+					hit_blockade = true;
+				}
+			});
+			return hit_blockade;
 		}).length > 0;
 	}
 }
