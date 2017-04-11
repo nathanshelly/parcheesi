@@ -1,5 +1,6 @@
 // represents a player
 interface _Player {
+	color: Color;
 	// inform the player that a game has started
   // and what color the player is.
 	startGame(color: Color): void;

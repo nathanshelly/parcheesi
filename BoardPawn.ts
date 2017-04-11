@@ -5,11 +5,20 @@ class BoardPawn {
 	// indices are delta from the color's starting spot
 	position: number;
 
+	constructor(position: number, id: number, color: Color) {
+		this.position = position;
+		this.pawn = new Pawn(id, color);
+	}
+
+	get_position(): number {
+		return this.position;
+	}
+
 	get_color(): Color {
-		return this.pawn.color;
+		return this.pawn.get_color();
 	}
 
 	get_id(): number {
-		return this.pawn.id;
+		return this.pawn.get_id();
 	}
 }

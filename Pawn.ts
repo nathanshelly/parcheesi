@@ -6,4 +6,12 @@ class Pawn {
     this.id = id;
     this.color = color;
   }
+
+	get_color(): Color {
+		return this.color;
+	}
+
+	get_id(): number {
+		return this.id;
+	}
 }
