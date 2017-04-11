@@ -7,7 +7,7 @@ import { EnterMove } from './EnterMove'
 import { BoardPawn } from './BoardPawn'
 
 export class Parcheesi implements _Game {
-	players: _Player[];
+	players: _Player[] = [];
 	board: ParcheesiBoard;
 
 	// add a player to the game
