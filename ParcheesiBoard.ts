@@ -13,6 +13,19 @@ class ParcheesiBoard implements _Board {
 		}); 
 	}
 
+	winner(): Color | null {
+		for (let color in Object.keys(this.pawns)) {
+			let ids = Object.keys(this.pawns[color]);
+			let positions = ids.map(id => {
+				return this.pawns[color][parseInt(id)].position;
+			});
+			if (positions.every(val => { return val == positions[0]; })) {
+				return colorForIndex(parseInt(color));
+			}
+		}
+		return null;
+	}
+
 	get_matching_board_pawn(pawn: Pawn): BoardPawn {
 		return this.pawns[pawn.get_color()][pawn.get_id()];
 	}
@@ -27,10 +40,9 @@ class ParcheesiBoard implements _Board {
 		let bopped_pawn = this.checkForBop(board_pawn)
 		if(bopped_pawn) {
 			bopped_pawn.position = -1;
-			return true;
+			return true; // bopped pawn, get extra move
 		}
-
-		return false;		
+		return false; // move is done
 	};
 
 	// update board_pawn position
@@ -45,10 +57,10 @@ class ParcheesiBoard implements _Board {
 
 	// check if move has bopped opponent pawn
 	checkForBop(board_pawn: BoardPawn): BoardPawn | null {
-		for (let color in this.pawns) {
+		for (let color in Object.keys(this.pawns)) {
 			let int_color = parseInt(color)
 			if(int_color != board_pawn.get_color()) {
-				for(let id in this.pawns[int_color]) {
+				for(let id in Object.keys(this.pawns[int_color])) {
 					let temp_board_pawn = this.pawns[int_color][parseInt(id)];
 					if(this.checkIntersection(temp_board_pawn, board_pawn)) {
 						return temp_board_pawn;
@@ -77,7 +89,7 @@ class ParcheesiBoard implements _Board {
 	// pawns contain position and color
 	findBlockades(): BoardPawn[] {
 		let blockade_pawns: BoardPawn[] = [];
-		for (let color in this.pawns) {
+		for (let color in Object.keys(this.pawns)) {
 			let int_color = parseInt(color)
 			blockade_pawns = blockade_pawns.concat(this.findBlockadeWithinColor(int_color));
 		}

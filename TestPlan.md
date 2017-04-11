@@ -5,3 +5,4 @@
 - Delta between passed in board pawn, die consumed, and move returned matches what we expect
 - Pawn passed back is of same color as player
 - Don't land on blockades (opponents or own)
+- Enter board without a 5

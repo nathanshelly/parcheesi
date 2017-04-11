@@ -2,7 +2,7 @@ class Parcheesi implements _Game {
 	players: _Player[];
 	board: ParcheesiBoard;
 	// add a player to the game
-  register(p: _Player): void {
+  	register(p: _Player): void {
 		if (this.players.length > 3) {
 			// fail silently for now
 		}
@@ -12,37 +12,43 @@ class Parcheesi implements _Game {
 	};
   
   // start a game
-  start() : void {
-		let colors = [Color.Red, Color.Blue, Color.Green, Color.Yellow]
+  	start() : void {
+		let colors = [Color.Blue, Color.Red, Color.Green, Color.Yellow]
 		this.players.forEach(element => {
 			element.startGame(colors.pop());
 		});
 
+		let ind = 0;
 		while(!this.board.winner()) {
-			this.players.forEach(player => {
-				// TODO: pass board by value
-				let dice: [number, number] = [Math.floor(6 * Math.random()), Math.floor(6 * Math.random())];
-				let moves: [_Move, _Move] = player.doMove(this.board, dice);
+			let player = this.players[ind];
+			ind = (ind + 1) % this.players.length;
+			
+			// TODO: pass board by value
+			let dice: [number, number] = [Math.floor(6 * Math.random()), Math.floor(6 * Math.random())];
+			let moves: [_Move, _Move] = player.doMove(this.board, dice);
 
-				if (this.isCheat(moves, dice, player)){
-					// kick player out of game
-					delete this.board.pawns[player.color];
+			if (this.isCheat(moves, dice, player)){
+				// kick player out of game
+				delete this.board.pawns[player.color];
 
-					let index: number = this.players.indexOf(player);
-					this.players.splice(index, 1);
-				}
-				else {
-					// TODO: make each move, reward bops and doubles appropriately
+				let index: number = this.players.indexOf(player);
+				this.players.splice(index, 1);
+			}
+			else {
+				// TODO: reward bops and doubles appropriately, penalize triple doubles
+				let extraMoves = moves.map(m => {
+					this.board.makeMove(m);
+				});
 
-				}
-			});
+				// idea: write a "do player moves" function that can call itself in the case of extra moves
+			}
 		}
-
 	};
 
 	isCheat(moves: [_Move, _Move], dice: [number, number], player: _Player): boolean {
 		return this.enteredWithoutFive(moves, dice) || this.moveUnenteredPawn(moves) || this.invalidColor(moves, player)
-					 || this.invalidStartPosition(moves) || this.invalidPositionDelta(moves, dice) || this.ranIntoBlockade(moves);
+					 || this.invalidStartPosition(moves) || this.invalidPositionDelta(moves, dice) || this.ranIntoBlockade(moves)
+					 || this.moveOutOfRange(moves);
 	}
 
 	enteredWithoutFive (moves: [_Move, _Move], dice: [number, number]): boolean {
@@ -97,5 +103,11 @@ class Parcheesi implements _Game {
 			});
 			return hit_blockade;
 		}).length > 0;
+	}
+
+	moveOutOfRange (moves: [_Move, _Move]): boolean {
+		return !moves.every(m => {
+			return (m.start + m.distance) < 72
+		});
 	}
 }
