@@ -1,6 +1,15 @@
-class Parcheesi implements _Game {
+import { _Game } from './_Game'
+import { _Player } from './_Player'
+import { _Move } from './_Move'
+import { ParcheesiBoard } from './ParcheesiBoard'
+import { Color } from './Color'
+import { EnterMove } from './EnterMove'
+import { BoardPawn } from './BoardPawn'
+
+export class Parcheesi implements _Game {
 	players: _Player[];
 	board: ParcheesiBoard;
+
 	// add a player to the game
   	register(p: _Player): void {
 		if (this.players.length > 3) {
@@ -10,9 +19,15 @@ class Parcheesi implements _Game {
 			this.players.push(p);
 		}
 	};
+
+	buildBoard() {
+		this.board = new ParcheesiBoard(this.players);
+	}
   
-  // start a game
+  	// start a game
   	start() : void {
+		this.buildBoard();
+
 		let colors = [Color.Blue, Color.Red, Color.Green, Color.Yellow]
 		this.players.forEach(element => {
 			element.startGame(colors.pop());

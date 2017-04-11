@@ -1,5 +1,8 @@
+import { _Move } from './_Move'
+import { Pawn } from './Pawn'
+
 // represents a move where a player enters a piece
-class EnterMove implements _Move {
+export class EnterMove implements _Move {
   pawn: Pawn;
   start: number;
   distance: number;

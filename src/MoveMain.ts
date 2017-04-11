@@ -1,6 +1,9 @@
+import { _Move } from './_Move'
+import { Pawn } from './Pawn'
+
 // represents a move that starts on the main ring
 // (but does not have to end up there)
-class MoveMain implements _Move {
+export class MoveMain implements _Move {
   pawn: Pawn;
   start: number;
   distance: number;

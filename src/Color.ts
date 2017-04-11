@@ -1,11 +1,11 @@
-enum Color {
+export enum Color {
 	Blue,
 	Red,
 	Green,
 	Yellow
 }
 
-function colorForIndex(ind: number): Color {
+export function colorForIndex(ind: number): Color {
 	switch (ind) {
 		case 0: return Color.Blue
 		case 1: return Color.Red

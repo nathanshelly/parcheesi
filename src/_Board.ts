@@ -1,1 +1,1 @@
-interface _Board {}
+export interface _Board {}

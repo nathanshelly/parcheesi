@@ -1,5 +1,7 @@
+import { _Player } from './_Player'
+
 // represents a game
-interface _Game {
+export interface _Game {
 
 	// add a player to the game
   register(p: _Player): void;

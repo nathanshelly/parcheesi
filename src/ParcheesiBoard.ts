@@ -1,4 +1,13 @@
-class ParcheesiBoard implements _Board {
+import { _Board } from './_Board'
+import { _Player } from './_Player'
+import { BoardPawn } from './BoardPawn'
+import { Pawn } from './Pawn'
+import { Color, colorForIndex } from './Color'
+import { EnterMove } from './EnterMove'
+import { MoveMain } from './MoveMain'
+import { MoveHome } from './MoveHome'
+
+export class ParcheesiBoard implements _Board {
 	pawns: BoardPawns;
 
 	constructor(players: _Player[]) {

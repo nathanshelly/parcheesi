@@ -1,5 +1,9 @@
+import { Color } from './Color'
+import { _Board } from './_Board'
+import { _Move } from './_Move'
+
 // represents a player
-interface _Player {
+export interface _Player {
 	color: Color;
 	// inform the player that a game has started
   // and what color the player is.

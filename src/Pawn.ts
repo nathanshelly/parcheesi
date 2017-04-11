@@ -1,4 +1,6 @@
-class Pawn {
+import { Color } from './Color'
+
+export class Pawn {
   // id
 	id: number;
   color: Color;

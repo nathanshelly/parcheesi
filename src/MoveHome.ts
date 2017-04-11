@@ -1,5 +1,8 @@
+import { _Move } from './_Move'
+import { Pawn } from './Pawn'
+
 // represents a move that starts on one of the home rows
-class MoveHome implements _Move {
+export class MoveHome implements _Move {
   pawn: Pawn;
   start: number;
   distance: number;
