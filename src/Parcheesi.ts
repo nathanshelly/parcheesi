@@ -1,14 +1,15 @@
-import { _Game } from './_Game'
+import { _Parcheesi } from './_Parcheesi'
 import { _Player } from './_Player'
 import { _Move } from './_Move'
-import { ParcheesiBoard } from './ParcheesiBoard'
+import { _Board } from './_Board'
+import { Board } from './Board'
 import { Color } from './Color'
 import { EnterMove } from './EnterMove'
 import { BoardPawn } from './BoardPawn'
 
-export class Parcheesi implements _Game {
+export class Parcheesi implements _Parcheesi {
 	players: _Player[] = [];
-	board: ParcheesiBoard;
+	board: Board;
 
 	// add a player to the game
   	register(p: _Player): void {
@@ -21,7 +22,7 @@ export class Parcheesi implements _Game {
 	};
 
 	buildBoard() {
-		this.board = new ParcheesiBoard(this.players);
+		this.board = new Board(this.players);
 	}
   
   	// start a game
@@ -60,27 +61,29 @@ export class Parcheesi implements _Game {
 
 	handleDiceMove(board: _Board, dice: [number, number], player: _Player): boolean {
 		// ask player for moves
-		let moves: [_Move, _Move] = player.doMove(this.board, dice);
-		// double bonus -> move by tops and bottoms of dice 
-		// double repeat -> 'nother turn
-		// need to give all four dice at once (or handle in player? have to catch that as cheating case)
+		// let moves: [_Move, _Move] = player.doMove(this.board, dice);
+		// // double bonus -> move by tops and bottoms of dice 
+		// // double repeat -> 'nother turn
+		// // need to give all four dice at once (or handle in player? have to catch that as cheating case)
 
-		if (this.isCheat(moves, dice, player)){
-			// kick player out of game
-			delete this.board.pawns[player.color];
+		// if (this.isCheat(moves, dice, player)){
+		// 	// kick player out of game
+		// 	delete this.board.pawns[player.color];
 
-			let index: number = this.players.indexOf(player);
-			this.players.splice(index, 1);
-		}
-		else {
-			// TODO: reward bops and home moves
-			// bop bonus -> if bopped, get extra 20 move
-			// home bonus -> move into home, get extra 10 move 
-			// have board.makeMove() differentiate between case
-			let extraMoves = moves.map(m => {
-				this.board.makeMove(m);
-			});
-		}
+		// 	let index: number = this.players.indexOf(player);
+		// 	this.players.splice(index, 1);
+		// }
+		// else {
+		// 	// TODO: reward bops and home moves
+		// 	// bop bonus -> if bopped, get extra 20 move
+		// 	// home bonus -> move into home, get extra 10 move 
+		// 	// have board.makeMove() differentiate between case
+		// 	let extraMoves = moves.map(m => {
+		// 		this.board.makeMove(m);
+		// 	});
+		// }
+
+		return false
 	}
 
 	isCheat(moves: [_Move, _Move], dice: [number, number], player: _Player): boolean {

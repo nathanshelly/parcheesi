@@ -1,6 +1,6 @@
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
-import { ParcheesiBoard } from '../src/ParcheesiBoard'
+import { Board } from '../src/Board'
 import { _Move } from '../src/_Move'
 import { EnterMove } from '../src/EnterMove'
 import { MoveMain } from '../src/MoveMain'
@@ -18,7 +18,7 @@ describe('Parcheesi should catch cheats', () => {
 
   it('shouldnt allow entering without a five', () => {
     class CheatingEnterPlayer extends BasicPlayer {
-      doMove(brd: ParcheesiBoard, dice: [number, number]): [_Move, _Move] {
+      doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
         return [new EnterMove(new Pawn(0, this.color)), new EnterMove(new Pawn(1, this.color))];
       };
     }
@@ -35,7 +35,7 @@ describe('Parcheesi should catch cheats', () => {
 
   it('should allow entering with a five', () => {
     class LegalEnterPlayer extends BasicPlayer {
-      doMove(brd: ParcheesiBoard, dice: [number, number]): [_Move, _Move] {
+      doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
         return [new EnterMove(new Pawn(0, this.color)), new EnterMove(new Pawn(1, this.color))];
       };
     }
@@ -52,7 +52,7 @@ describe('Parcheesi should catch cheats', () => {
 
   it('should not allow us to move an unentered pawn', () => {
     class CheatingUnenteredPawnPlayer extends BasicPlayer {
-      doMove(brd: ParcheesiBoard, dice: [number, number]): [_Move, _Move] {
+      doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
         return [new MoveMain(new Pawn(0, this.color), 0, 4), new MoveMain(new Pawn(1, this.color), 0, 4)]
       };
     }
@@ -69,7 +69,7 @@ describe('Parcheesi should catch cheats', () => {
 
   it('should allow us to move an entered pawn', () => {
     class CheatingUnenteredPawnPlayer extends BasicPlayer {
-      doMove(brd: ParcheesiBoard, dice: [number, number]): [_Move, _Move] {
+      doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
         return [new MoveMain(new Pawn(0, this.color), 0, 4), new MoveMain(new Pawn(1, this.color), 0, 4)]
       };
     }

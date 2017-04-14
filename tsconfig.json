@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "outDir": "out"
+        "outDir": "out",
+        "strictNullChecks": true
     },
     "include": [
         "src/**/*"

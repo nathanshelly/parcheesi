@@ -1,7 +1,7 @@
 import { _Player } from './_Player'
 import { _Move } from './_Move'
 import { Color } from './Color'
-import { ParcheesiBoard } from './ParcheesiBoard'
+import { Board } from './Board'
 
 export abstract class BasicPlayer implements _Player {
     color: Color;
@@ -14,5 +14,5 @@ export abstract class BasicPlayer implements _Player {
         console.log("Fricking doubles.");
     };
 
-    abstract doMove(brd: ParcheesiBoard, dice: [number, number]): [_Move, _Move];
+    abstract doMove(brd: Board, dice: [number, number]): [_Move, _Move];
 }

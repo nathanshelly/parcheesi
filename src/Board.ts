@@ -7,7 +7,7 @@ import { EnterMove } from './EnterMove'
 import { MoveMain } from './MoveMain'
 import { MoveHome } from './MoveHome'
 
-export class ParcheesiBoard implements _Board {
+export class Board implements _Board {
 	pawns: BoardPawns;
 
 	constructor(players: _Player[]) {
