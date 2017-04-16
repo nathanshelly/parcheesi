@@ -7,6 +7,8 @@ import { Color, colorForIndex } from './Color'
 import { EnterMove } from './EnterMove'
 import { MoveMain } from './MoveMain'
 import { MoveHome } from './MoveHome'
+import { HomeRow } from './HomeRow'
+import * as _ from 'lodash'
 
 export class Board {
 	mainRing: MainRingSpot[];
@@ -30,109 +32,11 @@ export class Board {
 	}
 
 	winner(): Color | null {
-		for (let color in Object.keys(this.pawns)) {
-			let ids = Object.keys(this.pawns[color]);
-			let positions = ids.map(id => {
-				return this.pawns[color][parseInt(id)].position;
-			});
-			if (positions.every(val => { return val == positions[0]; })) {
-				return colorForIndex(parseInt(color));
-			}
-		}
+		for (let position in Object.keys(c.HOME_ROW_COLORS)) {
+			let home_row = this.mainRing[parseInt(position)].home_row as HomeRow
+			if (home_row.home_spot.pawns.indexOf(null) != -1)
+				return home_row.color;
+		};
 		return null;
-	}
-
-	get_matching_board_pawn(pawn: Pawn): BoardPawn {
-		return this.pawns[pawn.get_color()][pawn.get_id()];
-	}
-
-	// move board_pawn distance given by passed in move
-	// invariant: all passed in moves are legal (invariant imposed by calling function)
-	makeMove(move: EnterMove | MoveHome | MoveMain): boolean {
-		let pawn = move.pawn;
-		let board_pawn = this.pawns[pawn.get_color()][pawn.get_id()];
-		
-		this.updatePosition(move, board_pawn)
-		let bopped_pawn = this.checkForBop(board_pawn)
-		if(bopped_pawn) {
-			bopped_pawn.position = -1;
-			return true; // bopped pawn, get extra move
-		}
-		return false; // move is done
-	};
-
-	// update board_pawn position
-	updatePosition(move: EnterMove | MoveHome | MoveMain, board_pawn: BoardPawn): void {
-		if (move instanceof EnterMove) {
-			board_pawn.position = 0;
-		}
-		else {
-			board_pawn.position += move.distance;
-		}
-	};
-
-	// check if move has bopped opponent pawn
-	checkForBop(board_pawn: BoardPawn): BoardPawn | null {
-		for (let color in Object.keys(this.pawns)) {
-			let int_color = parseInt(color)
-			if(int_color != board_pawn.get_color()) {
-				for(let id in Object.keys(this.pawns[int_color])) {
-					let temp_board_pawn = this.pawns[int_color][parseInt(id)];
-					if(this.checkIntersection(temp_board_pawn, board_pawn)) {
-						return temp_board_pawn;
-					}
-				}
-			}
-		}
-		return null;
-	};
-	
-	// returns empty list if no blockades
-	findBlockadeWithinColor(color: Color): BoardPawn[] {
-		let blockade_pawns: BoardPawn[] = [];
-		let this_color_pawns: ColorPawns = this.pawns[color];
-		for(let i = 0; i < Object.keys(this_color_pawns).length; i++) {
-			for(let j = 0; j < i; j++) {
-				if(this_color_pawns[i].get_position() == this_color_pawns[j].get_position()) {
-					blockade_pawns.push(this_color_pawns[i]);
-				}
-			}
-		}
-		return blockade_pawns;
-	}
-
-	// returns blockades represented as list of boardPawns
-	// pawns contain position and color
-	findBlockades(): BoardPawn[] {
-		let blockade_pawns: BoardPawn[] = [];
-		for (let color in Object.keys(this.pawns)) {
-			let int_color = parseInt(color)
-			blockade_pawns = blockade_pawns.concat(this.findBlockadeWithinColor(int_color));
-		}
-		return blockade_pawns;
-	}
-	
-	checkIntersection(first_pawn: BoardPawn, second_pawn: BoardPawn): boolean {
-		let [lower_color, offset] = this.colorOffset(first_pawn.get_color(), second_pawn.get_color())
-		let [lower_pawn, higher_pawn] = first_pawn.get_color() == lower_color ? [first_pawn, second_pawn] : [second_pawn, first_pawn];
-		
-		return (lower_pawn.position + offset) == higher_pawn.get_position();
-	}
-
-	colorOffset(first_color: Color, second_color: Color): [Color, number] {
-		let offset = 17 * Math.abs(first_color - second_color);
-		let lower_color = first_color < second_color ? first_color : second_color;
-		return [lower_color, offset]
 	}
  }
-
-// all pawns, keyed by color to
-// get dict of pawns belonging to color
-interface BoardPawns {
-	[color: number]: ColorPawns;
-}
-
-// pawns belonging to color, keyed by id
-interface ColorPawns {
-	[id: number]: BoardPawn;
-}
