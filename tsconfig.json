@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
         "outDir": "out",
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "sourceMap": true
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "test/**/*"
     ]
 }

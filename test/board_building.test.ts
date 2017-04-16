@@ -22,7 +22,9 @@ describe('A board with no players', () => {
     });
 
     it('should have have as many main ring spots with home rows as colors', () => {
-        expect(board.mainRing.filter(s => { return s.home_row != null }).length).to.equal(c.N_COLORS);
+        expect(board.mainRing.filter(s => {
+            return s.home_row != null
+        }).length).to.equal(c.N_COLORS);
     })
 
     it('should not have any pawns in the main ring', () => {
