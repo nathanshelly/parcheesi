@@ -13,6 +13,6 @@ export abstract class BasicPlayer implements _Player {
     DoublesPenalty(): void {
         console.log("Fricking doubles.");
     };
-
-    abstract doMove(brd: Board, dice: [number, number]): [_Move, _Move];
+    
+    abstract doMove(brd: Board, dice: number[]): _Move[];
 }
