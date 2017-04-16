@@ -26,13 +26,6 @@ export class RulesChecker {
 		return true;
 	}
 
-
-
-	pawnInBase(pawn: Pawn, board: Board) {
-		let pawns_in_base: (Pawn | null)[] = board.bases[pawn.color].pawns;
-		return pawns_in_base.indexOf
-	};
-
 	hasFive(possible_moves: number[]): boolean {
 		let pairs = this.makePairs(possible_moves);
 		return pairs.some(pair => {

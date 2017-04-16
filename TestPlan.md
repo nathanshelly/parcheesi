@@ -1,8 +1,11 @@
 ## Test plan
 
 ### Cheat checks
-- Move passed back consumed a die not passed in
-- Delta between passed in board pawn, die consumed, and move returned matches what we expect
-- Pawn passed back is of same color as player
-- Don't land on blockades (opponents or own)
-- Enter board without a 5
+#### Global cheats
+- Moved a pawn that is not yours
+- Pawn \_id is not 0-3
+#### Enter cheats
+- Entered on not a 5
+- Start and distance are not -1
+- Enter a pawn that wasn't in the base
+

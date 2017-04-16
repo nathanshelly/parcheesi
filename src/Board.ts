@@ -12,7 +12,7 @@ import * as _ from 'lodash'
 
 export class Board {
 	mainRing: MainRingSpot[];
-	bases: {[index: number]: BaseSpot};
+	bases: {[index: number]: BaseSpot} = {};
 
 	constructor(players: _Player[]) {
 		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i, a) => {
@@ -36,7 +36,7 @@ export class Board {
 	winner(): Color | null {
 		for (let position in Object.keys(c.HOME_ROW_COLORS)) {
 			let home_row = this.mainRing[parseInt(position)].home_row as HomeRow
-			if (home_row.home_spot.pawns.indexOf(null) != -1)
+			if (home_row.spot.pawns.indexOf(null) != -1)
 				return home_row.color;
 		};
 		return null;

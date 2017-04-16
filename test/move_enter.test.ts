@@ -64,8 +64,8 @@ describe('Unit tests for entering pawn in home spot:', () => {
         checker = new RulesChecker();
     });
     
-    it('should correctly identify if blue pawn in base spot', () => {
-        let pawn = new Pawn(0, Color.Blue);
-        expect(checker.pawnInBase(pawn)).to.equal(true);
-    });
+    // it('should correctly identify if blue pawn in base spot', () => {
+    //     let pawn = new Pawn(0, Color.Blue);
+    //     expect(checker.pawnInBase(pawn)).to.equal(true);
+    // });
 });
