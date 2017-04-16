@@ -1,11 +1,8 @@
-interface _Spot { // see spot run
-    home_row: _Spot[] | null;
-    position: number;
-    sanctuary: boolean;
-}
+import { Color } from './Color'
+import { Pawn } from './Pawn'
 
-class Spot implements _Spot {
-    home_row: _Spot[] | null;
+export interface _Spot {
     position: number;
-    sanctuary: boolean;
+    max_n_pawns: number;
+    pawns: (Pawn | null)[];
 }

@@ -1,7 +1,6 @@
 import { Color } from './Color'
 
 export class Pawn {
-  // id
 	id: number;
   color: Color;
   constructor(id: number, color: Color) {

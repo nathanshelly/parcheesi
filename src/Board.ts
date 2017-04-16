@@ -1,25 +1,32 @@
-import { _Board } from './_Board'
+import * as c from './Constants'
+import { MainRingSpot } from './MainRingSpot'
+import { BaseSpot } from './BaseSpot'
 import { _Player } from './_Player'
-import { BoardPawn } from './BoardPawn'
 import { Pawn } from './Pawn'
 import { Color, colorForIndex } from './Color'
 import { EnterMove } from './EnterMove'
 import { MoveMain } from './MoveMain'
 import { MoveHome } from './MoveHome'
 
-export class Board implements _Board {
-	pawns: BoardPawns;
+export class Board {
+	mainRing: MainRingSpot[];
+	bases: BaseSpot[];
 
 	constructor(players: _Player[]) {
-		this.pawns = {};
-		players.forEach(player => {
-			this.pawns[player.color] = {
-				0: new BoardPawn(-1, 0, player.color),
-				1: new BoardPawn(-1, 1, player.color),
-				2: new BoardPawn(-1, 2, player.color),
-				3: new BoardPawn(-1, 3, player.color)
+		this.mainRing = (new Array(c.MAIN_RING_SIZE)).map((_, i) => {
+			if (Object.keys(c.HOME_ROW_COLORS).indexOf(i.toString()) != -1) {
+				return new MainRingSpot(i, true, c.HOME_ROW_COLORS[i]);
 			}
-		}); 
+			else if (c.SAFE_SPOT_INDICES.indexOf(i) != -1) {
+				return new MainRingSpot(i, true, null);
+			}
+			else {
+				return new MainRingSpot(i, false, null);
+			}
+		});
+		this.bases = players.map((p, i) => {
+			return new BaseSpot(-1, this.mainRing[c.ENTRY_POINTS[p.color]], p.color);
+		});
 	}
 
 	winner(): Color | null {

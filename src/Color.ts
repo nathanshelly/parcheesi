@@ -1,8 +1,8 @@
 export enum Color {
-	Blue,
-	Red,
-	Green,
-	Yellow
+	Blue = 0,
+	Red = 1,
+	Green = 2,
+	Yellow = 3
 }
 
 export function colorForIndex(ind: number): Color {
@@ -11,5 +11,6 @@ export function colorForIndex(ind: number): Color {
 		case 1: return Color.Red
 		case 2: return Color.Green
 		case 3: return Color.Yellow
+		default: throw new Error("No color for that index!");
 	}
 }

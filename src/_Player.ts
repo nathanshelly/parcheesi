@@ -1,5 +1,5 @@
 import { Color } from './Color'
-import { _Board } from './_Board'
+import { Board } from './Board'
 import { _Move } from './_Move'
 
 // represents a player
@@ -10,7 +10,7 @@ export interface _Player {
 	startGame(color: Color): void;
 
   // ask the player what move they want to make
-	doMove(brd: _Board, dice: [number, number]): [_Move, _Move];
+	doMove(brd: Board, dice: [number, number]): [_Move, _Move];
 
   // inform the player that they have suffered
   // a doubles penalty
