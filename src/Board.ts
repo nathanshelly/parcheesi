@@ -12,7 +12,7 @@ import * as _ from 'lodash'
 
 export class Board {
 	mainRing: MainRingSpot[];
-	bases: BaseSpot[];
+	bases: {[index: number]: BaseSpot};
 
 	constructor(players: _Player[]) {
 		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i, a) => {
@@ -26,9 +26,11 @@ export class Board {
 				return new MainRingSpot(i, false, null);
 			}
 		});
-		this.bases = players.map((p, i) => {
-			return new BaseSpot(-1, this.mainRing[c.ENTRY_POINTS[p.color]], p.color);
-		});
+		
+		for(let i = 0; i < players.length; i++) {	
+			let player_color = players[i].color;
+			this.bases[player_color] = new BaseSpot(-1, this.mainRing[c.ENTRY_POINTS[player_color]], player_color);
+		}	
 	}
 
 	winner(): Color | null {
