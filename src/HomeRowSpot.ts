@@ -1,6 +1,7 @@
 import * as c from './Constants'
 import { _Spot } from './_Spot'
 import { Pawn } from './Pawn'
+import * as _ from 'lodash'
 
 export class HomeRowSpot implements _Spot {
     position: number;
@@ -9,6 +10,6 @@ export class HomeRowSpot implements _Spot {
 
     constructor(pos: number) {
         this.position = pos;
-        this.pawns = (new Array(this.max_n_pawns).map(() => {return null}));
+        this.pawns = _.fill(new Array(this.max_n_pawns), null).map(() => {return null});
     }
 }

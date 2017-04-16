@@ -15,7 +15,7 @@ export class Board {
 	bases: BaseSpot[];
 
 	constructor(players: _Player[]) {
-		this.mainRing = (new Array(c.MAIN_RING_SIZE)).map((_, i) => {
+		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i, a) => {
 			if (Object.keys(c.HOME_ROW_COLORS).indexOf(i.toString()) != -1) {
 				return new MainRingSpot(i, true, c.HOME_ROW_COLORS[i]);
 			}
