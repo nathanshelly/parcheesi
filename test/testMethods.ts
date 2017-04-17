@@ -19,6 +19,6 @@ export function placePawnForTesting(move: _Move, board: Board): void {
 		board.spotForPosition(move.start, move.pawn.color).pawns[new_pawn_index] = move.pawn;
 	}
 
-export function placeBlockade(position: number, pawns: [Pawn, Pawn], board: Board): void {
-	board.mainRing[position].pawns = pawns;
+export function placeBlockade(position: Position, pawns: [Pawn, Pawn], board: Board): void {
+	board.spotForPosition(position, pawns[0].color).pawns = pawns;
 }

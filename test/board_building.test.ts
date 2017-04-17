@@ -112,8 +112,8 @@ describe('A board with one player', () => {
     it('should have bases with color-appropriate entry points', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
-            let base = board.bases[base_keys[i]];
-            expect(base.entryPoint).to.equal(c.ENTRY_POINTS[base.color])
+            let base: BaseSpot = board.bases[base_keys[i]];
+            expect(base.entryPoint.position.main_ring_location).to.equal(c.ENTRY_POINTS[base.color])
         }
     });
 });
@@ -193,8 +193,8 @@ describe('A board with four players', () => {
     it('should have bases with color-appropriate entry points', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
-            let base = board.bases[base_keys[i]];
-            expect(base.entryPoint).to.equal(c.ENTRY_POINTS[base.color])
+            let base: BaseSpot = board.bases[base_keys[i]];
+            expect(base.entryPoint.position.main_ring_location).to.equal(c.ENTRY_POINTS[base.color])
         }
     });
 });

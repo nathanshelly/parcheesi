@@ -14,10 +14,11 @@ export const SAFE_SPOT_INDICES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67]
 
 // divided by two cuz typescript enum
 export const N_COLORS = Object.keys(Color).length / 2;
-export const BLUE_VAL = Color.Blue.valueOf;
-export const RED_VAL = Color.Red.valueOf;
-export const GREEN_VAL = Color.Green.valueOf;
-export const YELLOW_VAL = Color.Yellow.valueOf;
+
+export const BLUE_VAL = Color.Blue.valueOf();
+export const RED_VAL = Color.Red.valueOf();
+export const GREEN_VAL = Color.Green.valueOf();
+export const YELLOW_VAL = Color.Yellow.valueOf();
 
 export const HOME_ROW_BY_INDEX = {
     16: Color.Red,
@@ -26,18 +27,20 @@ export const HOME_ROW_BY_INDEX = {
     67: Color.Green
 }
 
+// Because objects suck, please make sure these keys line up with the X_VAL's above.
 export const HOME_ROW_BY_COLOR = {
-    RED_VAL: 16,
-    BLUE_VAL: 33,
-    YELLOW_VAL: 50,
-    GREEN_VAL: 67
+    1: 16,
+    0: 33,
+    3: 50,
+    2: 67
 }
 
+// See note above.
 export const ENTRY_POINTS = {
-    GREEN_VAL: 4,
-    RED_VAL: 21,
-    BLUE_VAL: 38,
-    YELLOW_VAL: 55
+    2: 4,
+    1: 21,
+    0: 38,
+    3: 55
 }
 
 export const BASE_POSITION = new Position(-1, -1);
