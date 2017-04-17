@@ -132,13 +132,13 @@ describe('A board with four players', () => {
         player1.startGame(Color.Green);
 
         let player2 = new ReallyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player2.startGame(Color.Blue);
 
         let player3 = new ReallyDumbPlayer();
-        player1.startGame(Color.Red);
+        player3.startGame(Color.Red);
 
         let player4 = new ReallyDumbPlayer();
-        player1.startGame(Color.Yellow);
+        player4.startGame(Color.Yellow);
         
         players = [player1, player2, player3, player4];
     });
