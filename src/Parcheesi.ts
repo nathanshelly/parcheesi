@@ -11,7 +11,7 @@ export class Parcheesi implements _Parcheesi {
 	board: Board;
 
 	// add a player to the game
-  	register(p: _Player): void {
+	register(p: _Player): void {
 		if (this.players.length > 3) {
 			// fail silently for now
 		}
@@ -19,9 +19,9 @@ export class Parcheesi implements _Parcheesi {
 			this.players.push(p);
 		}
 	};
-  
-  	// start a game
-  	start() : void {
 
+	// start a game
+	start() : void {
+		this.board = new Board(this.players);
 	};
-}
+};

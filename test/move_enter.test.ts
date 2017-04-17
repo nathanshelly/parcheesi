@@ -59,13 +59,34 @@ describe('Unit tests for entering pawn in home spot:', () => {
     let game: Parcheesi;
     let checker: RulesChecker;
 
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+            throw new Error('Method not implemented - not needed in testing board instantiaton.');
+        }
+    }
+
     beforeEach(() => {
         game = new Parcheesi();
         checker = new RulesChecker();
+        let player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Green);
+        game.start();
     });
     
-    // it('should correctly identify if blue pawn in base spot', () => {
-    //     let pawn = new Pawn(0, Color.Blue);
-    //     expect(checker.pawnInBase(pawn)).to.equal(true);
-    // });
+    it('should correctly identify if green 0 pawn in base spot', () => {
+        let pawn = new Pawn(0, Color.Green);
+        expect(checker.pawnInBase(pawn, game.board)).to.equal(true);
+    });
+    
+    it('should correctly identify if green 0 pawn in base spot', () => {
+        let color = Color.Green;
+        let pawn = new Pawn(0, color);
+        game.board.bases[color].pawns[0] == null;
+        expect(checker.pawnInBase(pawn, game.board)).to.equal(false;
+    });
+
+    it('should correctly identify that blue pawn is not in base spot', () => {
+        let pawn = new Pawn(0, Color.Blue);
+        expect(checker.pawnInBase(pawn, game.board)).to.equal(false);
+    });
 });

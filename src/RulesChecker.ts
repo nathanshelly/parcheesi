@@ -1,3 +1,4 @@
+import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
 import { Board } from '../src/Board'
@@ -11,7 +12,11 @@ import { Color } from '../src/Color'
 import * as c from '../src/Constants'
 
 export class RulesChecker {
-	legalMove(move: _Move, possible_moves: number[], board: Board): boolean {
+	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board, ): boolean {
+		if (move.pawn.color !== player.color)
+			return false;
+		if (move.pawn.id < c.NUM_PLAYER_PAWNS && )
+
 		if(move instanceof MoveEnter)
 			return this.legalMoveEnter(move, possible_moves, board);
 		else
@@ -25,6 +30,17 @@ export class RulesChecker {
 	legalMoveMain(move: _Move, possible_moves: number[], board: Board): boolean {
 		return true;
 	}
+
+	blockadeOnHome(color: Color, board: Board): boolean {
+		return c.ENTRY_POINTS
+	};
+
+	pawnInBase(pawn: Pawn, board: Board): boolean {
+		let pawns_in_base: (Pawn | null)[] = board.bases[pawn.color].pawns;
+		return pawns_in_base.some(base_pawn => {
+			return base_pawn && (base_pawn as Pawn).id == pawn.id ? true : false;
+		});
+	};
 
 	hasFive(possible_moves: number[]): boolean {
 		let pairs = this.makePairs(possible_moves);
