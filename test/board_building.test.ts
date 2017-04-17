@@ -36,7 +36,7 @@ describe('A board with no players', () => {
     })
 
     it('should not have any pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_COLORS).forEach(pos => {
+        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
             let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
             hr.row.forEach(hrs => {
                 expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);
@@ -79,7 +79,7 @@ describe('A board with one player', () => {
     })
 
     it('should have no pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_COLORS).forEach(pos => {
+        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
             let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
             hr.row.forEach(hrs => {
                 expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);
@@ -160,7 +160,7 @@ describe('A board with four players', () => {
     })
 
     it('should have no pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_COLORS).forEach(pos => {
+        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
             let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
             hr.row.forEach(hrs => {
                 expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);

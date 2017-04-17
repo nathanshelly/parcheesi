@@ -13,29 +13,64 @@ import * as c from '../src/Constants'
 
 export class RulesChecker {
 	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board, ): boolean {
-		if (move.pawn.color !== player.color)
+		if (this.pawnIsWrongColor(move.pawn, player.color) || this.pawnIdOutsideLegalRange(move.pawn))
 			return false;
-		if (move.pawn.id < c.NUM_PLAYER_PAWNS && )
 
 		if(move instanceof MoveEnter)
 			return this.legalMoveEnter(move, possible_moves, board);
 		else
-			return this.legalMoveMain(move, possible_moves, board);
+			return this.legalMoveMain(move, possible_moves, player, board);
 	}
 
-	legalMoveEnter(move: _Move, possible_moves: number[], board: Board): boolean {
-		return this.hasFive(possible_moves);
+	// GLOBAL MOVE CHECKS
+
+	pawnIsWrongColor(pawn: Pawn, color: Color): boolean {
+		return pawn.color !== color;
 	}
 
-	legalMoveMain(move: _Move, possible_moves: number[], board: Board): boolean {
+	pawnIdOutsideLegalRange(pawn: Pawn): boolean {
+		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
+	}
+
+	// madeAllLegalMoves(possible_moves: number[], board: Board, player: _Player): boolean {
+	// 	// TODO: actually write this function, check that remaining moves cannot be played
+	// 	return true;
+
+	// 	let pawns: Pawn[] = board.findPawnsOfColorOnBoard(player.color);
+	// 	return possible_moves.filter(move => {
+	// 		pawns.some(pawn => {
+	// 			if()
+				
+	// 			let move = new Move
+	// 			this.legalMove()
+	// 		});
+	// 		this.legalMove()
+	// 	}).length === 0;
+	// }
+
+
+	// MAIN RING CHECKS
+
+	legalMoveMain(move: _Move, possible_moves: number[], player: _Player, board: Board): boolean {
 		return true;
 	}
 
-	blockadeOnHome(color: Color, board: Board): boolean {
-		return c.ENTRY_POINTS
+	// ENTRANCE CHECKS
+	
+	legalMoveEnter(move: _Move, possible_moves: number[], board: Board): boolean {
+		return this.hasFive(possible_moves) && this.pawnInBase(move.pawn, board) && this.noBlockadeOnHome(move.pawn.color, board);
+	}
+
+	noBlockadeOnHome(color: Color, board: Board): boolean {
+		return board.mainRing[c.ENTRY_POINTS[color]].pawns.filter(pawn => {
+				return pawn === null;
+		}).length > 0;
 	};
 
 	pawnInBase(pawn: Pawn, board: Board): boolean {
+		if(board.bases[pawn.color] == undefined)
+			return false;
+		
 		let pawns_in_base: (Pawn | null)[] = board.bases[pawn.color].pawns;
 		return pawns_in_base.some(base_pawn => {
 			return base_pawn && (base_pawn as Pawn).id == pawn.id ? true : false;
