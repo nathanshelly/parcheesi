@@ -33,8 +33,8 @@ describe('A board with no players', () => {
         expect(board.mainRing.length).to.equal(c.MAIN_RING_SIZE);
     });
 
-    it('should have have as many main ring spots with home rows as colors', () => {
-        expect(board.mainRing.filter(s => { return s.home_row != null }).length).to.equal(c.N_COLORS);
+    it('should have have as many home spots at the end of home rows as colors', () => {
+        expect(board.getHomeSpots().length).to.equal(c.N_COLORS);
     })
 
     it('should not have any pawns in the main ring', () => {
@@ -44,12 +44,17 @@ describe('A board with no players', () => {
     })
 
     it('should not have any pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
-            let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
-            hr.row.forEach(hrs => {
-                expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);
-            })
-            expect(hr.spot.pawns.filter(p => { return p != null }).length).to.equal(0);
+        let hr_starts = board.getHomeRowStarts();
+
+        hr_starts.forEach(hrs => {
+            expect(hrs.n_pawns()).to.equal(0);
+
+            while (hrs.next() !instanceof HomeSpot) {
+                hrs = hrs.next() as HomeRowSpot;
+                expect(hrs.n_pawns()).to.equal(0);
+            }
+
+            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
         });
     });
 });

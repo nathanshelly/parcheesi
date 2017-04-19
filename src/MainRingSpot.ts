@@ -6,16 +6,17 @@ import { Color } from './Color';
 import { _Spot } from './_Spot'
 import { HomeRowSpot } from './HomeRowSpot'
 
-export class MainRingSpot implements _Spot {
+export class MainRingSpot extends _Spot {
     private next_main: MainRingSpot;
     private first_home: HomeRowSpot | null;
     
     sanctuary: boolean;
     
     max_n_pawns: number = c.MAX_N_PAWNS_MAIN;
-    pawns: (Pawn | null)[];
 
     constructor(sanc: boolean, home_color: Color | null) {
+        super();
+
         this.sanctuary = sanc;
         this.pawns = _.fill(new Array(this.max_n_pawns), null);
         

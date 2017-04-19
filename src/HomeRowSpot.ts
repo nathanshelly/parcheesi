@@ -6,15 +6,16 @@ import { Color } from './Color'
 import { _Spot } from './_Spot'
 import { HomeSpot } from './HomeSpot'
 
-export class HomeRowSpot implements _Spot {
+export class HomeRowSpot extends _Spot {
     max_n_pawns: number = c.MAX_N_PAWNS_HOME_ROW;
-    pawns: (Pawn | null)[];
 
     color: Color;
 
     private _next: HomeRowSpot | HomeSpot;
 
     constructor(ind: number, color: Color) {
+        super();
+
         this.pawns = _.fill(new Array(this.max_n_pawns), null);
         this.color = color;
 
