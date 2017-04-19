@@ -1,18 +1,19 @@
-import * as c from './Constants'
-import { MainRingSpot } from './MainRingSpot'
-import { BaseSpot } from './BaseSpot'
-import { _Player } from './_Player'
-import { Pawn } from './Pawn'
-import { Color, colorForIndex } from './Color'
-import { MoveEnter } from '../src/MoveEnter'
-import { MoveMain } from './MoveMain'
-import { MoveHome } from './MoveHome'
-import { HomeRowSpot } from './HomeRowSpot'
-import { HomeSpot } from './HomeSpot'
-import { _Move } from './_Move'
-import { _Spot } from './_Spot'
 import * as _ from 'lodash'
+import * as c from './Constants'
 
+import { Pawn } from './Pawn'
+import { Color } from './Color'
+import { _Player } from './_Player'
+
+import { _Move } from './_Move'
+import { MoveEnter } from './MoveEnter'
+import { MoveForward } from './MoveForward'
+
+import { _Spot } from './_Spot'
+import { BaseSpot } from './BaseSpot'
+import { HomeSpot } from './HomeSpot'
+import { HomeRowSpot } from './HomeRowSpot'
+import { MainRingSpot } from './MainRingSpot'
 
 export class Board {
 	mainRing: MainRingSpot[];

@@ -1,4 +1,3 @@
-import { Color } from './Color'
 import { Pawn } from './Pawn'
 
 export interface _Spot {

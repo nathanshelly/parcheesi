@@ -21,7 +21,7 @@ export class Parcheesi implements _Parcheesi {
 	};
 
 	// start a game
-	start() : void {
+	start(): void {
 		this.board = new Board(this.players);
 	};
 };
