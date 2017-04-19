@@ -17,47 +17,57 @@ import { MainRingSpot } from './MainRingSpot'
 
 export class Board {
 	mainRing: MainRingSpot[];
-	bases: {[index: number]: BaseSpot} = {};
+	bases: { [index: number]: BaseSpot } = {};
 
 	private buildMainRingSpot(ind: number): MainRingSpot {
-        let is_sanctuary = false;
-        if (c.SAFE_SPOT_INDICES.indexOf(ind) != -1)
-            is_sanctuary = true;
-        
-        let color: Color | null = null;
-        if (c.HOME_ROW_BY_INDEX[ind])
-            color = c.HOME_ROW_BY_INDEX[ind];
+		let is_sanctuary = false;
+		if (c.SAFE_SPOT_INDICES.indexOf(ind) != -1)
+			is_sanctuary = true;
 
-        return new MainRingSpot(is_sanctuary, color);
-    }
+		let color: Color | null = null;
+		if (c.HOME_ROW_BY_INDEX[ind])
+			color = c.HOME_ROW_BY_INDEX[ind];
+
+		return new MainRingSpot(is_sanctuary, color);
+	}
 
 	constructor(players: _Player[]) {
 		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i) => {
 			return this.buildMainRingSpot(i);
 		});
-		
+
 		this.mainRing.forEach((sp, i, a) => {
 			sp.setNextMain(a[(i + 1) % a.length]);
 		});
 
-		for(let i = 0; i < players.length; i++) {	
+		for (let i = 0; i < players.length; i++) {
 			let player_color = players[i].color;
 			this.bases[player_color] = new BaseSpot(this.mainRing[c.ENTRY_POINTS[player_color]], player_color);
-		}	
+		}
+	}
+
+	getHomeRowStarts(): HomeRowSpot[] {
+		return Object.keys(c.HOME_ROW_BY_INDEX).map(pos => {
+			let home_color = c.HOME_ROW_BY_INDEX[pos] as Color;
+			return this.mainRing[parseInt(pos)].next(home_color) as HomeRowSpot;
+		});
+	}
+
+	getHomeSpots(): HomeSpot[] {
+		return this.getHomeRowStarts().map(hrs => {
+			while (hrs.next()! instanceof HomeSpot)
+				hrs = hrs.next() as HomeRowSpot;
+
+			return hrs.next() as HomeSpot;
+		});
 	}
 
 	winner(): Color | null {
-		for (let position in Object.keys(c.HOME_ROW_BY_INDEX)) {
-			let home_color = c.HOME_ROW_BY_INDEX[position] as Color;
-			let hrs: HomeRowSpot = this.mainRing[parseInt(position)].next(home_color) as HomeRowSpot;
-
-			while (hrs.next() !instanceof HomeSpot)
-				hrs = hrs.next() as HomeRowSpot;
-
-			let home: HomeSpot = hrs.next() as HomeSpot;
-			if (home.pawns.indexOf(null) != -1)
-				return home.color;
-		};
+		let homes = this.getHomeSpots();
+		for (let i = 0; i < homes.length; ++i) {
+			if (homes[i].pawns.indexOf(null) != -1)
+				return homes[i].color;
+		}
 		return null;
 	}
 
@@ -65,7 +75,7 @@ export class Board {
 		let start_spot: _Spot = this.spotForPosition(move.start, move.pawn.color);
 		let end_position: Position = this.calculateNewPosition(move.start, move.distance, move.pawn.color);
 		let end_spot: _Spot = this.spotForPosition(end_position, move.pawn.color);
-		
+
 		// could do object check with simpler indexOf, do we trust Javascript's object comparison?
 		let pawn_ids: (number | null)[] = start_spot.pawns.map(pawn => {
 			return pawn ? pawn.id : null;
@@ -90,14 +100,14 @@ export class Board {
 		home_rows.forEach(home_row => {
 			home_row.row.forEach(home_row_spot => {
 				home_row_spot.pawns.forEach(home_row_spot_pawn => {
-					if(home_row_spot_pawn && home_row_spot_pawn.color === color)
+					if (home_row_spot_pawn && home_row_spot_pawn.color === color)
 						pawns.push(home_row_spot_pawn);
 				});
 			});
 
 			home_row.spot.pawns.forEach(home_spot_pawn => {
-				if(home_spot_pawn && home_spot_pawn.color === color)
-						pawns.push(home_spot_pawn);
+				if (home_spot_pawn && home_spot_pawn.color === color)
+					pawns.push(home_spot_pawn);
 			});
 		});
 
@@ -106,7 +116,7 @@ export class Board {
 
 	findPawnsOfColorInBases(color: Color) {
 		let pawns: Pawn[] = [];
-		
+
 		Object.keys(this.bases).forEach(base_position => {
 			this.bases[base_position].pawns.forEach(pawn => {
 				if (pawn && pawn.color === color)
@@ -130,7 +140,7 @@ export class Board {
 
 	calculateNewPosition(pos: Position, distance: number, color: Color): Position {
 		let moving_position: Position = pos;
-		for(let i = 0; i < distance; i++) {
+		for (let i = 0; i < distance; i++) {
 			if (moving_position.main_ring_location === c.HOME_ROW_BY_COLOR[color])
 				moving_position.home_row_location++;
 			else
@@ -141,19 +151,19 @@ export class Board {
 	};
 
 	spotForPosition(pos: Position, color: Color): _Spot {
-		if(pos.main_ring_location === -1) {
+		if (pos.main_ring_location === -1) {
 			return this.bases[color];
 		}
-		else if(pos.home_row_location === -1) {
+		else if (pos.home_row_location === -1) {
 			return this.mainRing[pos.main_ring_location];
 		}
 		else {
 			let home_row = this.mainRing[pos.main_ring_location].home_row as HomeRow
-			if(pos.home_row_location === c.HOME_ROW_SIZE)
+			if (pos.home_row_location === c.HOME_ROW_SIZE)
 				return home_row.spot;
 			else
 				return home_row.row[pos.home_row_location];
 		}
 
 	};
- }
+}
