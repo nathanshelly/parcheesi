@@ -7,7 +7,7 @@ import { Color, colorForIndex } from './Color'
 import { MoveEnter } from '../src/MoveEnter'
 import { MoveMain } from './MoveMain'
 import { MoveHome } from './MoveHome'
-import { HomeRow } from './HomeRow'
+import { HomeRowSpot } from './HomeRowSpot'
 import { HomeSpot } from './HomeSpot'
 import { _Move } from './_Move'
 import { _Spot } from './_Spot'
@@ -48,10 +48,14 @@ export class Board {
 	winner(): Color | null {
 		for (let position in Object.keys(c.HOME_ROW_BY_INDEX)) {
 			let home_color = c.HOME_ROW_BY_INDEX[position] as Color;
-			let first_home = this.mainRing[parseInt(position)].next(home_color);
+			let hrs: HomeRowSpot = this.mainRing[parseInt(position)].next(home_color) as HomeRowSpot;
 
-			if (home_row.spot.pawns.indexOf(null) != -1)
-				return home_row.color;
+			while (hrs.next() !instanceof HomeSpot)
+				hrs = hrs.next() as HomeRowSpot;
+
+			let home: HomeSpot = hrs.next() as HomeSpot;
+			if (home.pawns.indexOf(null) != -1)
+				return home.color;
 		};
 		return null;
 	}
