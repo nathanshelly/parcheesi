@@ -1,5 +1,4 @@
 import { Color } from './Color'
-import { Position } from './Position'
 
 export const NUM_PLAYER_PAWNS = 4;
 export const MAX_N_PAWNS_BASE = NUM_PLAYER_PAWNS;
@@ -42,5 +41,3 @@ export const ENTRY_POINTS = {
     0: 38,
     3: 55
 }
-
-export const BASE_POSITION = new Position(-1, -1);

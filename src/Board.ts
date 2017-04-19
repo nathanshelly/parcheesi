@@ -11,7 +11,6 @@ import { HomeRow } from './HomeRow'
 import { HomeSpot } from './HomeSpot'
 import { _Move } from './_Move'
 import { _Spot } from './_Spot'
-import { Position } from './Position'
 import * as _ from 'lodash'
 
 
@@ -19,19 +18,27 @@ export class Board {
 	mainRing: MainRingSpot[];
 	bases: {[index: number]: BaseSpot} = {};
 
+	private buildMainRingSpot(ind: number): MainRingSpot {
+        let is_sanctuary = false;
+        if (c.SAFE_SPOT_INDICES.indexOf(ind) != -1)
+            is_sanctuary = true;
+        
+        let color: Color | null = null;
+        if (c.HOME_ROW_BY_INDEX[ind])
+            color = c.HOME_ROW_BY_INDEX[ind];
+
+        return new MainRingSpot(is_sanctuary, color);
+    }
+
 	constructor(players: _Player[]) {
-		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i, a) => {
-			if (Object.keys(c.HOME_ROW_BY_INDEX).indexOf(i.toString()) != -1) {
-				return new MainRingSpot(new Position(i, -1), true, c.HOME_ROW_BY_INDEX[i]);
-			}
-			else if (c.SAFE_SPOT_INDICES.indexOf(i) != -1) {
-				return new MainRingSpot(new Position(i, -1), true, null);
-			}
-			else {
-				return new MainRingSpot(new Position(i, -1), false, null);
-			}
+		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i) => {
+			return this.buildMainRingSpot(i);
 		});
 		
+		this.mainRing.forEach((sp, i, a) => {
+			sp.setNextMain(a[(i + 1) % a.length]);
+		});
+
 		for(let i = 0; i < players.length; i++) {	
 			let player_color = players[i].color;
 			this.bases[player_color] = new BaseSpot(this.mainRing[c.ENTRY_POINTS[player_color]], player_color);
@@ -40,7 +47,9 @@ export class Board {
 
 	winner(): Color | null {
 		for (let position in Object.keys(c.HOME_ROW_BY_INDEX)) {
-			let home_row = this.mainRing[parseInt(position)].home_row as HomeRow
+			let home_color = c.HOME_ROW_BY_INDEX[position] as Color;
+			let first_home = this.mainRing[parseInt(position)].next(home_color);
+
 			if (home_row.spot.pawns.indexOf(null) != -1)
 				return home_row.color;
 		};

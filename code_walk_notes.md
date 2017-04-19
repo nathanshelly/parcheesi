@@ -1,10 +1,10 @@
 ## Sasha and Nathan codewalk, 4/18/17 - Parcheesi
 
 ### Methods on spots
-spot.has_blockade : bool
-spot.next : _Spot
-get_pawns : [Pawn]
-get_safety : 
+spot.has\_blockade : bool
+spot.next : \_Spot
+get\_pawns : [Pawn]
+get\_safety : 
 decorators for ensuring invariants?
 
 crazy typed languages
