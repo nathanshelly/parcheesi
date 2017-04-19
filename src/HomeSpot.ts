@@ -1,8 +1,9 @@
+import * as _ from 'lodash'
 import * as c from './Constants'
-import { _Spot } from './_Spot'
+
 import { Pawn } from './Pawn'
 import { Color } from './Color'
-import * as _ from 'lodash'
+import { _Spot } from './_Spot'
 
 export class HomeSpot implements _Spot {
     max_n_pawns: number = c.MAX_N_PAWNS_HOME_SPOT;

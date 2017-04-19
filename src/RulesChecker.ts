@@ -1,15 +1,17 @@
+import * as c from '../src/Constants'
+
+import { Pawn } from '../src/Pawn'
+import { Color } from '../src/Color'
+import { Board } from '../src/Board'
+import { BaseSpot } from '../src/BaseSpot'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
-import { Board } from '../src/Board'
-import { BaseSpot } from '../src/BaseSpot'
-import { HomeRow } from '../src/HomeRow'
+
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
-import { MoveMain } from '../src/MoveMain'
-import { Pawn } from '../src/Pawn'
-import { Color } from '../src/Color'
-import * as c from '../src/Constants'
+import { MoveForward } from '../src/MoveForward'
+
 
 export class RulesChecker {
 	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board, ): boolean {

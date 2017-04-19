@@ -1,20 +1,26 @@
-import { Parcheesi } from '../src/Parcheesi'
-import { BasicPlayer } from '../src/BasicPlayer'
-import { Board } from '../src/Board'
-import { BaseSpot } from '../src/BaseSpot'
-import { HomeRow } from '../src/HomeRow'
-import { _Move } from '../src/_Move'
-import { MoveEnter } from '../src/MoveEnter'
-import { MoveMain } from '../src/MoveMain'
+import * as _ from 'lodash'
+import * as c from '../src/Constants'
+
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
+import { Board } from '../src/Board'
+import { _Player } from '../src/_Player'
+import { Parcheesi } from '../src/Parcheesi'
+import { BasicPlayer } from '../src/BasicPlayer'
 import { RulesChecker } from '../src/RulesChecker'
-import * as c from '../src/Constants'
-import * as _test from './testMethods'
+
+import { _Move } from '../src/_Move'
+import { MoveEnter } from '../src/MoveEnter'
+import { MoveForward } from '../src/MoveForward'
+
+import { _Spot } from '../src/_Spot'
+import { BaseSpot } from '../src/BaseSpot'
+import { HomeSpot } from '../src/HomeSpot'
+import { HomeRowSpot } from '../src/HomeRowSpot'
+import { MainRingSpot } from '../src/MainRingSpot'
 
 import { expect } from 'chai';
 import 'mocha';
-import * as _ from 'lodash';
 
 describe('Unit tests for entering with correct number:', () => {
     let game: Parcheesi;

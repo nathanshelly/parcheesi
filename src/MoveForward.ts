@@ -1,5 +1,5 @@
-import { _Move } from './_Move'
 import { Pawn } from './Pawn'
+import { _Move } from './_Move'
 
 // represents a move that starts on the main ring
 // (but does not have to end up there)

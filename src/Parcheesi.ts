@@ -1,10 +1,6 @@
-import { _Parcheesi } from './_Parcheesi'
-import { _Player } from './_Player'
-import { _Move } from './_Move'
 import { Board } from './Board'
-import { Color } from './Color'
-import { MoveEnter } from './MoveEnter'
-import { rollDice } from './Dice'
+import { _Player } from './_Player'
+import { _Parcheesi } from './_Parcheesi'
 
 export class Parcheesi implements _Parcheesi {
 	players: _Player[] = [];

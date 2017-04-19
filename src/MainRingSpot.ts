@@ -1,10 +1,10 @@
+import * as _ from 'lodash'
 import * as c from './Constants'
+
+import { Pawn } from './Pawn'
 import { Color } from './Color';
 import { _Spot } from './_Spot'
 import { HomeRowSpot } from './HomeRowSpot'
-import { Pawn } from './Pawn'
-
-import * as _ from 'lodash'
 
 export class MainRingSpot implements _Spot {
     private next_main: MainRingSpot;
