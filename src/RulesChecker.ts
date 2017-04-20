@@ -99,7 +99,7 @@ export class RulesChecker {
 	}
 
 	blockadeOnHome(color: Color, board: Board): boolean {
-		return board.mainRing[c.ENTRY_POINTS[color]].has_blockade();
+		return board.getEntrySpot(color).has_blockade();
 	};
 
 	// assumes pawns color and id are correct

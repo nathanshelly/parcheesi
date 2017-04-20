@@ -72,42 +72,31 @@ export class Board {
 	}
 
 	// invariant at this point move is legal
-	makeMove(move: _Move): void {
+	makeMove(move: _Move, spot: _Spot): void {
 		if(move instanceof MoveEnter) {
-			(this.getNextSpot(move.pawn.spot, move.pawn.color) as MainRingSpot).add_pawn(move.pawn);
+			(this.getNextSpot(spot, move.pawn.color) as MainRingSpot).add_pawn(move.pawn);
 		}
 		// move is MoveForward
 		else if (move instanceof MoveForward) {
-			(this.advanceToNewSpot(move.pawn.spot, move.distance, move.pawn.color) as _Spot).add_pawn(move.pawn);
+			(this.advanceToNewSpot(spot, move.distance, move.pawn.color) as _Spot).add_pawn(move.pawn);
 
 		}
 
-		move.pawn.spot.remove_pawn(move.pawn);
+		spot.remove_pawn(move.pawn);
 	}
 
-	getPawnsOfColor(color: Color): Pawn[] {
-		return this.getPawnsOfColorInBases(color).concat(this.getPawnsOfColorOnBoard(color));
-	}
+	findPawn(pawn: Pawn): _Spot {
+		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
+		if(base_spot.pawn_exists(pawn))
+			return base_spot
 
-	getPawnsOfColorOnBoard(color: Color): Pawn[] {
-		let entry_spot: MainRingSpot = this.mainRing[c.ENTRY_POINTS[color]]
-		return this.getPawnsOfColorOnBoardHelper(color, entry_spot);
-	}
+		let spot: _Spot = this.getEntrySpot(pawn.color);
+		// spot cannot be null here as we have verified that pawn is
+		// valid and must exist on board, write into contract?
+		while(!spot.pawn_exists(pawn))
+			spot = this.getNextSpot(spot, pawn.color) as _Spot;
 
-	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
-		let live_pawns: Pawn[] = spot.get_live_pawns();
-		let append_pawns: Pawn[] = live_pawns && live_pawns[0].color === color ? live_pawns : [];
-		
-		let next_spot: _Spot | null = this.getNextSpot(spot, color);
-
-		if(next_spot === null)
-			return append_pawns
-		
-		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, spot));
-	}
-	
-	getPawnsOfColorInBases(color: Color): Pawn[] {
-		return this.bases[color].get_live_pawns();
+		return spot;
 	}
 
 	advanceToNewSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
@@ -133,5 +122,41 @@ export class Board {
 		// trigger that they've cheated instead?
 		else
 			return null;
+	}
+
+	getBaseSpot(color: Color): BaseSpot {
+		return this.bases[color];
+	}
+
+	getEntrySpot(color: Color): MainRingSpot {
+		return this.mainRing[c.ENTRY_POINTS[color]];
+	}
+
+	// functions for getting a pawn based on color
+	// may be less useful now that pawns don't have spots
+	// check back with functions to see if they are being used later
+	getPawnsOfColor(color: Color): Pawn[] {
+		return this.getPawnsOfColorInBase(color).concat(this.getPawnsOfColorOnBoard(color));
+	}
+
+	getPawnsOfColorOnBoard(color: Color): Pawn[] {
+		let entry_spot: MainRingSpot = this.getEntrySpot(color);
+		return this.getPawnsOfColorOnBoardHelper(color, entry_spot);
+	}
+
+	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
+		let live_pawns: Pawn[] = spot.get_live_pawns();
+		let append_pawns: Pawn[] = live_pawns && live_pawns[0].color === color ? live_pawns : [];
+		
+		let next_spot: _Spot | null = this.getNextSpot(spot, color);
+
+		if(next_spot === null)
+			return append_pawns
+		
+		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, spot));
+	}
+	
+	getPawnsOfColorInBase(color: Color): Pawn[] {
+		return this.bases[color].get_live_pawns();
 	}
 }
