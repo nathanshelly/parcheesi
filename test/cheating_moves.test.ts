@@ -100,6 +100,34 @@ describe("Enter move cheats", () => {
         board = new Board(players);
     });
 
+    it("should not allow entrance of a pawn of illegal ID", () => {
+        let pawn = new Pawn(-1, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.false;
+
+        pawn = new Pawn(4, player1.color);
+        move = new MoveEnter(pawn);
+
+        dice = [5, 6];
+        
+        res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.false;
+    });
+
+    it("should not allow entrance of a pawn of the wrong color", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player2, board);
+        expect(res).to.be.false;
+    });
+
     it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
