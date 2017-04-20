@@ -1,7 +1,7 @@
+.PHONY: all clean test tar
+
 all:
 	tsc -p .
-
-.PHONY: clean test tar
 
 clean:
 	rm -rf out/
