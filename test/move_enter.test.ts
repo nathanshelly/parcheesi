@@ -117,9 +117,9 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this tests
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        _test.placeBlockade();
+        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board);
 
-        expect(checker.noBlockadeOnHome(Color.Green, board)).to.equal(false);
+        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if blockade exists on home spot of opposite color', () => {
@@ -127,14 +127,14 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this test
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        _test.placeBlockade(new Position(c.ENTRY_POINTS[Color.Green], -1), [blockade_pawn_1, blockade_pawn_2], board);
+        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board);
         
-        expect(checker.noBlockadeOnHome(Color.Green, board)).to.equal(false);
+        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if no blockade exists on home spot of same color', () => {
         // technically both blockade_pawns are also still in the player's base 
         // but shouldn't matter for purposes of this test
-        expect(checker.noBlockadeOnHome(Color.Yellow, board)).to.equal(true);
+        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(true);
     });
 });
