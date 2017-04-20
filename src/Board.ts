@@ -71,99 +71,67 @@ export class Board {
 		return null;
 	}
 
+	// invariant at this point move is legal
 	makeMove(move: _Move): void {
-		let start_spot: _Spot = this.spotForPosition(move.start, move.pawn.color);
-		let end_position: Position = this.calculateNewPosition(move.start, move.distance, move.pawn.color);
-		let end_spot: _Spot = this.spotForPosition(end_position, move.pawn.color);
+		if(move instanceof MoveEnter) {
+			(this.getNextSpot(move.pawn.spot, move.pawn.color) as MainRingSpot).add_pawn(move.pawn);
+		}
+		// move is MoveForward
+		else if (move instanceof MoveForward) {
+			(this.advanceToNewSpot(move.pawn.spot, move.distance, move.pawn.color) as _Spot).add_pawn(move.pawn);
 
-		// could do object check with simpler indexOf, do we trust Javascript's object comparison?
-		let pawn_ids: (number | null)[] = start_spot.pawns.map(pawn => {
-			return pawn ? pawn.id : null;
-		});
-
-		let old_pawn_index = pawn_ids.indexOf(move.pawn.id);
-		start_spot.pawns[old_pawn_index] = null;
-		let new_pawn_index: number = end_spot.pawns.indexOf(null);
-		end_spot.pawns[new_pawn_index] = move.pawn;
-	}
-
-	findPawnsOfColorOnBoard(color: Color): Pawn[] {
-		return this.findPawnsOfColorInMainRing(color).concat(this.findPawnsOfColorInHomeRow(color), this.findPawnsOfColorInBases(color));
-	}
-
-	findPawnsOfColorInHomeRow(color: Color) {
-		let pawns: Pawn[] = [];
-		let home_rows: HomeRow[] = Object.keys(c.HOME_ROW_BY_INDEX).map(home_row_entry_position => {
-			return this.mainRing[home_row_entry_position].home_row;
-		});
-
-		home_rows.forEach(home_row => {
-			home_row.row.forEach(home_row_spot => {
-				home_row_spot.pawns.forEach(home_row_spot_pawn => {
-					if (home_row_spot_pawn && home_row_spot_pawn.color === color)
-						pawns.push(home_row_spot_pawn);
-				});
-			});
-
-			home_row.spot.pawns.forEach(home_spot_pawn => {
-				if (home_spot_pawn && home_spot_pawn.color === color)
-					pawns.push(home_spot_pawn);
-			});
-		});
-
-		return pawns;
-	}
-
-	findPawnsOfColorInBases(color: Color) {
-		let pawns: Pawn[] = [];
-
-		Object.keys(this.bases).forEach(base_position => {
-			this.bases[base_position].pawns.forEach(pawn => {
-				if (pawn && pawn.color === color)
-					pawns.push(pawn);
-			});
-		});
-
-		return pawns;
-	}
-
-	findPawnsOfColorInMainRing(color: Color) {
-		let pawns: Pawn[] = [];
-		this.mainRing.forEach(main_spot => {
-			main_spot.pawns.forEach(pawn => {
-				if (pawn && pawn.color === color)
-					pawns.push(pawn);
-			});
-		});
-		return pawns;
-	}
-
-	calculateNewPosition(pos: Position, distance: number, color: Color): Position {
-		let moving_position: Position = pos;
-		for (let i = 0; i < distance; i++) {
-			if (moving_position.main_ring_location === c.HOME_ROW_BY_COLOR[color])
-				moving_position.home_row_location++;
-			else
-				moving_position.main_ring_location++;
 		}
 
-		return moving_position;
+		move.pawn.spot.remove_pawn(move.pawn);
+	}
+
+	getPawnsOfColor(color: Color): Pawn[] {
+		return this.getPawnsOfColorInBases(color).concat(this.getPawnsOfColorOnBoard(color));
+	}
+
+	getPawnsOfColorOnBoard(color: Color): Pawn[] {
+		let entry_spot: MainRingSpot = this.mainRing[c.ENTRY_POINTS[color]]
+		return this.getPawnsOfColorOnBoardHelper(color, entry_spot);
+	}
+
+	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
+		let live_pawns: Pawn[] = spot.get_live_pawns();
+		let append_pawns: Pawn[] = live_pawns && live_pawns[0].color === color ? live_pawns : [];
+		
+		let next_spot: _Spot | null = this.getNextSpot(spot, color);
+
+		if(next_spot === null)
+			return append_pawns
+		
+		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, spot));
+	}
+	
+	getPawnsOfColorInBases(color: Color): Pawn[] {
+		return this.bases[color].get_live_pawns();
+	}
+
+	advanceToNewSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
+		let next_spot: _Spot | null = null;
+		
+		while(distance > 0) {
+			next_spot = this.getNextSpot(spot, color);
+			// trigger that they've cheated instead?
+			if(next_spot === null)
+				return next_spot;
+			distance--;
+		}
+
+		return next_spot;
 	};
 
-	spotForPosition(pos: Position, color: Color): _Spot {
-		if (pos.main_ring_location === -1) {
-			return this.bases[color];
-		}
-		else if (pos.home_row_location === -1) {
-			return this.mainRing[pos.main_ring_location];
-		}
-		else {
-			let home_row = this.mainRing[pos.main_ring_location].home_row as HomeRow
-			if (pos.home_row_location === c.HOME_ROW_SIZE)
-				return home_row.spot;
-			else
-				return home_row.row[pos.home_row_location];
-		}
-
-	};
+	getNextSpot(spot: _Spot, color: Color): _Spot | null {
+		if(spot instanceof MainRingSpot)
+			return spot.next(color);
+		else if(spot instanceof HomeRowSpot || spot instanceof BaseSpot)
+			return spot.next();
+		// spot is HomeSpot, has no next
+		// trigger that they've cheated instead?
+		else
+			return null;
+	}
 }

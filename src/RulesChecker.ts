@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -26,12 +27,46 @@ export class RulesChecker {
 
 	// GLOBAL MOVE CHECKS
 
+	// verify that move is valid
+	// means verifying pawn
+	// and confirming that distance will not move piece off board 
+	// (ignoring roadblocks or anything else that might invalidate the move)
+	verifyMove(move: _Move, color: Color, board: Board) {
+		
+		
+		let valid_distance: boolean = true;
+		if(move instanceof MoveForward)
+			valid_distance = board.advanceToNewSpot(move.pawn.spot, move.distance, color) ? true : false;
+
+		return valid_distance && this.verifyPawn(move.pawn, color, board);
+	}
+
+	// verify that pawn is correct:
+	// pawn's color matches player
+	// pawn's ID is legal
+	// pawn is where it says it is
+	verifyPawn(pawn: Pawn, color: Color, board: Board) {
+		return !this.pawnIsWrongColor(pawn, color) && !this.pawnIdOutsideLegalRange(pawn) && this.pawnInSpot(pawn, board);
+	}
+
 	pawnIsWrongColor(pawn: Pawn, color: Color): boolean {
 		return pawn.color !== color;
 	}
 
 	pawnIdOutsideLegalRange(pawn: Pawn): boolean {
 		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
+	}
+
+	// players can make own spots so can't trust that pawn's spot
+	// is actually a spot on board
+	pawnInSpot(pawn: Pawn, board: Board): boolean {
+		// split into two functions called based on move type?
+		let pawns: Pawn[] = board.getPawnsOfColor(pawn.color);
+
+		// _.isEqual should do what we expect, make sure tests confirm this
+		// should only be possible to have pawn match one pawn on board
+		// if not, previous invariant has failed
+		return pawns.some(p => { return _.isEqual(pawn, p); });
 	}
 
 	// madeAllLegalMoves(possible_moves: number[], board: Board, player: _Player): boolean {
@@ -60,42 +95,43 @@ export class RulesChecker {
 	// ENTRANCE CHECKS
 	
 	legalMoveEnter(move: _Move, possible_moves: number[], board: Board): boolean {
-		return this.hasFive(possible_moves) && this.pawnInBase(move.pawn, board) && this.noBlockadeOnHome(move.pawn.color, board);
+		return this.hasFive(possible_moves) && this.pawnInBase(move.pawn, board) && !this.blockadeOnHome(move.pawn.color, board);
 	}
 
-	noBlockadeOnHome(color: Color, board: Board): boolean {
-		return board.mainRing[c.ENTRY_POINTS[color]].pawns.filter(pawn => {
-				return pawn === null;
-		}).length > 0;
+	blockadeOnHome(color: Color, board: Board): boolean {
+		return board.mainRing[c.ENTRY_POINTS[color]].has_blockade();
 	};
 
+	// assumes pawns color and id are correct
+	// must be checked previously
+	// does not assume pawn's spot is correct
 	pawnInBase(pawn: Pawn, board: Board): boolean {
-		if(board.bases[pawn.color] == undefined)
+		if(board.bases[pawn.color] === undefined)
 			return false;
 		
-		let pawns_in_base: (Pawn | null)[] = board.bases[pawn.color].pawns;
-		return pawns_in_base.some(base_pawn => {
-			return base_pawn && (base_pawn as Pawn).id == pawn.id ? true : false;
-		});
+		return pawn.
 	};
 
+	// determine if set of pairs has any pair that sums to c.ENTRY_VALUE
 	hasFive(possible_moves: number[]): boolean {
-		let pairs = this.makePairs(possible_moves);
+		let pairs = this.makeDiceCombinations(possible_moves);
 		return pairs.some(pair => {
-			return pair[0] + pair[1] == 5;
+			return pair[0] + pair[1] == c.ENTRY_VALUE;
 		});
 	};
 
-	makePairs(possible_moves: number[]): [number, number][]{
+	makeDiceCombinations(possible_moves: number[]): [number, number][]{
 		let pairs: [number, number][] = [];
+		
+		// generate all pairs of dice 
 		for(let i = 0; i < possible_moves.length; i++) {
 			for(let j = 0; j < i; j++) {
 				pairs.push([possible_moves[i], possible_moves[j]]);
 			}
 		}
-		possible_moves.forEach(move => {
-			pairs.push([move, 0]);
-		});
+
+		// add lone pawn combos
+		possible_moves.forEach(move => { pairs.push([move, 0]); });
 		return pairs;
 	};
 }

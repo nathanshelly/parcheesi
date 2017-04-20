@@ -24,8 +24,9 @@ export class MainRingSpot extends _Spot {
             this.first_home = new HomeRowSpot(0, home_color);
     }
 
-    private called = false;
-    setNextMain(spot: MainRingSpot): void { // please only call this once (this would be a great place for a contract)
+    // private flag enforces calling setNextMain once
+    private called: boolean = false;
+    setNextMain(spot: MainRingSpot): void { 
         if (this.called)
             throw new Error("Tried to set MainRingSpot next twice");
 
