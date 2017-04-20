@@ -114,7 +114,7 @@ describe('A board with one player', () => {
 
     it('should have a base with the same color as the player', () => {
         players.forEach(p => {
-            expect(board.getBaseSpot(p.color)).to.not.throw(Error);
+            expect(() => {board.getBaseSpot(p.color)}).to.not.throw(Error);
         });
     });
 
@@ -202,7 +202,7 @@ describe('A board with four players', () => {
 
     it('should have a base with the same color as each player', () => {
         players.forEach(p => {
-            expect(board.getBaseSpot(p.color)).to.not.throw(Error);
+            expect(() => {board.getBaseSpot(p.color)}).to.not.throw(Error);
         });
     });
 
