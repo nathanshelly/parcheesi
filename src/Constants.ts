@@ -11,6 +11,7 @@ export const MAX_N_PAWNS_HOME_ROW = NUM_PAWNS_IN_BLOCKADE;
 export const HOME_ROW_SIZE = 8;
 export const MAIN_RING_SIZE = 68;
 export const ENTRY_VALUE = 5;
+export const LARGEST_POSSIBLE_MOVE = 20; // bopping bonus
 
 export const SAFE_SPOT_INDICES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67]
 

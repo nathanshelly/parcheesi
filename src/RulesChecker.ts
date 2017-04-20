@@ -37,9 +37,11 @@ export class RulesChecker {
 		if(!this.verifyPawn(move.pawn, color))
 			return false;
 		
-		if(move instanceof MoveForward
-				&& board.advanceToNewSpot(board.findPawn(move.pawn), move.distance, color) === null)
-			return false;
+		if(move instanceof MoveForward)
+			if	(move.distance <= 0
+				|| move.distance > c.LARGEST_POSSIBLE_MOVE
+				|| board.advanceToNewSpot(board.findPawn(move.pawn), move.distance, color) === null)
+					return false;
 
 		return true;
 	}

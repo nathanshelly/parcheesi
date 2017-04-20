@@ -9,7 +9,6 @@
 - Moved pawn to or though blockade (path contains blockade)
 - Attempted to land on occupied safe spot
 - Attempted to move invalid distance
-- Attempted to enter home row incorrectly
 - Attempted to move to home on not exact move
 - Attempted to move blockade together in same roll
 
@@ -18,7 +17,7 @@
 #### Global cheats
 
 - Moved a pawn that is not yours
-- Pawn \_id is not 0-3
+- Pawn id is not 0-3
 - Made all legal moves
 - Moved pawn to invalid location (off board)
 
@@ -31,6 +30,8 @@
 - Enter a pawn when there is a blockade of not our color
 
 #### Main cheats
+- Move a pawn of illegal ID
+- Move a pawn of not our color
 - Moved pawn to invalid location
     - Moved it past the home row
     - 
