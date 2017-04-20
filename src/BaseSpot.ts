@@ -17,7 +17,7 @@ export class BaseSpot extends _Spot {
         super();
 
         this.color = color;
-        this.pawns = _.fill(new Array(this.max_n_pawns), null).map((_, i) => {return new Pawn(i, color, this)});
+        this.pawns = _.fill(new Array(this.max_n_pawns), null).map((_, i) => {return new Pawn(i, color)});
 
         this._next = _next;
     }
