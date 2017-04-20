@@ -88,16 +88,21 @@ describe('A board with one player', () => {
     });
 
     it('should have the same number of home rows as colors', () => {
-        expect(board.mainRing.filter(s => { return s.home_row != null }).length).to.equal(c.N_COLORS);
+        expect(board.getHomeSpots().length).to.equal(c.N_COLORS);
     })
 
-    it('should have no pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
-            let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
-            hr.row.forEach(hrs => {
-                expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);
-            })
-            expect(hr.spot.pawns.filter(p => { return p != null }).length).to.equal(0);
+    it('should not have any pawns in the home rows', () => {
+        let hr_starts = board.getHomeRowStarts();
+
+        hr_starts.forEach(hrs => {
+            expect(hrs.n_pawns()).to.equal(0);
+
+            while (hrs.next() !instanceof HomeSpot) {
+                hrs = hrs.next() as HomeRowSpot;
+                expect(hrs.n_pawns()).to.equal(0);
+            }
+
+            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
         });
     });
 
@@ -108,13 +113,12 @@ describe('A board with one player', () => {
     });
 
     it('should have a base with the same color as the player', () => {
-        for (let i = 0; i < Object.keys(board.bases).length; i++) {
-            let base_color = board.bases[players[0].color].color
-            expect(base_color).to.equal(players[i].color);
-        }
+        players.forEach(p => {
+            expect(board.getBaseSpot(p.color)).to.not.throw(Error);
+        });
     });
 
-    it('should have four pawns in the base', () => {
+    it('should have the max number of pawns in the base', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let pawns = board.bases[base_keys[i]].pawns
@@ -126,7 +130,10 @@ describe('A board with one player', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let base: BaseSpot = board.bases[base_keys[i]];
-            expect(base.entryPoint.position.main_ring_location).to.equal(c.ENTRY_POINTS[base.color])
+            let entry_ind = c.ENTRY_POINTS[base.color];
+            let entry_spot = board.mainRing[entry_ind];
+
+            expect(base.next()).to.deep.equal(entry_spot);
         }
     });
 });
@@ -169,16 +176,21 @@ describe('A board with four players', () => {
     });
 
     it('should have the same number of home rows as colors', () => {
-        expect(board.mainRing.filter(s => { return s.home_row != null }).length).to.equal(c.N_COLORS);
+        expect(board.getHomeSpots().length).to.equal(c.N_COLORS);
     })
 
-    it('should have no pawns in the home rows', () => {
-        Object.keys(c.HOME_ROW_BY_INDEX).forEach(pos => {
-            let hr = board.mainRing[parseInt(pos)].home_row as HomeRow;
-            hr.row.forEach(hrs => {
-                expect(hrs.pawns.filter(p => { return p != null }).length).to.equal(0);
-            })
-            expect(hr.spot.pawns.filter(p => { return p != null }).length).to.equal(0);
+    it('should not have any pawns in the home rows', () => {
+        let hr_starts = board.getHomeRowStarts();
+
+        hr_starts.forEach(hrs => {
+            expect(hrs.n_pawns()).to.equal(0);
+
+            while (hrs.next() !instanceof HomeSpot) {
+                hrs = hrs.next() as HomeRowSpot;
+                expect(hrs.n_pawns()).to.equal(0);
+            }
+
+            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
         });
     });
 
@@ -189,13 +201,12 @@ describe('A board with four players', () => {
     });
 
     it('should have a base with the same color as each player', () => {
-        for (let i = 0; i < Object.keys(board.bases).length; i++) {
-            let base_color = board.bases[players[0].color].color;
-            expect(base_color).to.equal(players[0].color);
-        }
+        players.forEach(p => {
+            expect(board.getBaseSpot(p.color)).to.not.throw(Error);
+        });
     });
 
-    it('should have four pawns in each base', () => {
+    it('should have the max number of pawns in each base', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let pawns = board.bases[base_keys[i]].pawns
@@ -207,7 +218,10 @@ describe('A board with four players', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let base: BaseSpot = board.bases[base_keys[i]];
-            expect(base.entryPoint.position.main_ring_location).to.equal(c.ENTRY_POINTS[base.color])
+            let entry_ind = c.ENTRY_POINTS[base.color];
+            let entry_spot = board.mainRing[entry_ind];
+
+            expect(base.next()).to.deep.equal(entry_spot);
         }
     });
 });
