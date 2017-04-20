@@ -81,6 +81,12 @@ export class RulesChecker {
 		return true;
 	}
 
+	blockadeInPath(move: _Move, color: Color, board: Board) {
+				
+
+		return 
+	}
+
 	// ENTRANCE CHECKS
 	
 	legalMoveEnter(move: _Move, possible_moves: number[], board: Board): boolean {
