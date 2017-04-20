@@ -94,7 +94,8 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
 
     it('should correctly identify that pawn of unregistered player is not in base spot', () => {
         let pawn = new Pawn(0, Color.Blue);
-        expect(checker.pawnInBase(pawn, game.board)).to.equal(false);
+
+        expect(() => { checker.pawnInBase(pawn, game.board); }).to.throw(Error);
     });
 });
 
