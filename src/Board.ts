@@ -125,10 +125,17 @@ export class Board {
 	}
 
 	getBaseSpot(color: Color): BaseSpot {
-		return this.bases[color];
+		let base: BaseSpot | undefined = this.bases[color];
+		
+		if(base)
+			throw new Error("That color isn't playing and has no base spot.");
+
+		return base;
 	}
 
 	getEntrySpot(color: Color): MainRingSpot {
+		// no need to check if entry spot exists as it will exist even
+		// if passed in color isn't actually playing
 		return this.mainRing[c.ENTRY_POINTS[color]];
 	}
 
