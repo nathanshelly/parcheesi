@@ -17,5 +17,5 @@ export function placePawnsAtOffsetFromEntry(pawns: [Pawn, Pawn], board: Board, c
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')
 
-	
+	next_spot.pawns = pawns;
 }
