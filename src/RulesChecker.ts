@@ -15,38 +15,40 @@ import { MoveForward } from '../src/MoveForward'
 
 
 export class RulesChecker {
-	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board, ): boolean {
-		if (this.pawnIsWrongColor(move.pawn, player.color) || this.pawnIdOutsideLegalRange(move.pawn))
+	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board): boolean {
+		if (!this.verifyMove(move, player.color, board))
 			return false;
-
+		
 		if(move instanceof MoveEnter)
 			return this.legalMoveEnter(move, possible_moves, board);
-		else
-			return this.legalMoveMain(move, possible_moves, player, board);
+		else if (move instanceof MoveForward)
+			return this.legalMoveFoward(move, possible_moves, player, board);
+
+		return false;
 	}
 
 	// GLOBAL MOVE CHECKS
 
 	// verify that move is valid
 	// means verifying pawn
-	// and confirming that distance will not move piece off board 
+	// and in case of MoveForward confirming that distance will not move piece off board
 	// (ignoring roadblocks or anything else that might invalidate the move)
-	verifyMove(move: _Move, color: Color, board: Board) {
+	verifyMove(move: _Move, color: Color, board: Board): boolean {
+		if(!this.verifyPawn(move.pawn, color))
+			return false;
 		
-		
-		let valid_distance: boolean = true;
-		if(move instanceof MoveForward)
-			valid_distance = board.advanceToNewSpot(move.pawn.spot, move.distance, color) ? true : false;
+		if(move instanceof MoveForward
+				&& board.advanceToNewSpot(board.findPawn(move.pawn), move.distance, color) === null)
+			return false;
 
-		return valid_distance && this.verifyPawn(move.pawn, color, board);
+		return true;
 	}
 
 	// verify that pawn is correct:
 	// pawn's color matches player
 	// pawn's ID is legal
-	// pawn is where it says it is
-	verifyPawn(pawn: Pawn, color: Color, board: Board) {
-		return !this.pawnIsWrongColor(pawn, color) && !this.pawnIdOutsideLegalRange(pawn) && this.pawnInSpot(pawn, board);
+	verifyPawn(pawn: Pawn, color: Color) {
+		return !this.pawnIsWrongColor(pawn, color) && !this.pawnIdOutsideLegalRange(pawn);
 	}
 
 	pawnIsWrongColor(pawn: Pawn, color: Color): boolean {
@@ -55,18 +57,6 @@ export class RulesChecker {
 
 	pawnIdOutsideLegalRange(pawn: Pawn): boolean {
 		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
-	}
-
-	// players can make own spots so can't trust that pawn's spot
-	// is actually a spot on board
-	pawnInSpot(pawn: Pawn, board: Board): boolean {
-		// split into two functions called based on move type?
-		let pawns: Pawn[] = board.getPawnsOfColor(pawn.color);
-
-		// _.isEqual should do what we expect, make sure tests confirm this
-		// should only be possible to have pawn match one pawn on board
-		// if not, previous invariant has failed
-		return pawns.some(p => { return _.isEqual(pawn, p); });
 	}
 
 	// madeAllLegalMoves(possible_moves: number[], board: Board, player: _Player): boolean {
@@ -85,10 +75,9 @@ export class RulesChecker {
 	// 	}).length === 0;
 	// }
 
-
 	// MAIN RING CHECKS
 
-	legalMoveMain(move: _Move, possible_moves: number[], player: _Player, board: Board): boolean {
+	legalMoveFoward(move: _Move, possible_moves: number[], player: _Player, board: Board): boolean {
 		return true;
 	}
 
@@ -106,10 +95,7 @@ export class RulesChecker {
 	// must be checked previously
 	// does not assume pawn's spot is correct
 	pawnInBase(pawn: Pawn, board: Board): boolean {
-		if(board.bases[pawn.color] === undefined)
-			return false;
-		
-		return pawn.
+		return board.getBaseSpot(pawn.color).pawn_exists(pawn);
 	};
 
 	// determine if set of pairs has any pair that sums to c.ENTRY_VALUE

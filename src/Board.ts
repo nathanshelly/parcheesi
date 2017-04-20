@@ -106,7 +106,7 @@ export class Board {
 			next_spot = this.getNextSpot(spot, color);
 			// trigger that they've cheated instead?
 			if(next_spot === null)
-				return next_spot;
+				return null;
 			distance--;
 		}
 
@@ -127,7 +127,7 @@ export class Board {
 	getBaseSpot(color: Color): BaseSpot {
 		let base: BaseSpot | undefined = this.bases[color];
 		
-		if(base)
+		if(!base)
 			throw new Error("That color isn't playing and has no base spot.");
 
 		return base;
