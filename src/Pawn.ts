@@ -5,7 +5,7 @@ export class Pawn {
 	id: number;
   color: Color;
 
-  constructor(id: number, color: Color, spot: _Spot) {
+  constructor(id: number, color: Color) {
     this.id = id;
     this.color = color;
   }

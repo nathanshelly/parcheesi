@@ -1,24 +1,24 @@
 import * as _ from 'lodash'
 import * as c from '../src/Constants'
 
-import { MainRingSpot } from '../src/MainRingSpot'
-import { BaseSpot } from '../src/BaseSpot'
-import { _Player } from '../src/_Player'
 import { Pawn } from '../src/Pawn'
-import { Board } from '../src/Board'
-import { Color } from '../src/Color'
-import { MoveEnter } from '../src/MoveEnter'
-import { MoveForward } from '../src/MoveForward'
-import { HomeRow } from '../src/HomeRow'
 import { _Move } from '../src/_Move'
+import { _Spot } from '../src/_Spot'
+import { Board } from '../src/Board'
+import { MoveForward } from '../src/MoveForward'
 
 
-export function placePawnForTesting(move: _Move, board: Board): void {
-		let end_position: Position = board.calculateNewPosition(move.start, move.distance, move.pawn.color);
-		let new_pawn_index: number = board.spotForPosition(end_position, move.pawn.color).pawns.indexOf(null);
-		board.spotForPosition(move.start, move.pawn.color).pawns[new_pawn_index] = move.pawn;
-	}
+export function placePawnForTesting(move: MoveForward, board: Board): void {
+	let pawn_spot: _Spot = board.findPawn(move.pawn);
 
-export function placeBlockade(position: Position, pawns: [Pawn, Pawn], board: Board): void {
-	board.spotForPosition(position, pawns[0].color).pawns = pawns;
+	let new_spot: _Spot | null = board.advanceToNewSpot(pawn_spot, move.distance, move.pawn.color);
+
+	if(new_spot === null)
+		throw new Error('tried to place pawn off board');
+
+	new_spot.add_pawn(move.pawn);
+}
+
+export function placeBlockade(pawns: [Pawn, Pawn], board: Board): void {
+	board.getEntrySpot(pawns[0].color).pawns = pawns;
 }

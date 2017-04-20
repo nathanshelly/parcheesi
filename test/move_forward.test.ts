@@ -40,13 +40,13 @@ describe('Unit tests for main moves:', () => {
 			game.start();
     });
 
-    it('should correctly identify pawn moved from invalid location', () => {
-        let possible_moves: number[] = [3, 4, 3, 4];
-        expect(checker.hasFive(possible_moves)).to.equal(false);
-    });
+    // it('should correctly identify pawn moved from invalid location', () => {
+    //     let possible_moves: number[] = [3, 4, 3, 4];
+    //     expect(checker.hasFive(possible_moves)).to.equal(false);
+    // });
 
-		it('should correctly identify pawn moved from valid location', () => {
-        let possible_moves: number[] = [3, 4, 3, 4];
-        expect(checker.hasFive(possible_moves)).to.equal(false);
-    });
+	// 	it('should correctly identify pawn moved from valid location', () => {
+    //     let possible_moves: number[] = [3, 4, 3, 4];
+    //     expect(checker.hasFive(possible_moves)).to.equal(false);
+    // });
 });
