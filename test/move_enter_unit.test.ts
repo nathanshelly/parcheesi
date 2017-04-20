@@ -118,7 +118,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this tests
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        _test.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
@@ -128,7 +128,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this test
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        _test.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });

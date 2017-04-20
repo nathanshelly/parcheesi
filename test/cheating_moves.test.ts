@@ -19,6 +19,8 @@ import { HomeSpot } from '../src/HomeSpot'
 import { HomeRowSpot } from '../src/HomeRowSpot'
 import { MainRingSpot } from '../src/MainRingSpot'
 
+import * as tm from './TestMethods'
+
 import { expect } from 'chai';
 import 'mocha';
 
@@ -69,3 +71,89 @@ describe('Filename: move_enter.test.ts\n\nNon-move-specific cheating:', () => {
     // it('leaving no valid moves unused should succeed', () => {
     // })
 })
+
+describe("Enter move cheats", () => {
+    let rc: RulesChecker;
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+            throw new Error('Method not implemented - not needed in testing board instantiaton.');
+        }
+    }
+
+    before(() => {
+        rc = new RulesChecker();
+    });
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+    it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.true;
+    });
+
+    it("should not allow an enter move for a pawn outside the base", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+        board.makeMove(move);
+
+        let res = rc.legalMove(move, [5, 6], player1, board);
+        expect(res).to.be.false;
+    });
+
+    it("should not allow an enter move without a five", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+        
+        let dice = [1, 2];
+
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.false;
+    });
+
+    it("should not allow an enter move if a blockade of our own exists on the entry spot", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+        board.makeMove(move);
+
+        pawn = new Pawn(1, player1.color);
+        move = new MoveEnter(pawn);
+        board.makeMove(move);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.false;
+    });
+
+    it("should not allow an enter move if a blockade of another player's exists on the entry spot", () => {
+        let pawns: [Pawn, Pawn] = [new Pawn(0, player2.color), new Pawn(1, player2.color)];
+        tm.placePawnsOnEntrySpot(pawns, board, player1.color);
+
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.false;
+    });
+});
