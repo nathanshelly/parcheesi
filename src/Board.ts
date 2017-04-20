@@ -72,15 +72,14 @@ export class Board {
 	}
 
 	// invariant at this point move is legal
-	makeMove(move: _Move, spot: _Spot): void {
-		if(move instanceof MoveEnter) {
+	makeMove(move: _Move): void {
+		let spot: _Spot = this.findPawn(move.pawn);
+		
+		if(move instanceof MoveEnter)
 			(this.getNextSpot(spot, move.pawn.color) as MainRingSpot).add_pawn(move.pawn);
-		}
 		// move is MoveForward
-		else if (move instanceof MoveForward) {
+		else if (move instanceof MoveForward)
 			(this.advanceToNewSpot(spot, move.distance, move.pawn.color) as _Spot).add_pawn(move.pawn);
-
-		}
 
 		spot.remove_pawn(move.pawn);
 	}
