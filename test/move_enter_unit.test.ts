@@ -23,7 +23,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Unit tests for entering with correct number:', () => {
+describe('Filename: move_enter.test.ts\n\nUnit tests for entering with correct number:', () => {
     let game: Parcheesi;
     let checker: RulesChecker = new RulesChecker();
 
@@ -117,7 +117,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this tests
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board);
+        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
@@ -127,7 +127,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this test
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board);
+        _test.placeBlockade([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
@@ -135,6 +135,6 @@ describe('Unit tests for entering pawn:', () => {
     it('should correctly identify if no blockade exists on home spot of same color', () => {
         // technically both blockade_pawns are also still in the player's base 
         // but shouldn't matter for purposes of this test
-        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(true);
+        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(false);
     });
 });

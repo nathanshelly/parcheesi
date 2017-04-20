@@ -22,7 +22,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('A board with no players', () => {
+describe('Filename: board_building.test.ts\n\nA board with no players', () => {
     let board = new Board([]);
 
     it('should have no bases', () => {

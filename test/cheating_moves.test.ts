@@ -22,7 +22,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Non-move-specific cheating:', () => {
+describe('Filename: move_enter.test.ts\n\nNon-move-specific cheating:', () => {
     let game: Parcheesi;
     let board: Board;
     let checker: RulesChecker = new RulesChecker();

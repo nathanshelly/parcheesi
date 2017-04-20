@@ -22,7 +22,9 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Unit tests for main moves:', () => {
+
+
+describe('Filename: move_foward.test.ts\n\nUnit tests for main moves:', () => {
     let game: Parcheesi;
     let checker: RulesChecker = new RulesChecker();
 

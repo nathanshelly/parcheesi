@@ -5,10 +5,11 @@ import { Pawn } from '../src/Pawn'
 import { _Move } from '../src/_Move'
 import { _Spot } from '../src/_Spot'
 import { Board } from '../src/Board'
+import { Color } from '../src/Color'
 import { MoveForward } from '../src/MoveForward'
 
 
-export function placePawnForTesting(move: MoveForward, board: Board): void {
+export function executeMoveOnPawn(move: MoveForward, board: Board): void {
 	let pawn_spot: _Spot = board.findPawn(move.pawn);
 
 	let new_spot: _Spot | null = board.advanceToNewSpot(pawn_spot, move.distance, move.pawn.color);
@@ -19,6 +20,6 @@ export function placePawnForTesting(move: MoveForward, board: Board): void {
 	new_spot.add_pawn(move.pawn);
 }
 
-export function placeBlockade(pawns: [Pawn, Pawn], board: Board): void {
-	board.getEntrySpot(pawns[0].color).pawns = pawns;
+export function placeBlockade(pawns: [Pawn, Pawn], board: Board, color: Color): void {
+	board.getEntrySpot(color).pawns = pawns;
 }

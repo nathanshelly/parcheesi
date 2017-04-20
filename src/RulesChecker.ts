@@ -16,7 +16,7 @@ import { MoveForward } from '../src/MoveForward'
 
 export class RulesChecker {
 	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board): boolean {
-		if (!this.verifyMove(move, player.color, board))
+		if (!this.moveWellFormed(move, player.color, board))
 			return false;
 		
 		if(move instanceof MoveEnter)
@@ -33,7 +33,7 @@ export class RulesChecker {
 	// means verifying pawn
 	// and in case of MoveForward confirming that distance will not move piece off board
 	// (ignoring roadblocks or anything else that might invalidate the move)
-	verifyMove(move: _Move, color: Color, board: Board): boolean {
+	moveWellFormed(move: _Move, color: Color, board: Board): boolean {
 		if(!this.verifyPawn(move.pawn, color))
 			return false;
 		
