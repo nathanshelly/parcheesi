@@ -8,10 +8,9 @@
 
 - Move a pawn of illegal ID
 - Move a pawn of not our color
-- Moved pawn to invalid location
-    - Moved it past the home row
-    - 
+- Moved pawn to invalid location (past the home row)
 - Moved pawn to or though blockade (path contains blockade)
+
 - Attempted to land on occupied safe spot
 - Attempted to move invalid distance
 - Attempted to move to home on not exact move
