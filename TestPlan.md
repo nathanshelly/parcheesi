@@ -10,11 +10,11 @@
 - Move a pawn of not our color
 - Moved pawn to invalid location (past the home row)
 - Moved pawn to or though blockade (path contains blockade)
+- Attempted to move invalid distance (implicitly checks home on exact move)
+- Attempted to move blockade together in same roll
 
 - Attempted to land on occupied safe spot
-- Attempted to move invalid distance
-- Attempted to move to home on not exact move
-- Attempted to move blockade together in same roll
+
 
 ### Done
 
