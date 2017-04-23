@@ -79,7 +79,7 @@ describe("Enter move cheats", () => {
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
+            throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
 
@@ -127,16 +127,6 @@ describe("Enter move cheats", () => {
         expect(res).to.be.false;
     });
 
-    it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
-        let pawn = new Pawn(0, player1.color);
-        let move = new MoveEnter(pawn);
-
-        let dice = [5, 6];
-        
-        let res = rc.legalMove(move, dice, player1, board);
-        expect(res).to.be.true;
-    });
-
     it("should not allow an enter move for a pawn outside the base", () => {
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
@@ -146,12 +136,11 @@ describe("Enter move cheats", () => {
         expect(res).to.be.false;
     });
 
-    it("should not allow an enter move without a five", () => {
+    it("should not allow an enter move without a five, or numbers summing to five", () => {
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
         
         let dice = [1, 2];
-
         let res = rc.legalMove(move, dice, player1, board);
         expect(res).to.be.false;
     });
@@ -182,5 +171,124 @@ describe("Enter move cheats", () => {
 
         let res = rc.legalMove(move, dice, player1, board);
         expect(res).to.be.false;
+    });
+});
+
+describe("Legal enter moves:", () => {
+    let rc: RulesChecker;
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player1, board);
+        expect(res).to.be.true;
+    });
+
+    it("should allow an enter move of a pawn in the base, with no blockade, with a combination of 1 and 4", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow an enter move of a pawn in the base, with no blockade, with a combination of 2 and 3", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow an enter move of a pawn in the base resulting in a bop of another player", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow an enter move of a pawn in the base with one of the player's pawns on their entrance", () => {
+        expect(0).to.equal(1);
+    });
+})
+
+describe("Forward move cheats:", () => {
+    it("should not allow movement of a pawn of illegal ID", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn of other than the player's color", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn past the end of the home row", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn through a blockade of our own color", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn onto a spot blockaded by our own color", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn through a blockade of another player's", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a pawn onto a spot blockaded by another player", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a blockade together in the same roll", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow landing on an occupied safety spot", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should not allow movement of a distance other than those on the dice, with no bonuses", () => {
+        expect(0).to.equal(1);
+    });
+});
+
+describe("Legal forward moves:", () => {
+    it("should allow movement from a main ring spot with one pawn to a valid main ring spot", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow movement from a spot on the main ring to a valid spot in the player's home row", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow movement from a spot on a player's home row to another valid spot on their home row", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow movement onto the home spot, with exactly the right distance, from the home row", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow movement onto the home spot, with exactly the right distance, from the main ring", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow a valid bop", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow a pawn in a blockade to form a blockade with a different pawn, in the same roll", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow a pawn in a blockade to move out of the blockade", () => {
+        expect(0).to.equal(1);
+    });
+
+    it("should allow both pawns in a blockade to move, if not creating a new blockade", () => {
+        expect(0).to.equal(1);
     });
 });
