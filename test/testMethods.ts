@@ -6,11 +6,11 @@ import { Board } from '../src/Board'
 import { Color } from '../src/Color'
 import { _Spot } from '../src/_Spot'
 
-export function placePawnsOnEntrySpot(pawns: [Pawn, Pawn], board: Board, color: Color): void {
+export function placePawnsOnEntrySpot(pawns: [Pawn | null, Pawn | null], board: Board, color: Color): void {
 	board.getEntrySpot(color).pawns = pawns;
 }
 
-export function placePawnsAtOffsetFromEntry(pawns: [Pawn, Pawn], board: Board, color: Color, offset: number): void {
+export function placePawnsAtOffsetFromEntry(pawns: [Pawn | null, Pawn | null], board: Board, color: Color, offset: number): void {
 	let spot: _Spot = board.getEntrySpot(color);
 	let next_spot: _Spot | null = board.advanceToNewSpot(spot, offset, color);
 

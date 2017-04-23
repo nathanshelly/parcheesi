@@ -208,19 +208,50 @@ describe("Legal enter moves:", () => {
     });
 
     it("should allow an enter move of a pawn in the base, with no blockade, with a combination of 1 and 4", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [1, 4];
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow an enter move of a pawn in the base, with no blockade, with a combination of 2 and 3", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [2, 3];
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow an enter move of a pawn in the base resulting in a bop of another player", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let dice = [5, 6];
+
+        let other_pawn = new Pawn(0, player2.color);
+        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, player2.color, c.ENTRY_OFFSET);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow an enter move of a pawn in the base with one of the player's pawns on their entrance", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+        board.makeMove(move);
+
+        let dice = [5, 6];
+
+        pawn = new Pawn(1, player1.color);
+        move = new MoveEnter(pawn);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 })
 

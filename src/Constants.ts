@@ -45,3 +45,4 @@ export const ENTRY_POINTS = {
     0: 38,
     3: 55
 }
+export const ENTRY_OFFSET = 17;
