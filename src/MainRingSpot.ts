@@ -14,6 +14,8 @@ export class MainRingSpot extends _Spot {
     
     max_n_pawns: number = c.MAX_N_PAWNS_MAIN;
 
+    // index: number; // for debugging purposes
+
     constructor(sanc: boolean, home_color: Color | null) {
         super();
 
