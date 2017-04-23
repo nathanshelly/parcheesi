@@ -24,6 +24,7 @@ export class RulesChecker {
 	legalTurn(moves: _Move[], possible_moves: number[], player: _Player, board: Board): boolean {
 		// check legality of entire turn here
 		// this.legalRoll()
+		return true;
 	}
 
 

@@ -105,7 +105,7 @@ describe("Enter move cheats", () => {
 
         let dice = [5, 6];
         
-        let res = rc.legalMove(move, dice, player1, board);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
 
         pawn = new Pawn(4, player1.color);
@@ -113,7 +113,7 @@ describe("Enter move cheats", () => {
 
         dice = [5, 6];
         
-        res = rc.legalMove(move, dice, player1, board);
+        res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
     });
 
@@ -123,7 +123,7 @@ describe("Enter move cheats", () => {
 
         let dice = [5, 6];
         
-        let res = rc.legalMove(move, dice, player2, board);
+        let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
     });
 
@@ -133,7 +133,7 @@ describe("Enter move cheats", () => {
 
         let dice = [5, 6];
         
-        let res = rc.legalMove(move, dice, player1, board);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
 
@@ -142,7 +142,7 @@ describe("Enter move cheats", () => {
         let move = new MoveEnter(pawn);
         board.makeMove(move);
 
-        let res = rc.legalMove(move, [5, 6], player1, board);
+        let res = rc.legalMove(move, [5, 6], player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
     });
 
@@ -152,7 +152,7 @@ describe("Enter move cheats", () => {
         
         let dice = [1, 2];
 
-        let res = rc.legalMove(move, dice, player1, board);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
     });
 
@@ -167,7 +167,7 @@ describe("Enter move cheats", () => {
 
         let dice = [5, 6];
         
-        let res = rc.legalMove(move, dice, player1, board);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
     });
 
@@ -180,7 +180,7 @@ describe("Enter move cheats", () => {
 
         let dice = [5, 6];
 
-        let res = rc.legalMove(move, dice, player1, board);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.false;
     });
 });

@@ -21,6 +21,6 @@ export class Parcheesi implements _Parcheesi {
 		this.board = new Board(this.players);
 
 		// player turns loop
-		while(true)
+		// while(true)
 	};
 };

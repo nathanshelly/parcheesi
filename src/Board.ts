@@ -155,7 +155,7 @@ export class Board {
 
 		return base;
 	}
-
+	
 	// assumes pawns color and id are correct
 	// must be checked previously
 	// does not assume pawn's spot is correct
@@ -189,7 +189,7 @@ export class Board {
 		if(next_spot === null)
 			return append_pawns
 		
-		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, spot));
+		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, next_spot));
 	}
 	
 	getPawnsOfColorInBase(color: Color): Pawn[] {
