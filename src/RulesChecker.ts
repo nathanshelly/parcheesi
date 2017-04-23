@@ -31,6 +31,13 @@ export class RulesChecker {
 		let starting_blockades: Pawn[][] = board.findBlockadesOfColor(player.color);
 		// check legality of roll here
 		// for testing purposes assumes moves has one move
+
+		// AT SOME POINT
+		
+		// while(moves.length > 0) {
+			// consume moves every time
+		// }
+
 		return this.legalMove(moves[0], possible_moves, player, board, starting_blockades);
 	}
 
@@ -64,21 +71,23 @@ export class RulesChecker {
 		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
 	}
 
-	// madeAllLegalMoves(possible_moves: number[], board: Board, player: _Player): boolean {
-	// 	// TODO: actually write this function, check that remaining moves cannot be played
-	// 	return true;
+	madeAllLegalMoves(possible_moves: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+		let base_pawns: Pawn[] = board.getPawnsOfColorInBase(player.color);
 
-	// 	let pawns: Pawn[] = board.findPawnsOfColorOnBoard(player.color);
-	// 	return possible_moves.filter(move => {
-	// 		pawns.some(pawn => {
-	// 			if()
-				
-	// 			let move = new Move
-	// 			this.legalMove()
-	// 		});
-	// 		this.legalMove()
-	// 	}).length === 0;
-	// }
+		if(base_pawns.some(pawn => { return this.legalMove(new MoveEnter(pawn), possible_moves, player, board, starting_blockades); }))
+			return false;
+
+		let main_ring_pawns: Pawn[] = board.getPawnsOfColorOnBoard(player.color);
+
+		if(main_ring_pawns.some(pawn => {
+			return possible_moves.some(distance => { 
+				return this.legalMove(new MoveForward(pawn, distance), possible_moves, player, board, starting_blockades); 
+			});
+		}))
+			return false;
+		
+		return true;
+	}
 
 	// MAIN RING CHECKS
 
