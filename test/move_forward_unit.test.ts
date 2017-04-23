@@ -24,7 +24,7 @@ import 'mocha';
 
 
 
-describe('Filename: move_foward.test.ts\n\nUnit tests for main moves:', () => {
+describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () => {
     let game: Parcheesi;
     let checker: RulesChecker = new RulesChecker();
 

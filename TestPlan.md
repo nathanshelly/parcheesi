@@ -4,6 +4,19 @@
 
 ### To Do
 
+#### Sequence cheats
+
+- multiple moves in a roll
+	- 
+- multiple rolls in a turn
+	- 
+
+#### Main cheats
+
+- Attempted to move blockade together in same roll
+
+### Done
+
 #### Main cheats
 
 - Move a pawn of illegal ID
@@ -11,12 +24,7 @@
 - Moved pawn to invalid location (past the home row)
 - Moved pawn to or though blockade (path contains blockade)
 - Attempted to move invalid distance (implicitly checks home on exact move)
-- Attempted to move blockade together in same roll
-
 - Attempted to land on occupied safe spot
-
-
-### Done
 
 #### Global cheats
 

@@ -7,6 +7,7 @@ import { Color } from '../src/Color'
 import { _Spot } from '../src/_Spot'
 
 export function placePawnsOnEntrySpot(pawns: [Pawn | null, Pawn | null], board: Board, color: Color): void {
+	removeOldPawns(pawns, board);
 	board.getEntrySpot(color).pawns = pawns;
 }
 
@@ -17,10 +18,14 @@ export function placePawnsAtOffsetFromEntry(pawns: [Pawn | null, Pawn | null], b
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')
 
+	removeOldPawns(pawns, board);
+	
+	next_spot.pawns = pawns;
+}
+
+function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 	pawns.forEach(pawn => {
 		if(pawn !== null)
 			board.findPawn(pawn).remove_pawn(pawn);
 	});
-	
-	next_spot.pawns = pawns;
 }

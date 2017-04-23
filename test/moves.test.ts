@@ -23,7 +23,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: cheating_moves.test.ts\n\nNon-move-specific cheating:', () => {
+describe('Filename: moves.test.ts\n\nNon-move-specific cheating:', () => {
     let game: Parcheesi;
     let board: Board;
     let checker: RulesChecker = new RulesChecker();
@@ -499,39 +499,142 @@ describe("Legal forward moves:", () => {
         board = new Board(players);
     });
     
+    it("should allow movement from entry spot to a valid main ring spot", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 6);
+
+        let dice = [5, 6];
+
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
+    });
+
     it("should allow movement from a main ring spot with one pawn to a valid main ring spot", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 4);
+
+        let dice = [4, 6];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 4);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow movement from a spot on the main ring to a valid spot in the player's home row", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 6);
+
+        let dice = [5, 6];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 65);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow movement from a spot on a player's home row to another valid spot on their home row", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 2);
+
+        let dice = [5, 2];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 71);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow movement onto the home spot, with exactly the right distance, from the home row", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 4);
+
+        let dice = [5, 4];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 71);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow movement onto the home spot, with exactly the right distance, from the main ring", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 9);
+
+        let dice = [5, 9];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 66);
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow a valid bop", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let opposing_pawn = new Pawn(0, player2.color);
+        let move = new MoveForward(pawn, 3);
+
+        let dice = [5, 3];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player2.color, 8);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
-    it("should allow a pawn in a blockade to form a blockade with a different pawn, in the same roll", () => {
-        expect(0).to.equal(1);
+    it("should allow a pawn to form a blockade", () => {
+        let pawn = new Pawn(0, player1.color);
+        let pawn_on_same_team = new Pawn(1, player1.color);
+        let move = new MoveForward(pawn, 3);
+
+        let dice = [5, 3];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn_on_same_team, null], board, player2.color, 8);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow a pawn in a blockade to move out of the blockade", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let pawn_in_blockade = new Pawn(1, player1.color);
+        let move = new MoveForward(pawn, 3);
+
+        let dice = [5, 3];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_blockade], board, player1.color, 5);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
+    });
+
+    it("should allow a pawn in a blockade to form a blockade with a different pawn, in the same roll", () => {
+        let pawn = new Pawn(0, player1.color);
+        let pawn_in_old_blockade = new Pawn(1, player1.color);
+        let pawn_in_new_blockade = new Pawn(2, player1.color);
+        let move = new MoveForward(pawn, 3);
+
+        let dice = [5, 3];
+
+        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_old_blockade], board, player1.color, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn_in_new_blockade, null], board, player2.color, 8);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 
     it("should allow both pawns in a blockade to move, if not creating a new blockade", () => {
-        expect(0).to.equal(1);
+        let pawn_one = new Pawn(0, player1.color);
+        let pawn_two = new Pawn(1, player1.color);
+        let move_one = new MoveForward(pawn_one, 3);
+        let move_two = new MoveForward(pawn_two, 5);
+
+        let dice = [5, 3];
+
+        tm.placePawnsAtOffsetFromEntry([pawn_one, pawn_two], board, player1.color, 5);
+
+        let res = rc.legalMove(move_one, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
+
+        res = rc.legalMove(move_two, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.true;
     });
 });

@@ -23,7 +23,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: move_enter.test.ts\n\nUnit tests for entering with correct number:', () => {
+describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with correct number:', () => {
     let game: Parcheesi;
     let checker: RulesChecker = new RulesChecker();
 
@@ -100,17 +100,31 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
 });
 
 describe('Unit tests for entering pawn:', () => {
+    let rc: RulesChecker;
     let board: Board;
-    let checker: RulesChecker = new RulesChecker();
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
+            throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
 
+    before(() => {
+        rc = new RulesChecker();
+    });
+
     beforeEach(() => {
-        board = new Board([]);
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Green);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
     });
     
     it('should correctly identify if blockade exists on home spot of same color', () => {
@@ -120,7 +134,7 @@ describe('Unit tests for entering pawn:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Green);
         tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
-        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if blockade exists on home spot of opposite color', () => {
@@ -130,12 +144,12 @@ describe('Unit tests for entering pawn:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
         tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
-        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if no blockade exists on home spot of same color', () => {
         // technically both blockade_pawns are also still in the player's base 
         // but shouldn't matter for purposes of this test
-        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(false);
+        expect(rc.blockadeOnHome(Color.Yellow, board)).to.equal(false);
     });
 });

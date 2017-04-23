@@ -151,7 +151,7 @@ export class Board {
 	getBaseSpot(color: Color): BaseSpot {
 		let base: BaseSpot | undefined = this.bases[color];
 		
-		if(!base)
+		if(base === undefined)
 			throw new Error("That color isn't playing and has no base spot.");
 
 		return base;

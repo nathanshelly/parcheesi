@@ -24,6 +24,8 @@ export abstract class _Spot {
 
     // assumes pawn exists
     remove_pawn(pawn: Pawn): void {
+        // need to indexOf(true) on mapped array because indexOf comparison
+        // won't correctly match pawns on board with player created pawns
         let matching_index: number = this.pawns.map(p => {return _.isEqual(p, pawn); }).indexOf(true);
         this.pawns[matching_index] = null;
     }
