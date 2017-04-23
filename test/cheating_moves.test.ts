@@ -256,16 +256,94 @@ describe("Legal enter moves:", () => {
 })
 
 describe("Forward move cheats:", () => {
+    let rc: RulesChecker;
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    before(() => {
+        rc = new RulesChecker();
+    });
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
     it("should not allow movement of a pawn of illegal ID", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(-1, player1.color);
+        let move = new MoveForward(pawn, 10);
+
+        let dice = [5, 10];
+        
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
+
+        pawn = new Pawn(4, player1.color);
+        move = new MoveForward(pawn, 5);
+
+        dice = [5, 6];
+        
+        res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn of other than the player's color", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 5);
+
+        let dice = [5, 6];
+        
+        let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
+        expect(res).to.be.false;
+    });
+
+    it("should not allow movement of a pawn zero or a negative distance", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 0);
+
+        let dice = [5, 6];
+        
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 0);
+        let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
+        expect(res).to.be.false;
+
+        move = new MoveForward(pawn, -5);
+        res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
+        expect(res).to.be.false;
+    });
+    
+    it("should not allow movement of a pawn a distance greater than 20", () => {
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 21);
+
+        let dice = [21, 6];
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 0);
+        let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn past the end of the home row", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveForward(pawn, 10);
+
+        let dice = [20, 6];
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 67);
+        let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn through a blockade of our own color", () => {
@@ -298,6 +376,33 @@ describe("Forward move cheats:", () => {
 });
 
 describe("Legal forward moves:", () => {
+    let rc: RulesChecker;
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    before(() => {
+        rc = new RulesChecker();
+    });
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+    
     it("should allow movement from a main ring spot with one pawn to a valid main ring spot", () => {
         expect(0).to.equal(1);
     });

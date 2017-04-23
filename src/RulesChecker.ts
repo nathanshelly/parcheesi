@@ -94,7 +94,9 @@ export class RulesChecker {
 
 	legalMoveFoward(move: MoveForward, possible_moves: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 			if (move.distance < 1
-				|| move.distance > c.LARGEST_POSSIBLE_MOVE)
+				|| move.distance > c.LARGEST_POSSIBLE_MOVE
+				|| possible_moves.indexOf(move.distance) === -1
+				|| board.pawnInBase(move.pawn))
 					return false;
 
 		let blockade_on_spot = (spot: _Spot) => { return spot.has_blockade(); };
