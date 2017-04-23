@@ -1,4 +1,5 @@
 import * as _ from 'lodash'
+import * as tm from './testMethods'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -19,12 +20,10 @@ import { HomeSpot } from '../src/HomeSpot'
 import { HomeRowSpot } from '../src/HomeRowSpot'
 import { MainRingSpot } from '../src/MainRingSpot'
 
-import * as tm from './TestMethods'
-
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: move_enter.test.ts\n\nNon-move-specific cheating:', () => {
+describe('Filename: cheating_moves.test.ts\n\nNon-move-specific cheating:', () => {
     let game: Parcheesi;
     let board: Board;
     let checker: RulesChecker = new RulesChecker();

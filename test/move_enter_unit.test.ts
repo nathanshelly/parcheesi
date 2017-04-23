@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
+import * as tm from './testMethods'
 import * as c from '../src/Constants'
-import * as _test from './testMethods'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -82,20 +82,20 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
     
     it('should correctly identify if green 0 pawn in base spot', () => {
         let pawn = new Pawn(0, Color.Green);
-        expect(checker.pawnInBase(pawn, game.board)).to.equal(true);
+        expect(game.board.pawnInBase(pawn)).to.equal(true);
     });
     
     it('should correctly identify if green 0 pawn in base spot', () => {
         let color = Color.Green;
         let pawn = new Pawn(0, color);
         game.board.bases[color].pawns[0] = null;
-        expect(checker.pawnInBase(pawn, game.board)).to.equal(false);
+        expect(game.board.pawnInBase(pawn)).to.equal(false);
     });
 
     it('should correctly identify that pawn of unregistered player is not in base spot', () => {
         let pawn = new Pawn(0, Color.Blue);
 
-        expect(() => { checker.pawnInBase(pawn, game.board); }).to.throw(Error);
+        expect(() => { game.board.pawnInBase(pawn); }).to.throw(Error);
     });
 });
 
@@ -118,7 +118,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this tests
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        _test.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
@@ -128,7 +128,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this test
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        _test.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
         expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
