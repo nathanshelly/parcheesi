@@ -154,7 +154,7 @@ export class RulesChecker {
 	// ENTRANCE CHECKS
 	
 	legalMoveEnter(move: MoveEnter, possible_moves: number[], board: Board): boolean {
-		return this.hasFive(possible_moves) && board.pawnInBase(move.pawn) && !this.blockadeOnHome(move.pawn.color, board);
+		return this.hasFive(possible_moves) && !this.blockadeOnHome(move.pawn.color, board) && board.pawnInBase(move.pawn);
 	}
 
 	blockadeOnHome(color: Color, board: Board): boolean {

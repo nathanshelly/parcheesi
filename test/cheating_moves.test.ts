@@ -197,6 +197,22 @@ describe("Legal enter moves:", () => {
         }
     }
 
+    before(() => {
+        rc = new RulesChecker();
+    });
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
     it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
