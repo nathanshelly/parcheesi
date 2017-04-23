@@ -25,7 +25,7 @@ export class Board {
 			is_sanctuary = true;
 
 		let color: Color | null = null;
-		if (c.HOME_ROW_BY_INDEX[ind])
+		if (c.HOME_ROW_BY_INDEX[ind] !== undefined) // FUCK YOU ZERO
 			color = c.HOME_ROW_BY_INDEX[ind];
 
 		return new MainRingSpot(is_sanctuary, color);
@@ -38,6 +38,7 @@ export class Board {
 
 		this.mainRing.forEach((sp, i, a) => {
 			sp.setNextMain(a[(i + 1) % a.length]);
+			// sp.index = i; // for debugging purposes
 		});
 
 		for (let i = 0; i < players.length; i++) {
