@@ -317,7 +317,7 @@ describe("Forward move cheats:", () => {
 
         let dice = [5, 6];
         
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 0);
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
         let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
 
@@ -331,17 +331,19 @@ describe("Forward move cheats:", () => {
         let move = new MoveForward(pawn, 21);
 
         let dice = [21, 6];
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 0);
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
         let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn past the end of the home row", () => {
         let pawn = new Pawn(0, player1.color);
-        let move = new MoveForward(pawn, 10);
+        let move = new MoveForward(pawn, 20);
 
         let dice = [20, 6];
+        
         tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 67);
+        
         let res = rc.legalMove(move, dice, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
     });
