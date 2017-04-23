@@ -155,7 +155,7 @@ export class Board {
 
 		return base;
 	}
-	
+
 	// assumes pawns color and id are correct
 	// must be checked previously
 	// does not assume pawn's spot is correct
@@ -182,7 +182,7 @@ export class Board {
 
 	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
 		let live_pawns: Pawn[] = spot.get_live_pawns();
-		let append_pawns: Pawn[] = live_pawns && live_pawns[0].color === color ? live_pawns : [];
+		let append_pawns: Pawn[] = (live_pawns.length > 0 && live_pawns[0].color === color) ? live_pawns : [];
 		
 		let next_spot: _Spot | null = this.getNextSpot(spot, color);
 
