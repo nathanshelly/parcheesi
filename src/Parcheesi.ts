@@ -19,5 +19,8 @@ export class Parcheesi implements _Parcheesi {
 	// start a game
 	start(): void {
 		this.board = new Board(this.players);
+
+		// player turns loop
+		while(true)
 	};
 };

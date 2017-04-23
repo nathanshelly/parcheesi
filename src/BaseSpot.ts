@@ -25,4 +25,6 @@ export class BaseSpot extends _Spot {
     next(): MainRingSpot {
         return this._next;
     }
+
+    has_blockade(): boolean {return false;}
 }

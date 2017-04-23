@@ -17,4 +17,6 @@ export class HomeSpot extends _Spot {
         this.pawns = _.fill(new Array(this.max_n_pawns), null);
         this.color = color;
     }
+
+    has_blockade(): boolean {return false};
 }

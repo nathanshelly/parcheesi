@@ -7,10 +7,10 @@ export abstract class _Spot {
     max_n_pawns: number;
     pawns: (Pawn | null)[];
 
+    abstract has_blockade(): boolean;
+    
     n_pawns(): number { return this.get_live_pawns().length; };
     
-    has_blockade(): boolean { return this.n_pawns() === c.NUM_PAWNS_IN_BLOCKADE}
-
     // cast as Pawn[] because TypeScript doesn't understand that filter will ensure no null in list:
     // (either Pawn[] or [] which is still Pawn[])
     get_live_pawns(): Pawn[] { return this.pawns.filter(p => { return p !== null}) as Pawn[]; };

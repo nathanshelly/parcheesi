@@ -98,13 +98,31 @@ export class Board {
 		return spot;
 	}
 
+	findBlockadesOfColor(color: Color): Pawn[][] {
+		let pawn_spots: _Spot[] = this.getSpotsOfColor(color);
+		
+		// filter to unique spots (keeps first of duplicate items)
+		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
+		// filter spots to only spots with blockades
+		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
+		
+		// get tuples of pawns from spots that have blockades
+		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => spot.get_live_pawns())
+		return currently_blockaded_pawns;
+	}
+
 	advanceToNewSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
+		// no predicate, just to find distances
+		return this.spotRunner(spot, distance, color);
+	};
+
+	spotRunner(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
 		let next_spot: _Spot | null = null;
 		
 		while(distance > 0) {
 			next_spot = this.getNextSpot(spot, color);
 			// trigger that they've cheated instead?
-			if(next_spot === null)
+			if(next_spot === null || predicates.some(predicate => { return predicate(next_spot as _Spot); }))
 				return null;
 			distance--;
 		}
@@ -123,6 +141,12 @@ export class Board {
 			return null;
 	}
 
+	getEntrySpot(color: Color): MainRingSpot {
+		// no need to check if entry spot exists as it will exist even
+		// if passed in color isn't actually playing
+		return this.mainRing[c.ENTRY_POINTS[color]];
+	}
+
 	getBaseSpot(color: Color): BaseSpot {
 		let base: BaseSpot | undefined = this.bases[color];
 		
@@ -132,10 +156,16 @@ export class Board {
 		return base;
 	}
 
-	getEntrySpot(color: Color): MainRingSpot {
-		// no need to check if entry spot exists as it will exist even
-		// if passed in color isn't actually playing
-		return this.mainRing[c.ENTRY_POINTS[color]];
+	// assumes pawns color and id are correct
+	// must be checked previously
+	// does not assume pawn's spot is correct
+	pawnInBase(pawn: Pawn): boolean {
+		return this.getBaseSpot(pawn.color).pawn_exists(pawn);
+	};
+
+
+	getSpotsOfColor(color: Color): _Spot[] {
+		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findPawn(pawn); });
 	}
 
 	// functions for getting a pawn based on color

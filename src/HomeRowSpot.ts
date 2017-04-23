@@ -28,4 +28,6 @@ export class HomeRowSpot extends _Spot {
     next(): HomeRowSpot | HomeSpot {
         return this._next;
     }
+
+    has_blockade(): boolean {return this.n_pawns() === c.MAX_N_PAWNS_HOME_ROW}
 }
