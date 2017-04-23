@@ -17,5 +17,10 @@ export function placePawnsAtOffsetFromEntry(pawns: [Pawn | null, Pawn | null], b
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')
 
+	pawns.forEach(pawn => {
+		if(pawn !== null)
+			board.findPawn(pawn).remove_pawn(pawn);
+	});
+	
 	next_spot.pawns = pawns;
 }
