@@ -365,31 +365,109 @@ describe("Forward move cheats:", () => {
     });
 
     it("should not allow movement of a pawn through a blockade of our own color", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        
+        let b_pawn0 = new Pawn(1, player1.color);
+        let b_pawn1 = new Pawn(2, player1.color);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player1.color, 6);
+
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+
+        let dice = [4, 6];
+        let move = new MoveForward(pawn, 10);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn onto a spot blockaded by our own color", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        
+        let b_pawn0 = new Pawn(1, player1.color);
+        let b_pawn1 = new Pawn(2, player1.color);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player1.color, 10);
+
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+
+        let dice = [4, 6];
+        let move = new MoveForward(pawn, 10);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn through a blockade of another player's", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        
+        let b_pawn0 = new Pawn(1, player2.color);
+        let b_pawn1 = new Pawn(2, player2.color);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player2.color, 6);
+
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+
+        let dice = [4, 6];
+        let move = new MoveForward(pawn, 10);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
     it("should not allow movement of a pawn onto a spot blockaded by another player", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        
+        let b_pawn0 = new Pawn(1, player2.color);
+        let b_pawn1 = new Pawn(2, player2.color);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player2.color, 10);
+
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+
+        let dice = [4, 6];
+        let move = new MoveForward(pawn, 10);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
-    it("should not allow movement of a blockade together in the same roll", () => {
-        expect(0).to.equal(1);
+    it("should not allow landing on a safety spot occupied by another player", () => {
+        let pawn = new Pawn(0, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+
+        let other_pawn = new Pawn(0, player2.color);
+        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, player2.color, 24);
+
+        let dice = [1, 6];
+        let move = new MoveForward(pawn, 7);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 
-    it("should not allow landing on an occupied safety spot", () => {
-        expect(0).to.equal(1);
-    });
+    it("should not allow movement of a distance other than those possible with the dice", () => {
+        let pawn = new Pawn(0, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
 
-    it("should not allow movement of a distance other than those on the dice, with no bonuses", () => {
-        expect(0).to.equal(1);
+        let dice = [3, 4];
+        let move = new MoveForward(pawn, 1);
+
+        let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
+
+        move = new MoveForward(pawn, 6);
+
+        res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
+
+        dice = [3, 4, 10]
+        
+        move = new MoveForward(pawn, 6);
+
+        res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
+
+        move = new MoveForward(pawn, 12);
+
+        res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
+        expect(res).to.be.false;
     });
 });
 
