@@ -67,7 +67,7 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
     let checker: RulesChecker = new RulesChecker();
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed in testing board instantiaton.');
         }
     }
@@ -106,7 +106,7 @@ describe('Unit tests for entering pawn:', () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }

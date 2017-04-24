@@ -29,7 +29,7 @@ describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () 
     let checker: RulesChecker = new RulesChecker();
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed in testing board instantiaton.');
         }
     }

@@ -78,7 +78,7 @@ describe("Enter move cheats", () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
@@ -192,7 +192,7 @@ describe("Legal enter moves:", () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
@@ -278,7 +278,7 @@ describe("Forward move cheats:", () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
@@ -478,7 +478,7 @@ describe("Legal forward moves:", () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: [number, number]): [_Move, _Move] {
+        doMove(brd: Board, dice: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
