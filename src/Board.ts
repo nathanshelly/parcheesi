@@ -78,7 +78,7 @@ export class Board {
 		let new_spot: _Spot;
 
 		if(move instanceof MoveForward)
-			new_spot = this.advanceToNewSpot(old_spot, move.distance, move.pawn.color) as _Spot;
+			new_spot = this.getSpotAtOffsetFromSpot(old_spot, move.distance, move.pawn.color) as _Spot;
 		// move is MoveEnter
 		else
 			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
@@ -141,10 +141,15 @@ export class Board {
 		return currently_blockaded_pawns;
 	}
 
-	advanceToNewSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
+	getSpotAtOffsetFromSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
 		// no predicate, just to find distances
 		return this.spotRunner(spot, distance, color);
 	};
+
+	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
+		let spot = this.getEntrySpot(color);
+		return this.spotRunner(spot, distance, color);
+	}
 
 	spotRunner(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
 		let next_spot: _Spot | null = spot;

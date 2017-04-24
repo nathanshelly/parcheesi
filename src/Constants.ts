@@ -10,8 +10,12 @@ export const MAX_N_PAWNS_HOME_ROW = NUM_PAWNS_IN_BLOCKADE;
 
 export const HOME_ROW_SIZE = 8;
 export const MAIN_RING_SIZE = 68;
+export const ENTRY_TO_HOME_START_OFFSET = 64;
+
 export const ENTRY_VALUE = 5;
+
 export const LARGEST_POSSIBLE_MOVE = 20; // bopping bonus
+
 export const HOME_SPOT_BONUS = 10;
 export const BOP_BONUS = 20;
 
@@ -47,5 +51,4 @@ export const ENTRY_POINTS = {
     0: 38,
     3: 55
 }
-
 export const ENTRY_OFFSET = 17;
