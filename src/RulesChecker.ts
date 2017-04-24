@@ -115,7 +115,7 @@ export class RulesChecker {
 		
 		if(final_spot instanceof MainRingSpot)
 			if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== player.color)
-				return board.landingWillBop(final_spot, player.color);
+				return board.landingWillBop(move, final_spot);
 
 		return true;
 	}
