@@ -587,7 +587,7 @@ describe("Legal forward moves:", () => {
         let dice = [5, 3];
 
         tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 5);
-        tm.placePawnsAtOffsetFromEntry([pawn_on_same_team, null], board, player2.color, 8);
+        tm.placePawnsAtOffsetFromEntry([pawn_on_same_team, null], board, player1.color, 8);
 
         let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;

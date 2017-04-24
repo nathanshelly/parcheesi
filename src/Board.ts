@@ -38,7 +38,7 @@ export class Board {
 
 		this.mainRing.forEach((sp, i, a) => {
 			sp.setNextMain(a[(i + 1) % a.length]);
-			// sp.index = i; // for debugging purposes
+			sp.index = i; // for debugging purposes
 		});
 
 		for (let i = 0; i < players.length; i++) {
@@ -118,14 +118,13 @@ export class Board {
 	};
 
 	spotRunner(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
-		let next_spot: _Spot | null = null;
+		let next_spot: _Spot | null = spot;
 		
-		while(distance > 0) {
-			next_spot = this.getNextSpot(spot, color);
+		while(distance-- > 0) {
+			next_spot = this.getNextSpot(next_spot, color);
 			// trigger that they've cheated instead?
 			if(next_spot === null || predicates.some(predicate => { return predicate(next_spot as _Spot); }))
 				return null;
-			distance--;
 		}
 
 		return next_spot;

@@ -104,9 +104,9 @@ export class RulesChecker {
 		// spotRunner implicitly checks that distance is not off board 
 		// (which itself implicitly checks that they enter home on exact value)
 		let final_spot: _Spot | null = board.spotRunner(board.findPawn(move.pawn),
-																										move.distance,
-																										player.color,
-																										blockade_on_spot);
+														move.distance,
+														player.color,
+														blockade_on_spot);
 
 		if(final_spot === null)
 			return false;
