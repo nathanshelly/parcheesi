@@ -84,18 +84,24 @@ export class Board {
 		
 		old_spot.remove_pawn(move.pawn);
 		
-		return this.handleSpecialLandings(new_spot, move.pawn.color);
+		return this.handleSpecialLandings(move, new_spot);
 	}
 
-	handleSpecialLandings(spot: _Spot, color: Color): number | null {
+	handleSpecialLandings(move: _Move, spot: _Spot): number | null {
 		if(spot instanceof HomeSpot)
 			return c.HOME_SPOT_BONUS;
-		if(spot instanceof MainRingSpot && this.landingWillBop(spot, color)) {
+		if(spot instanceof MainRingSpot && this.landingWillBop(move, spot)) {
 			this.moveOnePawnBackToBase(spot);
 			return c.BOP_BONUS;
 		}
 
 		return null;
+	}
+
+	// at this point we know spot has no blockades, contracts again?
+	landingWillBop(move: _Move, spot: MainRingSpot): boolean {
+		return (move instanceof MoveEnter ? true : !spot.sanctuary)
+					 && spot.get_live_pawns().some(pawn => { return pawn !== null && pawn.color !== move.pawn.color; });
 	}
 
 	// at least one pawn on this spot
@@ -105,12 +111,7 @@ export class Board {
 
 		this.bases[moving_pawn.color].add_pawn(moving_pawn)
 	}
-
-	// at this point we know spot has no blockades, contracts again?
-	landingWillBop(spot: MainRingSpot, color: Color): boolean {
-		return !spot.sanctuary && spot.get_live_pawns().some(pawn => { return pawn !== null && pawn.color !== color; });
-	}
-
+	
 	findPawn(pawn: Pawn): _Spot {
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
 		if(base_spot.pawn_exists(pawn))
