@@ -5,11 +5,13 @@ import * as tm from './testMethods'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { _Player } from '../src/_Player'
+import { BasicPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
 import { MoveForward } from '../src/MoveForward'
 
+import { Board } from '../src/Board'
 import { _Spot } from '../src/_Spot'
 import { BaseSpot } from '../src/BaseSpot'
 import { HomeSpot } from '../src/HomeSpot'
@@ -20,12 +22,48 @@ import { expect } from 'chai'
 import 'mocha'
 
 describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
     it("should perform entrance moves correctly", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        let move = new MoveEnter(pawn);
+
+        let entry = board.getEntrySpot(player1.color);
+
+        expect(entry.n_pawns()).to.equal(0);
+
+        board.makeMove(move);
+
+        expect(entry.n_pawns()).to.equal(1);
     });
 
     it("should advance spots in the main ring correctly", () => {
-        expect(0).to.equal(1);
+        let pawn = new Pawn(0, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
+
+        let move = new MoveForward(pawn, 3);
+
+        
     });
 
     it("should advance spots from the main ring to the home row correctly", () => {

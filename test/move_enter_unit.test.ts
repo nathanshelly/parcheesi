@@ -132,7 +132,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this tests
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board);
 
         expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
@@ -142,7 +142,7 @@ describe('Unit tests for entering pawn:', () => {
         // but shouldn't matter for purposes of this test
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
+        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board);
         
         expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });

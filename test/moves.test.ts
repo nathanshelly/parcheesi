@@ -173,7 +173,7 @@ describe("Enter move cheats", () => {
 
     it("should not allow an enter move if a blockade of another player's exists on the entry spot", () => {
         let pawns: [Pawn, Pawn] = [new Pawn(0, player2.color), new Pawn(1, player2.color)];
-        tm.placePawnsOnEntrySpot(pawns, board, player1.color);
+        tm.placePawnsOnEntrySpot(pawns, board);
 
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
@@ -250,7 +250,7 @@ describe("Legal enter moves:", () => {
         let distances = [5, 6];
 
         let other_pawn = new Pawn(0, player2.color);
-        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, player2.color, c.ENTRY_OFFSET);
+        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, c.ENTRY_OFFSET);
 
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
@@ -333,7 +333,7 @@ describe("Forward move cheats:", () => {
 
         let distances = [5, 6];
         
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
         let res = rc.legalMove(move, distances, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
 
@@ -347,7 +347,7 @@ describe("Forward move cheats:", () => {
         let move = new MoveForward(pawn, 21);
 
         let distances = [21, 6];
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
         let res = rc.legalMove(move, distances, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
     });
@@ -358,7 +358,7 @@ describe("Forward move cheats:", () => {
 
         let distances = [20, 6];
         
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 67);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 67);
         
         let res = rc.legalMove(move, distances, player2, board, board.findBlockadesOfColor(player2.color));
         expect(res).to.be.false;
@@ -369,9 +369,9 @@ describe("Forward move cheats:", () => {
         
         let b_pawn0 = new Pawn(1, player1.color);
         let b_pawn1 = new Pawn(2, player1.color);
-        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player1.color, 6);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, 6);
 
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let distances = [4, 6];
         let move = new MoveForward(pawn, 10);
@@ -385,9 +385,9 @@ describe("Forward move cheats:", () => {
         
         let b_pawn0 = new Pawn(1, player1.color);
         let b_pawn1 = new Pawn(2, player1.color);
-        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player1.color, 10);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, 10);
 
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let distances = [4, 6];
         let move = new MoveForward(pawn, 10);
@@ -401,9 +401,9 @@ describe("Forward move cheats:", () => {
         
         let b_pawn0 = new Pawn(1, player2.color);
         let b_pawn1 = new Pawn(2, player2.color);
-        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player2.color, 6);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, 6);
 
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let distances = [4, 6];
         let move = new MoveForward(pawn, 10);
@@ -417,9 +417,9 @@ describe("Forward move cheats:", () => {
         
         let b_pawn0 = new Pawn(1, player2.color);
         let b_pawn1 = new Pawn(2, player2.color);
-        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, player2.color, 10);
+        tm.placePawnsAtOffsetFromEntry([b_pawn0, b_pawn1], board, 10);
 
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let distances = [4, 6];
         let move = new MoveForward(pawn, 10);
@@ -430,10 +430,10 @@ describe("Forward move cheats:", () => {
 
     it("should not allow landing on a safety spot occupied by another player", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let other_pawn = new Pawn(0, player2.color);
-        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, player2.color, 24);
+        tm.placePawnsAtOffsetFromEntry([other_pawn, null], board, 24);
 
         let distances = [1, 6];
         let move = new MoveForward(pawn, 7);
@@ -444,7 +444,7 @@ describe("Forward move cheats:", () => {
 
     it("should not allow movement of a distance other than those possible with the distances", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
 
         let distances = [3, 4];
         let move = new MoveForward(pawn, 1);
@@ -505,7 +505,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 6];
 
-        tm.placePawnsOnEntrySpot([pawn, null], board, player1.color);
+        tm.placePawnsOnEntrySpot([pawn, null], board);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -516,7 +516,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [4, 6];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 4);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 4);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -527,7 +527,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 6];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 65);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 65);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -538,7 +538,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 2];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 71);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 71);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -549,7 +549,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 4];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 67);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 67);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -560,7 +560,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 10];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 62);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 62);
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -572,8 +572,8 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 3];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 5);
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player2.color, 8);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 8);
 
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
@@ -586,8 +586,8 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 3];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 5);
-        tm.placePawnsAtOffsetFromEntry([pawn_on_same_team, null], board, player1.color, 8);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn_on_same_team, null], board, 8);
 
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
@@ -600,7 +600,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 3];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_blockade], board, player1.color, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_blockade], board, 5);
 
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
@@ -614,8 +614,8 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 3];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_old_blockade], board, player1.color, 5);
-        tm.placePawnsAtOffsetFromEntry([pawn_in_new_blockade, null], board, player2.color, 8);
+        tm.placePawnsAtOffsetFromEntry([pawn, pawn_in_old_blockade], board, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn_in_new_blockade, null], board, 8);
 
         let res = rc.legalMove(move, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
@@ -629,7 +629,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 3];
 
-        tm.placePawnsAtOffsetFromEntry([pawn_one, pawn_two], board, player1.color, 5);
+        tm.placePawnsAtOffsetFromEntry([pawn_one, pawn_two], board, 5);
 
         let res = rc.legalMove(move_one, distances, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
