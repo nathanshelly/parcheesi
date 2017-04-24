@@ -24,10 +24,15 @@ export function rollDice(): number[] {
 	return isDoubles(initial_roll) ? initial_roll.concat(doublesOpposites(initial_roll[0])) : initial_roll;
 }
 
-export function addDistance(current_distances: number[], ): number[] {
-	// return current_moves
+export function addDistance(current_distances: number[], new_distance: number): number[] {
+	current_distances.push(new_distance);
+	return current_distances;
 }
 
-export function consumeDistance(current_distancess: number[]): number[] {
+export function consumeDistance(current_distances: number[], distance_to_consume: number): number[] {
+	if(!(distance_to_consume in current_distances))
+		throw new Error("That distance isn't in the array and can't be consumed!");
 	
+	current_distances.splice(current_distances.indexOf(distance_to_consume), 1);
+	return current_distances;
 }
