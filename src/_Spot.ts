@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
+import { Color } from './Color'
 
 export abstract class _Spot {
     max_n_pawns: number;
@@ -29,4 +30,6 @@ export abstract class _Spot {
         let matching_index: number = this.pawns.map(p => {return _.isEqual(p, pawn); }).indexOf(true);
         this.pawns[matching_index] = null;
     }
+
+    color_of_pawns(): Color | null { return this.n_pawns() > 0 ? this.get_live_pawns()[0].color : null; }
 }
