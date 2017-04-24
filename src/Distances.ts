@@ -31,8 +31,8 @@ export function addDistance(current_distances: number[], new_distance: number): 
 	return current_distances;
 }
 
-export function consumeDistance(current_distances: number[], distance_to_consume: number): number[] {
-	return (typeof distance_to_consume === undefined) 
+export function consumeDistance(current_distances: number[], distance_to_consume?: number): number[] {
+	return (typeof distance_to_consume === 'undefined') 
 					? consumeMoveEnterDistance(current_distances)
 					: consumeMoveForwardDistance(current_distances, distance_to_consume);
 }
@@ -74,7 +74,7 @@ function consumePair(current_distances: number[], pair_to_consume: [number, numb
 	return consumeSingleDistance(current_distances, pair_to_consume[1]);
 }
 
-// determine if set of pairs has any pair that sums to c.ENTRY_VALUE
+// returns pairs in set of pairs that sum to c.ENTRY_VALUE
 export function findFive(current_distances: number[]): [number, number][] {
 	let pairs = this.distanceCombinations(current_distances);
 	return pairs.filter(pair => { return pair[0] + pair[1] === c.ENTRY_VALUE; });

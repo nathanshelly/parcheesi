@@ -30,22 +30,20 @@ export class RulesChecker {
 		
 		while(moves.length > 0) {
 			// cannot be undefined due to length condition of while loop
+			// TODO check that we still have possible distances
+
 			let move: _Move = moves.shift() as _Move
 			if(this.legalMove(move, possible_distances, player, board, starting_blockades)) {
 				let possible_bonus: number | null = board.makeMove(move);
 
 				if(move instanceof MoveForward)
 					possible_distances = _distances.consumeDistance(possible_distances, move.distance);
-				else()
+				else
+					possible_distances = _distances.consumeDistance(possible_distances)
 
 				if(possible_bonus !== null)
 					possible_distances = _distances.addDistance(possible_distances, possible_bonus);
-
-				
 			}
-				
-			
-			
 		}
 
 		return this.legalMove(moves[0], possible_distances, player, board, starting_blockades);
