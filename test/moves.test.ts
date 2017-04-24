@@ -549,18 +549,18 @@ describe("Legal forward moves:", () => {
 
         let dice = [5, 4];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 71);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 67);
         let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
 
     it("should allow movement onto the home spot, with exactly the right distance, from the main ring", () => {
         let pawn = new Pawn(0, player1.color);
-        let move = new MoveForward(pawn, 9);
+        let move = new MoveForward(pawn, 10);
 
-        let dice = [5, 9];
+        let dice = [5, 10];
 
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 66);
+        tm.placePawnsAtOffsetFromEntry([pawn, null], board, player1.color, 62);
         let res = rc.legalMove(move, dice, player1, board, board.findBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
