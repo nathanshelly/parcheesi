@@ -129,7 +129,7 @@ export class Board {
 	}
 
 	findBlockadesOfColor(color: Color): Pawn[][] {
-		let pawn_spots: _Spot[] = this.getSpotsOfColor(color);
+		let pawn_spots: _Spot[] = this.getSpotsOfColorOnBoard(color);
 		
 		// filter to unique spots (keeps first of duplicate items)
 		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
@@ -193,7 +193,7 @@ export class Board {
 	};
 
 
-	getSpotsOfColor(color: Color): _Spot[] {
+	getSpotsOfColorOnBoard(color: Color): _Spot[] {
 		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findPawn(pawn); });
 	}
 

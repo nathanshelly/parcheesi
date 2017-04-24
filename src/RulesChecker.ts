@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import * as c from '../src/Constants'
+import * as _distances from '../src/Distances'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -30,8 +31,19 @@ export class RulesChecker {
 		while(moves.length > 0) {
 			// cannot be undefined due to length condition of while loop
 			let move: _Move = moves.shift() as _Move
-			if(this.legalMove(move, possible_distances, player, board, starting_blockades))
-				board.makeMove(move)
+			if(this.legalMove(move, possible_distances, player, board, starting_blockades)) {
+				let possible_bonus: number | null = board.makeMove(move);
+
+				if(move instanceof MoveForward)
+					possible_distances = _distances.consumeDistance(possible_distances, move.distance);
+				else()
+
+				if(possible_bonus !== null)
+					possible_distances = _distances.addDistance(possible_distances, possible_bonus);
+
+				
+			}
+				
 			
 			
 		}
@@ -141,7 +153,6 @@ export class RulesChecker {
 		return false;
 	}
 
-
 	// ENTRANCE CHECKS
 	
 	legalMoveEnter(move: MoveEnter, possible_distances: number[], board: Board): boolean {
@@ -150,28 +161,9 @@ export class RulesChecker {
 
 	blockadeOnHome(color: Color, board: Board): boolean {
 		return board.getEntrySpot(color).has_blockade();
-	};
+	}
 
-	// determine if set of pairs has any pair that sums to c.ENTRY_VALUE
 	hasFive(possible_distances: number[]): boolean {
-		let pairs = this.makeDiceCombinations(possible_distances);
-		return pairs.some(pair => {
-			return pair[0] + pair[1] == c.ENTRY_VALUE;
-		});
-	};
-
-	makeDiceCombinations(possible_distances: number[]): [number, number][]{
-		let pairs: [number, number][] = [];
-		
-		// generate all pairs of distances
-		for(let i = 0; i < possible_distances.length; i++) {
-			for(let j = 0; j < i; j++) {
-				pairs.push([possible_distances[i], possible_distances[j]]);
-			}
-		}
-
-		// add lone pawn combos
-		possible_distances.forEach(move => { pairs.push([move, 0]); });
-		return pairs;
-	};
+		return _distances.findFive(possible_distances).length > 0  ? true : false;
+	}
 }

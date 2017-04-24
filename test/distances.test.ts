@@ -38,4 +38,7 @@ describe('Filename: distances.test.ts\n\nConsumption and addition of distances:'
 
 		expect(() => { _distances.consumeDistance(old_array, 6); }).to.throw(Error);
 	});
+
+	// TODO write more tests here for different consume case
+
 });
