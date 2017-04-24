@@ -20,14 +20,6 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 
 export class RulesChecker {
-	
-	legalTurn(moves: _Move[], possible_moves: number[], player: _Player, board: Board): boolean {
-		// check legality of entire turn here
-		// this.legalRoll()
-		return true;
-	}
-
-
 	legalRoll(moves: _Move[], possible_moves: number[], player: _Player, board: Board): boolean {
 		let starting_blockades: Pawn[][] = board.findBlockadesOfColor(player.color);
 		// check legality of roll here
@@ -35,9 +27,12 @@ export class RulesChecker {
 
 		// AT SOME POINT
 		
-		// while(moves.length > 0) {
-			// consume moves every time
-		// }
+		while(moves.length > 0) {
+			// cannot be undefined due to length condition of while loop
+			let move: _Move = moves.shift() as _Move
+			if(this.legalMove(move, possible_moves, player, board, starting_blockades))
+				board.makeMove(move)
+		}
 
 		return this.legalMove(moves[0], possible_moves, player, board, starting_blockades);
 	}
@@ -104,9 +99,9 @@ export class RulesChecker {
 		// spotRunner implicitly checks that distance is not off board 
 		// (which itself implicitly checks that they enter home on exact value)
 		let final_spot: _Spot | null = board.spotRunner(board.findPawn(move.pawn),
-														move.distance,
-														player.color,
-														blockade_on_spot);
+																										move.distance,
+																										player.color,
+																										blockade_on_spot);
 
 		if(final_spot === null)
 			return false;
@@ -119,20 +114,14 @@ export class RulesChecker {
 			return true;
 		
 		if(final_spot instanceof MainRingSpot)
-			if(!this.isSpotEmpty(final_spot))
-				return this.bopAndLegal(final_spot, player.color);
+			if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== player.color)
+				return board.landingWillBop(final_spot, player.color);
 
 		return true;
 	}
 	
 	isSpotEmpty(spot: _Spot): boolean {
 		return spot.n_pawns() === 0;
-	}
-
-	// at this point we know spot has no blockades, contracts again?
-	// still want to check if pawn !== null because calling isEmptySpot prior
-	bopAndLegal(spot: MainRingSpot, color: Color): boolean {
-		return spot.get_live_pawns().some(pawn => { return pawn !== null && pawn.color !== color; });
 	}
 
 	reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {

@@ -73,16 +73,42 @@ export class Board {
 	}
 
 	// invariant at this point move is legal
-	makeMove(move: _Move): void {
-		let spot: _Spot = this.findPawn(move.pawn);
-		
-		if(move instanceof MoveEnter)
-			(this.getNextSpot(spot, move.pawn.color) as MainRingSpot).add_pawn(move.pawn);
-		// move is MoveForward
-		else if (move instanceof MoveForward)
-			(this.advanceToNewSpot(spot, move.distance, move.pawn.color) as _Spot).add_pawn(move.pawn);
+	makeMove(move: _Move): number | null {
+		let old_spot: _Spot = this.findPawn(move.pawn);
+		let new_spot: _Spot;
 
-		spot.remove_pawn(move.pawn);
+		if(move instanceof MoveForward)
+			new_spot = this.advanceToNewSpot(old_spot, move.distance, move.pawn.color) as _Spot;
+		else
+			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
+		
+		old_spot.remove_pawn(move.pawn);
+		
+		return this.handleSpecialLandings(new_spot, move.pawn.color);
+	}
+
+	handleSpecialLandings(spot: _Spot, color: Color): number | null {
+		if(spot instanceof HomeSpot)
+			return c.HOME_SPOT_BONUS;
+		if(spot instanceof MainRingSpot && this.landingWillBop(spot, color)) {
+			this.moveOnePawnBackToBase(spot);
+			return c.BOP_BONUS;
+		}
+
+		return null;
+	}
+
+	// at least one pawn on this spot
+	moveOnePawnBackToBase(spot: _Spot) {
+		let moving_pawn: Pawn = spot.get_live_pawns()[0];
+		spot.remove_pawn(moving_pawn)
+
+		this.bases[moving_pawn.color].add_pawn(moving_pawn)
+	}
+
+	// at this point we know spot has no blockades, contracts again?
+	landingWillBop(spot: MainRingSpot, color: Color): boolean {
+		return !spot.sanctuary && spot.get_live_pawns().some(pawn => { return pawn !== null && pawn.color !== color; });
 	}
 
 	findPawn(pawn: Pawn): _Spot {
