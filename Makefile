@@ -10,4 +10,4 @@ test:
 	npm test
 
 tar:
-	tar -czvf submission.tgz Makefile src/ test/ package.json tsconfig.json
+	tar -cvf submission.tgz Makefile src/ test/ package.json tsconfig.json
