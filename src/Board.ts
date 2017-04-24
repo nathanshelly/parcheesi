@@ -79,10 +79,12 @@ export class Board {
 
 		if(move instanceof MoveForward)
 			new_spot = this.advanceToNewSpot(old_spot, move.distance, move.pawn.color) as _Spot;
+		// move is MoveEnter
 		else
 			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
 		
 		old_spot.remove_pawn(move.pawn);
+		new_spot.add_pawn(move.pawn);
 		
 		return this.handleSpecialLandings(move, new_spot);
 	}

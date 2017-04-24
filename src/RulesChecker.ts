@@ -20,7 +20,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 
 export class RulesChecker {
-	legalRoll(moves: _Move[], possible_moves: number[], player: _Player, board: Board): boolean {
+	legalRoll(moves: _Move[], possible_distances: number[], player: _Player, board: Board): boolean {
 		let starting_blockades: Pawn[][] = board.findBlockadesOfColor(player.color);
 		// check legality of roll here
 		// for testing purposes assumes moves has one move
@@ -30,22 +30,24 @@ export class RulesChecker {
 		while(moves.length > 0) {
 			// cannot be undefined due to length condition of while loop
 			let move: _Move = moves.shift() as _Move
-			if(this.legalMove(move, possible_moves, player, board, starting_blockades))
+			if(this.legalMove(move, possible_distances, player, board, starting_blockades))
 				board.makeMove(move)
+			
+			
 		}
 
-		return this.legalMove(moves[0], possible_moves, player, board, starting_blockades);
+		return this.legalMove(moves[0], possible_distances, player, board, starting_blockades);
 	}
 
 	// check legality of one of user's moves
-	legalMove(move: _Move, possible_moves: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+	legalMove(move: _Move, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		if (!this.verifyPawn(move.pawn, player.color))
 			return false;
 		
 		if(move instanceof MoveEnter)
-			return this.legalMoveEnter(move, possible_moves, board);
+			return this.legalMoveEnter(move, possible_distances, board);
 		else if (move instanceof MoveForward)
-			return this.legalMoveFoward(move, possible_moves, player, board, starting_blockades);
+			return this.legalMoveFoward(move, possible_distances, player, board, starting_blockades);
 
 		return false;
 	}
@@ -67,17 +69,17 @@ export class RulesChecker {
 		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
 	}
 
-	madeAllLegalMoves(possible_moves: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+	madeAllLegalMoves(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		let base_pawns: Pawn[] = board.getPawnsOfColorInBase(player.color);
 
-		if(base_pawns.some(pawn => { return this.legalMove(new MoveEnter(pawn), possible_moves, player, board, starting_blockades); }))
+		if(base_pawns.some(pawn => { return this.legalMove(new MoveEnter(pawn), possible_distances, player, board, starting_blockades); }))
 			return false;
 
 		let main_ring_pawns: Pawn[] = board.getPawnsOfColorOnBoard(player.color);
 
 		if(main_ring_pawns.some(pawn => {
-			return possible_moves.some(distance => { 
-				return this.legalMove(new MoveForward(pawn, distance), possible_moves, player, board, starting_blockades); 
+			return possible_distances.some(distance => { 
+				return this.legalMove(new MoveForward(pawn, distance), possible_distances, player, board, starting_blockades); 
 			});
 		}))
 			return false;
@@ -87,10 +89,10 @@ export class RulesChecker {
 
 	// MAIN RING CHECKS
 
-	legalMoveFoward(move: MoveForward, possible_moves: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+	legalMoveFoward(move: MoveForward, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 			if (move.distance < 1
 				|| move.distance > c.LARGEST_POSSIBLE_MOVE
-				|| possible_moves.indexOf(move.distance) === -1
+				|| possible_distances.indexOf(move.distance) === -1
 				|| board.pawnInBase(move.pawn))
 					return false;
 
@@ -142,8 +144,8 @@ export class RulesChecker {
 
 	// ENTRANCE CHECKS
 	
-	legalMoveEnter(move: MoveEnter, possible_moves: number[], board: Board): boolean {
-		return this.hasFive(possible_moves) && !this.blockadeOnHome(move.pawn.color, board) && board.pawnInBase(move.pawn);
+	legalMoveEnter(move: MoveEnter, possible_distances: number[], board: Board): boolean {
+		return this.hasFive(possible_distances) && !this.blockadeOnHome(move.pawn.color, board) && board.pawnInBase(move.pawn);
 	}
 
 	blockadeOnHome(color: Color, board: Board): boolean {
@@ -151,25 +153,25 @@ export class RulesChecker {
 	};
 
 	// determine if set of pairs has any pair that sums to c.ENTRY_VALUE
-	hasFive(possible_moves: number[]): boolean {
-		let pairs = this.makeDiceCombinations(possible_moves);
+	hasFive(possible_distances: number[]): boolean {
+		let pairs = this.makeDiceCombinations(possible_distances);
 		return pairs.some(pair => {
 			return pair[0] + pair[1] == c.ENTRY_VALUE;
 		});
 	};
 
-	makeDiceCombinations(possible_moves: number[]): [number, number][]{
+	makeDiceCombinations(possible_distances: number[]): [number, number][]{
 		let pairs: [number, number][] = [];
 		
-		// generate all pairs of dice 
-		for(let i = 0; i < possible_moves.length; i++) {
+		// generate all pairs of distances
+		for(let i = 0; i < possible_distances.length; i++) {
 			for(let j = 0; j < i; j++) {
-				pairs.push([possible_moves[i], possible_moves[j]]);
+				pairs.push([possible_distances[i], possible_distances[j]]);
 			}
 		}
 
 		// add lone pawn combos
-		possible_moves.forEach(move => { pairs.push([move, 0]); });
+		possible_distances.forEach(move => { pairs.push([move, 0]); });
 		return pairs;
 	};
 }

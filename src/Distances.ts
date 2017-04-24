@@ -19,8 +19,15 @@ function doublesOpposites(visible_face: number): number[] {
 	});
 }
 
-// export class Dice{};
 export function rollDice(): number[] {
 	let initial_roll: number[] = [this.rollDie(), this.rollDie()]
 	return isDoubles(initial_roll) ? initial_roll.concat(doublesOpposites(initial_roll[0])) : initial_roll;
+}
+
+export function addDistance(current_distances: number[], ): number[] {
+	// return current_moves
+}
+
+export function consumeDistance(current_distancess: number[]): number[] {
+	
 }

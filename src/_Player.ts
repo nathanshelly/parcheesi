@@ -10,7 +10,7 @@ export interface _Player {
 	startGame(color: Color): void;
 
   // ask the player what move they want to make
-	doMove(brd: Board, dice: number[]): _Move[];
+	doMove(brd: Board, distances: number[]): _Move[];
 
   // inform the player that they have suffered
   // a doubles penalty

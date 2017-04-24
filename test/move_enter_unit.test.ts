@@ -32,33 +32,33 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
     });
     
     it('should correctly identify if number five in possible moves', () => {
-        let possible_moves: number[] = [5, 1];
-        expect(checker.hasFive(possible_moves)).to.equal(true);
+        let possible_distances: number[] = [5, 1];
+        expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if number five in possible moves', () => {
-        let possible_moves: number[] = [5, 2, 5, 2];
-        expect(checker.hasFive(possible_moves)).to.equal(true);
+        let possible_distances: number[] = [5, 2, 5, 2];
+        expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify 1 and 4 combination summing to five in possible moves', () => {
-        let possible_moves: number[] = [1, 4];
-        expect(checker.hasFive(possible_moves)).to.equal(true);
+        let possible_distances: number[] = [1, 4];
+        expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if combination summing to five in possible moves', () => {
-        let possible_moves: number[] = [2, 3];
-        expect(checker.hasFive(possible_moves)).to.equal(true);
+        let possible_distances: number[] = [2, 3];
+        expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if no five or combination of 5', () => {
-        let possible_moves: number[] = [1, 2];
-        expect(checker.hasFive(possible_moves)).to.equal(false);
+        let possible_distances: number[] = [1, 2];
+        expect(checker.hasFive(possible_distances)).to.equal(false);
     });
 
     it('should correctly identify if no five or combination of 5', () => {
-        let possible_moves: number[] = [3, 4, 3, 4];
-        expect(checker.hasFive(possible_moves)).to.equal(false);
+        let possible_distances: number[] = [3, 4, 3, 4];
+        expect(checker.hasFive(possible_distances)).to.equal(false);
     });
 });
 
@@ -67,7 +67,7 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
     let checker: RulesChecker = new RulesChecker();
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: number[]): _Move[] {
+        doMove(brd: Board, distances: number[]): _Move[] {
             throw new Error('Method not implemented - not needed in testing board instantiaton.');
         }
     }
@@ -106,7 +106,7 @@ describe('Unit tests for entering pawn:', () => {
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
     class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, dice: number[]): _Move[] {
+        doMove(brd: Board, distances: number[]): _Move[] {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
