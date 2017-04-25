@@ -59,7 +59,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the main ring to the main ring correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsOnEntrySpot([pawn, null], board);
+        tm.placePawnsOnGivenColorEntrySpot([pawn, null], board, pawn.color);
 
         let move = new MoveForward(pawn, 3);
 
@@ -138,7 +138,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
         tm.placePawnsAtOffsetFromEntry([pawn0, null], board, 4);
 
         let pawn1 = new Pawn(1, player1.color);
-        tm.placePawnsOnEntrySpot([pawn1, null], board);
+        tm.placePawnsOnGivenColorEntrySpot([pawn1, null], board, pawn1.color);
 
         let move = new MoveForward(pawn1, 4);
 

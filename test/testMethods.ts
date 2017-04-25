@@ -6,9 +6,7 @@ import { Board } from '../src/Board'
 import { Color } from '../src/Color'
 import { _Spot } from '../src/_Spot'
 
-export function placePawnsOnEntrySpot(pawns: [Pawn, Pawn | null], board: Board): void {
-	let color = pawns[0].color;
-
+export function placePawnsOnGivenColorEntrySpot(pawns: [Pawn, Pawn | null], board: Board, color: Color): void {
 	removeOldPawns(pawns, board);
 	board.getEntrySpot(color).pawns = pawns;
 }

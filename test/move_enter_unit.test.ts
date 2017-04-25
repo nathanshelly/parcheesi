@@ -127,29 +127,23 @@ describe('Unit tests for entering pawn:', () => {
         board = new Board(players);
     });
     
-    it('should correctly identify if blockade exists on home spot of same color', () => {
-        // technically both blockade_pawns are also still in the player's base 
-        // but shouldn't matter for purposes of this tests
+    it('should correctly identify if blockade of same color exists on home spot', () => {
         let blockade_pawn_1 = new Pawn(0, Color.Green);
         let blockade_pawn_2 = new Pawn(1, Color.Green);
-        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board);
+        tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
         expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
-    it('should correctly identify if blockade exists on home spot of opposite color', () => {
-        // technically both blockade_pawns are also still in the player's base 
-        // but shouldn't matter for purposes of this test
+    it('should correctly identify if blockade of opponent color exists on home spot', () => {
         let blockade_pawn_1 = new Pawn(0, Color.Blue);
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
-        tm.placePawnsOnEntrySpot([blockade_pawn_1, blockade_pawn_2], board);
+        tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
         expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
-    it('should correctly identify if no blockade exists on home spot of same color', () => {
-        // technically both blockade_pawns are also still in the player's base 
-        // but shouldn't matter for purposes of this test
+    it('should correctly identify if no blockade of same color exists on home spot', () => {
         expect(rc.blockadeOnHome(Color.Yellow, board)).to.equal(false);
     });
 });
