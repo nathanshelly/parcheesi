@@ -39,6 +39,31 @@ describe('Filename: distances.test.ts\n\nConsumption and addition of distances:'
 		expect(() => { _distances.consumeDistance(old_array, 6); }).to.throw(Error);
 	});
 
-	// TODO write more tests here for different consume case
+	it("should error if no pair or number equaling five in distances on MoveEnter", () => {
+		let old_array = [1, 3, 20];
+
+		expect(() => { _distances.consumeDistance(old_array); }).to.throw(Error);
+	});
+
+	it("should correctly consume five on MoveEnter", () => {
+		let old_array = [1, 5, 2];
+
+		let new_array = _distances.consumeDistance(old_array);
+		expect(new_array).to.deep.equal([1, 2]);
+	});
+
+	it("should correctly consume 1 and 4 in pair on MoveEnter", () => {
+		let old_array = [1, 4, 20];
+
+		let new_array = _distances.consumeDistance(old_array);
+		expect(new_array).to.deep.equal([20]);
+	});
+
+	it("should correctly consume 2 and 3 in pair on MoveEnter", () => {
+		let old_array = [2, 3, 4, 20];
+
+		let new_array = _distances.consumeDistance(old_array);
+		expect(new_array).to.deep.equal([4, 20]);
+	});
 
 });

@@ -44,11 +44,6 @@ function consumeMoveForwardDistance(current_distances: number[], distance_to_con
 	return consumeSingleDistance(current_distances, distance_to_consume);
 }
 
-function consumeSingleDistance(current_distances: number[], distance_to_consume: number):  number[] {
-	current_distances.splice(current_distances.indexOf(distance_to_consume), 1);
-	return current_distances;
-}
-
 // there must be a five at this point
 function consumeMoveEnterDistance(current_distances: number[]): number[] {
 	let fives: [number, number][] = findFive(current_distances);
@@ -63,7 +58,7 @@ function consumeMoveEnterDistance(current_distances: number[]): number[] {
 
 	let five_to_consume: [number, number] = fives[0];
 
-	if(five_to_consume[1] === null)
+	if(five_to_consume[1] === 0)
 		return consumeSingleDistance(current_distances, five_to_consume[0]);
 	else
 		return consumePair(current_distances, five_to_consume);
@@ -74,9 +69,14 @@ function consumePair(current_distances: number[], pair_to_consume: [number, numb
 	return consumeSingleDistance(current_distances, pair_to_consume[1]);
 }
 
+function consumeSingleDistance(current_distances: number[], distance_to_consume: number):  number[] {
+	current_distances.splice(current_distances.indexOf(distance_to_consume), 1);
+	return current_distances;
+}
+
 // returns pairs in set of pairs that sum to c.ENTRY_VALUE
 export function findFive(current_distances: number[]): [number, number][] {
-	let pairs = this.distanceCombinations(current_distances);
+	let pairs = distanceCombinations(current_distances);
 	return pairs.filter(pair => { return pair[0] + pair[1] === c.ENTRY_VALUE; });
 }
 
