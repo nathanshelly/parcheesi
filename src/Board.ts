@@ -47,31 +47,6 @@ export class Board {
 		}
 	}
 
-	getHomeRowStarts(): HomeRowSpot[] {
-		return Object.keys(c.HOME_ROW_BY_INDEX).map(pos => {
-			let home_color = c.HOME_ROW_BY_INDEX[pos] as Color;
-			return this.mainRing[parseInt(pos)].next(home_color) as HomeRowSpot;
-		});
-	}
-
-	getHomeSpots(): HomeSpot[] {
-		return this.getHomeRowStarts().map(hrs => {
-			while (hrs.next()! instanceof HomeSpot)
-				hrs = hrs.next() as HomeRowSpot;
-
-			return hrs.next() as HomeSpot;
-		});
-	}
-
-	winner(): Color | null {
-		let homes = this.getHomeSpots();
-		for (let i = 0; i < homes.length; ++i) {
-			if (homes[i].pawns.indexOf(null) != -1)
-				return homes[i].color;
-		}
-		return null;
-	}
-
 	// invariant at this point move is legal
 	makeMove(move: _Move): number | null {
 		let old_spot: _Spot = this.findPawn(move.pawn);
@@ -114,6 +89,7 @@ export class Board {
 		this.bases[moving_pawn.color].add_pawn(moving_pawn)
 	}
 	
+
 	findPawn(pawn: Pawn): _Spot {
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
 		if(base_spot.pawn_exists(pawn))
@@ -128,19 +104,6 @@ export class Board {
 		return spot;
 	}
 
-	findBlockadesOfColor(color: Color): Pawn[][] {
-		let pawn_spots: _Spot[] = this.getSpotsOfColorOnBoard(color);
-		
-		// filter to unique spots (keeps first of duplicate items)
-		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
-		// filter spots to only spots with blockades
-		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
-		
-		// get tuples of pawns from spots that have blockades
-		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => spot.get_live_pawns())
-		return currently_blockaded_pawns;
-	}
-
 	getSpotAtOffsetFromSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
 		// no predicate, just to find distances
 		return this.spotRunner(spot, distance, color);
@@ -148,7 +111,7 @@ export class Board {
 
 	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
 		let spot = this.getEntrySpot(color);
-		return this.spotRunner(spot, distance, color);
+		return this.getSpotAtOffsetFromSpot(spot, distance, color);
 	}
 
 	spotRunner(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
@@ -190,6 +153,19 @@ export class Board {
 		return base;
 	}
 
+	getBlockadesOfColor(color: Color): Pawn[][] {
+		let pawn_spots: _Spot[] = this.getOccupiedSpotsOfColorOnBoard(color);
+		
+		// filter to unique spots (keeps first of duplicate items)
+		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
+		// filter spots to only spots with blockades
+		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
+		
+		// get tuples of pawns from spots that have blockades
+		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => spot.get_live_pawns())
+		return currently_blockaded_pawns;
+	}
+
 	// assumes pawns color and id are correct
 	// must be checked previously
 	// does not assume pawn's spot is correct
@@ -197,16 +173,8 @@ export class Board {
 		return this.getBaseSpot(pawn.color).pawn_exists(pawn);
 	};
 
-
-	getSpotsOfColorOnBoard(color: Color): _Spot[] {
+	getOccupiedSpotsOfColorOnBoard(color: Color): _Spot[] {
 		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findPawn(pawn); });
-	}
-
-	// functions for getting a pawn based on color
-	// may be less useful now that pawns don't have spots
-	// check back with functions to see if they are being used later
-	getPawnsOfColor(color: Color): Pawn[] {
-		return this.getPawnsOfColorInBase(color).concat(this.getPawnsOfColorOnBoard(color));
 	}
 
 	getPawnsOfColorOnBoard(color: Color): Pawn[] {
@@ -229,4 +197,31 @@ export class Board {
 	getPawnsOfColorInBase(color: Color): Pawn[] {
 		return this.bases[color].get_live_pawns();
 	}
+
+		// TODO - move this to game?
+	winner(): Color | null {
+		let homes = this.getHomeSpots();
+		for (let i = 0; i < homes.length; ++i) {
+			if (homes[i].pawns.indexOf(null) != -1)
+				return homes[i].color;
+		}
+		return null;
+	}
+
+	getHomeSpots(): HomeSpot[] {
+		return this.getHomeRowStarts().map(hrs => {
+			while (hrs.next()! instanceof HomeSpot)
+				hrs = hrs.next() as HomeRowSpot;
+
+			return hrs.next() as HomeSpot;
+		});
+	}
+
+	getHomeRowStarts(): HomeRowSpot[] {
+		return Object.keys(c.HOME_ROW_BY_INDEX).map(pos => {
+			let home_color = c.HOME_ROW_BY_INDEX[pos] as Color;
+			return this.mainRing[parseInt(pos)].next(home_color) as HomeRowSpot;
+		});
+	}
+
 }

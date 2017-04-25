@@ -22,7 +22,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 export class RulesChecker {
 	legalRoll(moves: _Move[], possible_distances: number[], player: _Player, board: Board): boolean {
-		let starting_blockades: Pawn[][] = board.findBlockadesOfColor(player.color);
+		let starting_blockades: Pawn[][] = board.getBlockadesOfColor(player.color);
 		// check legality of roll here
 		// for testing purposes assumes moves has one move
 
@@ -62,6 +62,86 @@ export class RulesChecker {
 		return false;
 	}
 
+	// ENTRANCE CHECKS
+	
+	legalMoveEnter(move: MoveEnter, possible_distances: number[], board: Board): boolean {
+		return this.hasFive(possible_distances) && !this.blockadeOnHome(move.pawn.color, board) && board.pawnInBase(move.pawn);
+	}
+
+	blockadeOnHome(color: Color, board: Board): boolean {
+		return board.getEntrySpot(color).has_blockade();
+	}
+
+	hasFive(possible_distances: number[]): boolean {
+		return _distances.findFive(possible_distances).length > 0  ? true : false;
+	}
+
+
+	// MAIN RING CHECKS
+
+	legalMoveFoward(move: MoveForward, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+			if (move.distance < 1
+				|| move.distance > c.LARGEST_POSSIBLE_MOVE
+				|| possible_distances.indexOf(move.distance) === -1
+				|| board.pawnInBase(move.pawn))
+					return false;
+
+		let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
+
+		// spotRunner implicitly checks that distance is not off board 
+		// (which itself implicitly checks that they enter home on exact value)
+		// passed in blockade_on_spot_checker will cause spotRunner to return null
+		// if move attempts to move onto or through blockade
+		let final_spot: _Spot | null = board.spotRunner(board.findPawn(move.pawn),
+																										move.distance,
+																										player.color,
+																										blockade_on_spot_checker);
+		
+		// overshot home
+		if(final_spot === null)
+			return false;
+		
+		// reached home, no further ways to cheat
+		if(final_spot instanceof HomeSpot)
+			return true;
+
+		// can't reform blockade on same roll
+		if(this.reformedBlockade(move.pawn, final_spot, starting_blockades))
+			return false;
+
+		// reached homeRowSpot and didn't reform blockade, no further ways to cheat
+		if(final_spot instanceof HomeRowSpot)
+			return true;
+		
+		// last way to cheat:
+		// bopping pawn on safety spot
+		if(final_spot instanceof MainRingSpot)
+			if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== player.color)
+				return board.landingWillBop(move, final_spot);
+
+		// no cheat found, we have a legal MoveForward
+		return true;
+	}
+	
+	isSpotEmpty(spot: _Spot): boolean {
+		return spot.n_pawns() === 0;
+	}
+
+	reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
+		// passed in spot is assumed to have no blockade due to sequencing of calls
+		let would_be_pawns: Pawn[] = spot.get_live_pawns();
+		would_be_pawns.push(pawn);
+
+		return starting_blockades.filter(blockade => { return _.isEqual(would_be_pawns, blockade); }).length === 1;
+	}
+
+	isSafetySpot(spot: _Spot): boolean {
+		if(spot instanceof MainRingSpot)
+			return spot.sanctuary;
+
+		return false;
+	}
+
 	// GLOBAL MOVE CHECKS
 
 	// verify that pawn is correct:
@@ -95,73 +175,5 @@ export class RulesChecker {
 			return false;
 		
 		return true;
-	}
-
-	// MAIN RING CHECKS
-
-	legalMoveFoward(move: MoveForward, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
-			if (move.distance < 1
-				|| move.distance > c.LARGEST_POSSIBLE_MOVE
-				|| possible_distances.indexOf(move.distance) === -1
-				|| board.pawnInBase(move.pawn))
-					return false;
-
-		let blockade_on_spot = (spot: _Spot) => { return spot.has_blockade(); };
-
-		// spotRunner implicitly checks that distance is not off board 
-		// (which itself implicitly checks that they enter home on exact value)
-		let final_spot: _Spot | null = board.spotRunner(board.findPawn(move.pawn),
-																										move.distance,
-																										player.color,
-																										blockade_on_spot);
-
-		if(final_spot === null)
-			return false;
-		if(final_spot instanceof HomeSpot)
-			return true;
-
-		if(this.reformedBlockade(move.pawn, final_spot, starting_blockades))
-			return false;
-		if(final_spot instanceof HomeRowSpot)
-			return true;
-		
-		if(final_spot instanceof MainRingSpot)
-			if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== player.color)
-				return board.landingWillBop(move, final_spot);
-
-		return true;
-	}
-	
-	isSpotEmpty(spot: _Spot): boolean {
-		return spot.n_pawns() === 0;
-	}
-
-	reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
-		// passed in spot is assumed to have no blockade due to sequencing of calls
-		let would_be_pawns: Pawn[] = spot.get_live_pawns();
-		would_be_pawns.push(pawn);
-
-		return starting_blockades.filter(blockade => { return _.isEqual(would_be_pawns, blockade); }).length === 1;
-	}
-
-	isSafetySpot(spot: _Spot): boolean {
-		if(spot instanceof MainRingSpot)
-			return spot.sanctuary;
-
-		return false;
-	}
-
-	// ENTRANCE CHECKS
-	
-	legalMoveEnter(move: MoveEnter, possible_distances: number[], board: Board): boolean {
-		return this.hasFive(possible_distances) && !this.blockadeOnHome(move.pawn.color, board) && board.pawnInBase(move.pawn);
-	}
-
-	blockadeOnHome(color: Color, board: Board): boolean {
-		return board.getEntrySpot(color).has_blockade();
-	}
-
-	hasFive(possible_distances: number[]): boolean {
-		return _distances.findFive(possible_distances).length > 0  ? true : false;
 	}
 }
