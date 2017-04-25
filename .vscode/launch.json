@@ -17,7 +17,7 @@
             "outFiles": [
                 "${workspaceRoot}/out/**/*"
             ],
-            "preLaunchTask": "compile"
+            // "preLaunchTask": "compile"
         }
     ]
 }
