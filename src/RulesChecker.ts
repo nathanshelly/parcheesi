@@ -135,13 +135,6 @@ export class RulesChecker {
 		return starting_blockades.filter(blockade => { return _.isEqual(would_be_pawns, blockade); }).length === 1;
 	}
 
-	isSafetySpot(spot: _Spot): boolean {
-		if(spot instanceof MainRingSpot)
-			return spot.sanctuary;
-
-		return false;
-	}
-
 	// GLOBAL MOVE CHECKS
 
 	// verify that pawn is correct:

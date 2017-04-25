@@ -89,7 +89,6 @@ export class Board {
 		this.bases[moving_pawn.color].add_pawn(moving_pawn)
 	}
 	
-
 	findPawn(pawn: Pawn): _Spot {
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
 		if(base_spot.pawn_exists(pawn))
