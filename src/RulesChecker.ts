@@ -73,7 +73,7 @@ export class RulesChecker {
 	}
 
 	hasFive(possible_distances: number[]): boolean {
-		return _distances.findFive(possible_distances).length > 0  ? true : false;
+		return _distances.findFive(possible_distances).length > 0;
 	}
 
 
