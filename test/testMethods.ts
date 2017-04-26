@@ -11,7 +11,7 @@ export function placePawnsOnGivenColorEntrySpot(pawns: [Pawn, Pawn | null], boar
 	board.getEntrySpot(color).pawns = pawns;
 }
 
-export function placePawnsAtOffsetFromEntry(pawns: [Pawn, Pawn | null], board: Board, offset: number): void {
+export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], board: Board, offset: number): void {
 	let color = pawns[0].color;
 	
 	let spot: _Spot = board.getEntrySpot(color);

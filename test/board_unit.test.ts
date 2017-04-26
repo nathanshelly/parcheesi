@@ -74,7 +74,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the main ring to the home row correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
 
         let move = new MoveForward(pawn, 6);
         
@@ -89,7 +89,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the main ring to the home spot correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
 
         let offset = c.HOME_ROW_SIZE + 2;
         let move = new MoveForward(pawn, offset);
@@ -105,7 +105,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the home row to the home row correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
 
         let move = new MoveForward(pawn, 2);
         
@@ -120,7 +120,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the home row to the home spot correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
 
         let move = new MoveForward(pawn, c.HOME_ROW_SIZE - 2);
         
@@ -135,7 +135,7 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should correctly form blockades on the main ring", () => {
         let pawn0 = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn0, null], board, 4);
+        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, 4);
 
         let pawn1 = new Pawn(1, player1.color);
         tm.placePawnsOnGivenColorEntrySpot([pawn1, null], board, pawn1.color);
@@ -154,10 +154,10 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should correctly form blockades on the home row", () => {
         let pawn0 = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn0, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
 
         let pawn1 = new Pawn(1, player1.color);
-        tm.placePawnsAtOffsetFromEntry([pawn1, null], board, c.ENTRY_TO_HOME_START_OFFSET);
+        tm.placePawnsAtOffsetFromYourEntry([pawn1, null], board, c.ENTRY_TO_HOME_START_OFFSET);
 
         let move = new MoveForward(pawn1, 2);
 
