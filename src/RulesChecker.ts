@@ -80,7 +80,7 @@ export class RulesChecker {
 	// MAIN RING CHECKS
 
 	legalMoveFoward(move: MoveForward, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
-			if (move.distance < 1
+			if  (move.distance < 1
 				|| move.distance > c.LARGEST_POSSIBLE_MOVE
 				|| possible_distances.indexOf(move.distance) === -1
 				|| board.pawnInBase(move.pawn))
