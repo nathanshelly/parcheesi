@@ -130,7 +130,7 @@ describe('A board with one player', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let base: BaseSpot = board.bases[base_keys[i]];
-            let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY"];
+            let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY_FROM_BASE"];
             let entry_spot = board.mainRing[entry_ind];
 
             expect(base.next()).to.deep.equal(entry_spot);
@@ -218,7 +218,7 @@ describe('A board with four players', () => {
         let base_keys = Object.keys(board.bases)
         for (let i = 0; i < base_keys.length; i++) {
             let base: BaseSpot = board.bases[base_keys[i]];
-            let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY"];
+            let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY_FROM_BASE"];
             let entry_spot = board.mainRing[entry_ind];
 
             expect(base.next()).to.deep.equal(entry_spot);

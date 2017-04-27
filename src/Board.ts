@@ -24,11 +24,19 @@ export class Board {
 		if (c.SAFE_SPOT_INDICES.indexOf(ind) !== -1)
 			is_sanctuary = true;
 
-		let color: Color | null = null;
-		if (c.HOME_ROW_BY_INDEX[ind] !== undefined) // FUCK YOU ZERO
-			color = c.HOME_ROW_BY_INDEX[ind];
+		let color: Color | null = this.colorIfHomeEntrySpot(ind);
 
 		return new MainRingSpot(is_sanctuary, color);
+	}
+
+	private colorIfHomeEntrySpot(ind): Color | null {
+		// mapping to numbers not technically required but lets me sleep at night
+		let color_keys: number[] = Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => { return parseInt(key); });
+		for (let key in color_keys)
+			if (c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"] === ind)
+				return parseInt(key) as Color;
+		
+		return null;
 	}
 
 	constructor(players: _Player[]) {
@@ -43,7 +51,7 @@ export class Board {
 
 		for (let i = 0; i < players.length; i++) {
 			let player_color = players[i].color;
-			this.bases[player_color] = new BaseSpot(this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY"]], player_color);
+			this.bases[player_color] = new BaseSpot(this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY_FROM_BASE"]], player_color);
 		}
 	}
 
@@ -140,7 +148,7 @@ export class Board {
 	getEntrySpot(color: Color): MainRingSpot {
 		// no need to check if entry spot exists as it will exist even
 		// if passed in color isn't actually playing
-		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY"]];
+		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY_FROM_BASE"]];
 	}
 
 	getBaseSpot(color: Color): BaseSpot {
@@ -200,16 +208,21 @@ export class Board {
 		// TODO - move this to game?
 	winner(): Color | null {
 		let homes = this.getHomeSpots();
-		for (let i = 0; i < homes.length; ++i) {
+		for (let i = 0; i < homes.length; ++i)
+			// TODO - test if below works, cleaner than looking for null
+			// if (homes[i].n_pawns() === c.NUM_PLAYER_PAWNS)
 			if (homes[i].pawns.indexOf(null) != -1)
 				return homes[i].color;
-		}
+
 		return null;
 	}
 
+	// any reason not to use spotrunner to advance forward length of home row?
 	getHomeSpots(): HomeSpot[] {
 		return this.getHomeRowStarts().map(hrs => {
-			while (hrs.next()! instanceof HomeSpot)
+			// TODO - test if one-liner below works, if so use it instead
+			// return this.getSpotAtOffsetFromSpot(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
+			while (hrs.next() !instanceof HomeSpot)
 				hrs = hrs.next() as HomeRowSpot;
 
 			return hrs.next() as HomeSpot;
@@ -219,6 +232,6 @@ export class Board {
 	getHomeRowStarts(): HomeRowSpot[] {
 		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
 			let home_color: Color = parseInt(key) as Color;
-			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME"]].next(home_color) as HomeRowSpot;
+			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"]].next(home_color) as HomeRowSpot;
 		})};
 }

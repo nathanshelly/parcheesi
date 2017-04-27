@@ -21,31 +21,16 @@ export const BOP_BONUS = 20;
 
 export const SAFE_SPOT_INDICES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67]
 
-export const HOME_ROW_BY_INDEX = {
-    16: Color.Red,
-    33: Color.Blue,
-    50: Color.Yellow,
-    67: Color.Green
-}
-
 // Because objects suck, please make sure these keys line up correct colors
 export const COLOR_HOME_AND_ENTRY = {
-    0: {"HOME": 33,
-        "ENTRY": 38},
-    1: {"HOME": 16,
-        "ENTRY": 21},
-    2: {"HOME": 67,
-        "ENTRY": 4},
-    3: {"HOME": 50,
-        "ENTRY": 55},
-}
-
-// CURRENTLY UNUSED
-export const HOME_ROW_BY_COLOR = {
-    1: 16,
-    0: 33,
-    3: 50,
-    2: 67
+    0: {"HOME_ROW_ENTRY": 33,
+        "ENTRY_FROM_BASE": 38},
+    1: {"HOME_ROW_ENTRY": 16,
+        "ENTRY_FROM_BASE": 21},
+    2: {"HOME_ROW_ENTRY": 67,
+        "ENTRY_FROM_BASE": 4},
+    3: {"HOME_ROW_ENTRY": 50,
+        "ENTRY_FROM_BASE": 55},
 }
 
 
