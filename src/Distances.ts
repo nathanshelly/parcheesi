@@ -12,7 +12,7 @@ function rollDie(): number {
 
 function isDoubles(dice: number[]): boolean {
 	// checks if dice in roll are doubles
-	return dice[0] == dice[1];
+	return dice[0] === dice[1];
 }
 
 function doublesOpposites(visible_face: number): number[] {
@@ -77,7 +77,7 @@ function consumeSingleDistance(current_distances: number[], distance_to_consume:
 // returns pairs in set of pairs that sum to c.ENTRY_VALUE
 export function findFive(current_distances: number[]): [number, number][] {
 	let pairs = distanceCombinations(current_distances);
-	return pairs.filter(pair => { return pair[0] + pair[1] === c.ENTRY_VALUE; });
+	return pairs.filter(pair => { return pair[0] + pair[1] === c.VALUE_TO_ENTER_ON; });
 }
 
 function distanceCombinations(possible_distances: number[]): [number, number][]{

@@ -21,7 +21,7 @@ export class Board {
 
 	private buildMainRingSpot(ind: number): MainRingSpot {
 		let is_sanctuary = false;
-		if (c.SAFE_SPOT_INDICES.indexOf(ind) != -1)
+		if (c.SAFE_SPOT_INDICES.indexOf(ind) !== -1)
 			is_sanctuary = true;
 
 		let color: Color | null = null;
@@ -43,7 +43,7 @@ export class Board {
 
 		for (let i = 0; i < players.length; i++) {
 			let player_color = players[i].color;
-			this.bases[player_color] = new BaseSpot(this.mainRing[c.ENTRY_POINTS[player_color]], player_color);
+			this.bases[player_color] = new BaseSpot(this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY"]], player_color);
 		}
 	}
 
@@ -140,7 +140,7 @@ export class Board {
 	getEntrySpot(color: Color): MainRingSpot {
 		// no need to check if entry spot exists as it will exist even
 		// if passed in color isn't actually playing
-		return this.mainRing[c.ENTRY_POINTS[color]];
+		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY"]];
 	}
 
 	getBaseSpot(color: Color): BaseSpot {
@@ -217,10 +217,8 @@ export class Board {
 	}
 
 	getHomeRowStarts(): HomeRowSpot[] {
-		return Object.keys(c.HOME_ROW_BY_INDEX).map(pos => {
-			let home_color = c.HOME_ROW_BY_INDEX[pos] as Color;
-			return this.mainRing[parseInt(pos)].next(home_color) as HomeRowSpot;
-		});
-	}
-
+		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
+			let home_color: Color = parseInt(key) as Color;
+			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME"]].next(home_color) as HomeRowSpot;
+		})};
 }

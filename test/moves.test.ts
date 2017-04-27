@@ -250,7 +250,7 @@ describe("Legal enter moves:", () => {
         let distances = [5, 6];
 
         let other_pawn = new Pawn(0, player2.color);
-        tm.placePawnsAtOffsetFromYourEntry([other_pawn, null], board, c.ENTRY_OFFSET);
+        tm.placePawnsAtOffsetFromYourEntry([other_pawn, null], board, c.OFFSET_BETWEEN_ENTRIES);
 
         let res = rc.legalMove(move, distances, player1, board, board.getBlockadesOfColor(player1.color));
         expect(res).to.be.true;
