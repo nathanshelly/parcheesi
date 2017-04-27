@@ -10,7 +10,7 @@ export class Parcheesi implements _Parcheesi {
 	// add a player to the game
 	register(p: _Player): void {
 		if (this.players.length > 3) {
-			// fail silently for now
+			throw new Error("Tried to register more than 4 players")
 		}
 		else {
 			this.players.push(p);

@@ -24,15 +24,12 @@ export class RulesChecker {
 	legalRoll(moves: _Move[], possible_distances: number[], player: _Player, board: Board): boolean {
 		let starting_blockades: Pawn[][] = board.getBlockadesOfColor(player.color);
 		// check legality of roll here
-		// for testing purposes assumes moves has one move
-
-		// AT SOME POINT
 		
 		while(moves.length > 0) {
 			// cannot be undefined due to length condition of while loop
 			// TODO check that we still have possible distances
-
 			let move: _Move = moves.shift() as _Move
+
 			if(this.legalMove(move, possible_distances, player, board, starting_blockades)) {
 				let possible_bonus: number | null = board.makeMove(move);
 
@@ -75,7 +72,6 @@ export class RulesChecker {
 	hasFive(possible_distances: number[]): boolean {
 		return _distances.findFive(possible_distances).length > 0;
 	}
-
 
 	// MAIN RING CHECKS
 
@@ -153,20 +149,24 @@ export class RulesChecker {
 	}
 
 	madeAllLegalMoves(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+		return ! (this.legalMoveEnterPossible(possible_distances, player, board, starting_blockades)
+					 		|| this.legalMoveForwardPossible(possible_distances, player, board, starting_blockades));
+	}
+
+	legalMoveEnterPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		let base_pawns: Pawn[] = board.getPawnsOfColorInBase(player.color);
 
-		if(base_pawns.some(pawn => { return this.legalMove(new MoveEnter(pawn), possible_distances, player, board, starting_blockades); }))
-			return false;
+		return base_pawns.some(pawn => { 
+			return this.legalMove(new MoveEnter(pawn), possible_distances, player, board, starting_blockades);
+		});
+	}
 
+	legalMoveForwardPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		let main_ring_pawns: Pawn[] = board.getPawnsOfColorOnBoard(player.color);
 
-		if(main_ring_pawns.some(pawn => {
+		return main_ring_pawns.some(pawn => {
 			return possible_distances.some(distance => { 
 				return this.legalMove(new MoveForward(pawn, distance), possible_distances, player, board, starting_blockades); 
-			});
-		}))
-			return false;
-		
-		return true;
+			});});
 	}
 }
