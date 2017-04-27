@@ -168,8 +168,8 @@ export class Board {
 		// filter spots to only spots with blockades
 		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
 		
-		// get tuples of pawns from spots that have blockades
-		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => spot.get_live_pawns())
+		// get tuples of pawns (sorted for later equality) from spots that have blockades
+		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.get_live_pawns().sort(); });
 		return currently_blockaded_pawns;
 	}
 

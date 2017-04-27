@@ -124,11 +124,15 @@ export class RulesChecker {
 	}
 
 	reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
-		// passed in spot is assumed to have no blockade due to sequencing of calls
+		if(spot.has_blockade())
+			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
+		
 		let would_be_pawns: Pawn[] = spot.get_live_pawns();
 		would_be_pawns.push(pawn);
+		// sorting for equality check
+		would_be_pawns = would_be_pawns.sort();
 
-		return starting_blockades.filter(blockade => { return _.isEqual(would_be_pawns, blockade); }).length === 1;
+		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
 	}
 
 	// GLOBAL MOVE CHECKS
@@ -148,24 +152,29 @@ export class RulesChecker {
 		return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
 	}
 
+	// checks if all legal moves have been made
 	madeAllLegalMoves(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		return ! (this.legalMoveEnterPossible(possible_distances, player, board, starting_blockades)
 					 		|| this.legalMoveForwardPossible(possible_distances, player, board, starting_blockades));
 	}
 
-	legalMoveEnterPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+	// checks if all legal MoveEnters have been made
+	private	legalMoveEnterPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		let base_pawns: Pawn[] = board.getPawnsOfColorInBase(player.color);
 
 		return base_pawns.some(pawn => { 
+			// legalMove instead of legalMoveEnter to maintain checking done only in legalMove
 			return this.legalMove(new MoveEnter(pawn), possible_distances, player, board, starting_blockades);
 		});
 	}
 
-	legalMoveForwardPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+	// checks if all legal MoveForwards have been made
+	private legalMoveForwardPossible(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 		let main_ring_pawns: Pawn[] = board.getPawnsOfColorOnBoard(player.color);
 
 		return main_ring_pawns.some(pawn => {
 			return possible_distances.some(distance => { 
+				// legalMove instead of legalMoveForward to maintain checking done in legalMove
 				return this.legalMove(new MoveForward(pawn, distance), possible_distances, player, board, starting_blockades); 
 			});});
 	}
