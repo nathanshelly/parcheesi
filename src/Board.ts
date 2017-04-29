@@ -111,17 +111,8 @@ export class Board {
 		return spot;
 	}
 
-	getSpotAtOffsetFromSpot(spot: _Spot, distance: number, color: Color): _Spot | null {
-		// no predicate, just to find distances
-		return this.spotRunner(spot, distance, color);
-	};
-
-	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
-		let spot = this.getEntrySpot(color);
-		return this.getSpotAtOffsetFromSpot(spot, distance, color);
-	}
-
-	spotRunner(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
+	getSpotAtOffsetFromSpot(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
+		// get spot at an offset, checking any passed in predicates at each spot along the way
 		let next_spot: _Spot | null = spot;
 		
 		while(distance-- > 0) {
@@ -133,6 +124,11 @@ export class Board {
 
 		return next_spot;
 	};
+
+	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
+		let spot = this.getEntrySpot(color);
+		return this.getSpotAtOffsetFromSpot(spot, distance, color);
+	}
 
 	getNextSpot(spot: _Spot, color: Color): _Spot | null {
 		if(spot instanceof MainRingSpot)
@@ -173,9 +169,7 @@ export class Board {
 		return currently_blockaded_pawns;
 	}
 
-	// assumes pawns color and id are correct
-	// must be checked previously
-	// does not assume pawn's spot is correct
+	// invariant: pawns color and id are correct
 	pawnInBase(pawn: Pawn): boolean {
 		return this.getBaseSpot(pawn.color).pawn_exists(pawn);
 	};
@@ -205,7 +199,7 @@ export class Board {
 		return this.bases[color].get_live_pawns();
 	}
 
-	// any reason not to use spotrunner to advance forward length of home row?
+	// any reason not to use getSpotAtOffsetFromSpot to advance forward length of home row?
 	getHomeSpots(): HomeSpot[] {
 		return this.getHomeRowStarts().map(hrs => {
 			// TODO - test if one-liner below works, if so use it instead

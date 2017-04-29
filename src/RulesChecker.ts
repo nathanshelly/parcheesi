@@ -84,11 +84,11 @@ export class RulesChecker {
 
 		let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
 
-		// spotRunner implicitly checks that distance is not off board 
+		// getSpotAtOffsetFromSpot implicitly checks that distance is not off board 
 		// (which itself implicitly checks that they enter home on exact value)
-		// passed in blockade_on_spot_checker will cause spotRunner to return null
+		// passed in blockade_on_spot_checker will cause getSpotAtOffsetFromSpot to return null
 		// if move attempts to move onto or through blockade
-		let final_spot: _Spot | null = board.spotRunner(board.findPawn(move.pawn),
+		let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findPawn(move.pawn),
 																										move.distance,
 																										player.color,
 																										blockade_on_spot_checker);
