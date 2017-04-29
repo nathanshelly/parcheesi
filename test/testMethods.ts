@@ -20,8 +20,9 @@ export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], boar
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')
 
+	if(next_spot.n_pawns() > 0)
+		throw new Error('tried to place pawns on spot with pawns already there')
 	removeOldPawns(pawns, board);
-	
 	next_spot.pawns = pawns;
 }
 

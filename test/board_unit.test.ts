@@ -21,7 +21,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
-describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality", () => {
+describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
@@ -44,203 +44,92 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
         board = new Board(players);
     });
 
-    it("should perform entrance moves correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        let move = new MoveEnter(pawn);
-
-        let entry = board.getEntrySpot(player1.color);
-
-        expect(entry.n_pawns()).to.equal(0);
-
-        board.makeMove(move);
-
-        expect(entry.n_pawns()).to.equal(1);
+    it("should correctly identify no blockades when no pawns on board", () => {
+        expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
     });
 
-    it("should perform forward moves from the main ring to the main ring correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        tm.placePawnsOnGivenColorEntrySpot([pawn, null], board, pawn.color);
+		it("should correctly identify no blockades of color when only blockades of other color on board", () => {
+			let pawn_one = new Pawn(0, player2.color);
+			let pawn_two = new Pawn(1, player2.color);
+			
+			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
+				
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
 
-        let move = new MoveForward(pawn, 3);
-
-        let end = board.getSpotAtOffsetFromEntry(3, player1.color) as _Spot;
-        
-        expect(end.n_pawns()).to.equal(0);
-
-        board.makeMove(move);
-
-        expect(end.n_pawns()).to.equal(1);
+			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player2.color);
+				
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
     });
 
-    it("should perform forward moves from the main ring to the home row correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+		it("should correctly identify blockade of your color on entry spot", () => {
+			let pawn_one = new Pawn(0, player1.color);
+			let pawn_two = new Pawn(1, player1.color);
+			
+			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
 
-        let move = new MoveForward(pawn, 6);
-        
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 4, player1.color) as _Spot;
-        
-        expect(end.n_pawns()).to.equal(0);
-        
-        board.makeMove(move);
-
-        expect(end.n_pawns()).to.equal(1);
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-    it("should perform forward moves from the main ring to the home spot correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+		it("should correctly identify blockade of your color on arbitrary spot", () => {
+			let pawn_one = new Pawn(0, player1.color);
+			let pawn_two = new Pawn(1, player1.color);
+			
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 20);
 
-        let offset = c.HOME_ROW_SIZE + 2;
-        let move = new MoveForward(pawn, offset);
-        
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
-        
-        expect(end.n_pawns()).to.equal(0);
-        
-        board.makeMove(move);
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
 
-        expect(end.n_pawns()).to.equal(1);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
+
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-    it("should perform forward moves from the home row to the home row correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+		it("should correctly identify blockade of your color on your home row", () => {
+			let pawn_one = new Pawn(0, player1.color);
+			let pawn_two = new Pawn(1, player1.color);
+			
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 68);
 
-        let move = new MoveForward(pawn, 2);
-        
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 4, player1.color) as _Spot;
-        
-        expect(end.n_pawns()).to.equal(0);
-        
-        board.makeMove(move);
-
-        expect(end.n_pawns()).to.equal(1);
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-    it("should perform forward moves from the home row to the home spot correctly", () => {
-        let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+		it("should correctly identify two blockades of your color on arbitrary spots", () => {
+			let pawn_one 		= new Pawn(0, player1.color);
+			let pawn_two 		= new Pawn(1, player1.color);
+			let pawn_three 	= new Pawn(2, player1.color);
+			let pawn_four 	= new Pawn(3, player1.color);
+			
+			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 20);
 
-        let move = new MoveForward(pawn, c.HOME_ROW_SIZE - 2);
-        
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
-        
-        expect(end.n_pawns()).to.equal(0);
-        
-        board.makeMove(move);
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
 
-        expect(end.n_pawns()).to.equal(1);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 41);
+
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
 
-    it("should correctly form blockades on the main ring", () => {
-        let pawn0 = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, 4);
+		it("should correctly identify two blockades of your color on your home row", () => {
+			let pawn_one 		= new Pawn(0, player1.color);
+			let pawn_two 		= new Pawn(1, player1.color);
+			let pawn_three 	= new Pawn(2, player1.color);
+			let pawn_four 	= new Pawn(3, player1.color);
+			
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 69);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 66);
 
-        let pawn1 = new Pawn(1, player1.color);
-        tm.placePawnsOnGivenColorEntrySpot([pawn1, null], board, pawn1.color);
-
-        let move = new MoveForward(pawn1, 4);
-
-        let end = board.getSpotAtOffsetFromEntry(4, player1.color) as _Spot;
-        expect(end.n_pawns()).to.equal(1);
-        expect(end.has_blockade()).to.be.false;
-
-        board.makeMove(move);
-
-        expect(end.n_pawns()).to.equal(2);
-        expect(end.has_blockade()).to.be.true;
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
 
-    it("should correctly form blockades on the home row", () => {
-        let pawn0 = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+		it("should correctly identify two blockades of your color on home row and main ring", () => {
+			let pawn_one 		= new Pawn(0, player1.color);
+			let pawn_two 		= new Pawn(1, player1.color);
+			let pawn_three 	= new Pawn(2, player1.color);
+			let pawn_four 	= new Pawn(3, player1.color);
+			
+			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 41);
+			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 68);
 
-        let pawn1 = new Pawn(1, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn1, null], board, c.ENTRY_TO_HOME_START_OFFSET);
-
-        let move = new MoveForward(pawn1, 2);
-
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 2, player1.color) as _Spot;
-        expect(end.n_pawns()).to.equal(1);
-        expect(end.has_blockade()).to.be.false;
-
-        board.makeMove(move);
-
-        expect(end.n_pawns()).to.equal(2);
-        expect(end.has_blockade()).to.be.true;    });
-});
-
-describe("The board's bonus functionality", () => {
-    it("should confer a bonus upon landing on the home spot", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should detect that a landing on the main ring from the main ring will bop correctly", () => {
-        expect(0).to.equal(1);
-    });
-    
-    it("should detect that a landing on the main ring from a base will bop correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should detect that a landing will bop in the main ring", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should confer a bonus and send back a pawn upon a bop from a forward move", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should confer a bonus and send back a pawn upon a bop from an entrance move", () => {
-        expect(0).to.equal(1);
-    });
-});
-
-describe("The board's locating functionality", () => {
-    it("should find a pawn in the base correcty", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should find a pawn in the main ring correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should find a pawn in the home row correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should find a pawn in the home spot correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should detect that a pawn is in the base correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should detect that a pawn is not in the base correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should get a base spot with pawns on it correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should get main ring spots with pawns on them correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should get home row spots with pawns on them correctly", () => {
-        expect(0).to.equal(1);
-    });
-
-    it("should get a base, main ring spot, home row spot, and home spot, all with pawns on them, correctly", () => {
-        expect(0).to.equal(1);
-    });
-});
-
-describe("The board's end-game functionality", () => {
-    it("should accurately determine if there is a winner", () => {
-        expect(0).to.equal(1);
+			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
 });
