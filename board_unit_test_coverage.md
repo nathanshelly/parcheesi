@@ -18,6 +18,7 @@ Does not mean comprehensive
 - getOccupiedSpotsOfColorOnBoard - assuming correct if findPawn and getPawnsOfColorOnBoard pass tests
 - getBlockadesOfColor
 - getSpotAtOffsetFromSpot
+- moveOnePawnBackToBase
 
 ## Assumed Correct
 
@@ -26,7 +27,7 @@ Does not mean comprehensive
 
 ## Needs Tests
 
-- moveOnePawnBackToBase
+
 - findPawn
 - handleSpecialLandings
 - landingWillBop

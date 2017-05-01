@@ -36,6 +36,13 @@ describe('Filename: distances.test.ts\n\nConsumption and addition of distances:'
 		expect(new_array).to.deep.equal([1, 5, 20]);
 	});
 
+	it("should successfully consume another unique distance in array", () => {
+		let old_array = [1, 3, 5, 20];
+		let new_array = _distances.consumeMove(old_array, new MoveForward(pawn, 20));
+
+		expect(new_array).to.deep.equal([1, 3, 5]);
+	});
+
 	it("should successfully consume first of duplicate distances in array", () => {
 		let old_array = [1, 3, 5, 20, 3];
 		let new_array = _distances.consumeMove(old_array, new MoveForward(pawn, 3));

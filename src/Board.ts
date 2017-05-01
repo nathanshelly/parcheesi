@@ -91,6 +91,11 @@ export class Board {
 
 	// at least one pawn on this spot
 	moveOnePawnBackToBase(spot: _Spot) {
+		if(spot.n_pawns() === 0)
+			throw new Error("tried to move back pawn from spot with no pawns");
+		if(spot instanceof HomeSpot)
+			throw new Error("tried to move back pawn from home spot");
+		
 		let moving_pawn: Pawn = spot.get_live_pawns()[0];
 		spot.remove_pawn(moving_pawn)
 
