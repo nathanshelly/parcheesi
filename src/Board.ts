@@ -178,6 +178,14 @@ export class Board {
 		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findPawn(pawn); });
 	}
 
+	getPawnsOfColor(color: Color): Pawn[] {
+		let entry_spot: MainRingSpot = this.getEntrySpot(color);
+
+		let base_pawns = this.getPawnsOfColorInBase(color)
+
+		return base_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, entry_spot));
+	}
+
 	getPawnsOfColorOnBoard(color: Color): Pawn[] {
 		let entry_spot: MainRingSpot = this.getEntrySpot(color);
 		return this.getPawnsOfColorOnBoardHelper(color, entry_spot);
