@@ -8,10 +8,10 @@ export const NUM_PAWNS_IN_BLOCKADE = 2;
 export const MAX_N_PAWNS_MAIN = NUM_PAWNS_IN_BLOCKADE;
 export const MAX_N_PAWNS_HOME_ROW = NUM_PAWNS_IN_BLOCKADE;
 
-export const HOME_ROW_SIZE = 8;
+export const HOME_ROW_SIZE = 7;
 export const MAIN_RING_SIZE = 68;
-export const ENTRY_TO_HOME_START_OFFSET = 64;
-export const ENTRY_TO_HOME_OFFSET = 72;
+export const ENTRY_TO_HOME_ROW_START_OFFSET = 64;
+export const ENTRY_TO_HOME_OFFSET = 71;
 export const OFFSET_BETWEEN_ENTRIES = 17;
 
 export const VALUE_TO_ENTER_ON = 5;

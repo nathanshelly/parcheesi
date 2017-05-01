@@ -22,10 +22,10 @@ export class HomeRowSpot extends _Spot {
         this.color = color;
         this.index = ind;
 
-        if (ind === c.HOME_ROW_SIZE)
-            this._next = new HomeSpot(color);
-        else
+        if (ind < c.HOME_ROW_SIZE - 1)
             this._next = new HomeRowSpot(ind + 1, color);
+        else
+            this._next = new HomeSpot(color);
     }
 
     next(): HomeRowSpot | HomeSpot {

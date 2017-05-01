@@ -538,7 +538,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 2];
 
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, 71);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, 65);
         let res = rc.legalMove(move, distances, player1, board, board.getBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
@@ -560,7 +560,7 @@ describe("Legal forward moves:", () => {
 
         let distances = [5, 10];
 
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, 62);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, 61);
         let res = rc.legalMove(move, distances, player1, board, board.getBlockadesOfColor(player1.color));
         expect(res).to.be.true;
     });
