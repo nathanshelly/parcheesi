@@ -366,22 +366,80 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 		let pawn_four 	= new Pawn(3, player1.color);
 
 		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 66);
-		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 71);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 68);
 				
 		let pawns = board.getPawnsOfColorOnBoard(player1.color);
 		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
     });
 
-	// it("should correctly find all pawns in home spot", () => {
-	// 	let pawn_one 	= new Pawn(0, player1.color);
-	// 	let pawn_two 	= new Pawn(1, player1.color);
-	// 	let pawn_three 	= new Pawn(2, player1.color);
-	// 	let pawn_four 	= new Pawn(3, player1.color);
+	it("should correctly find all pawns in home spot", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
 
-	// 	tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 73);
-	// 	tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 73);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_OFFSET);
 				
-	// 	let pawns = board.getPawnsOfColorOnBoard(player1.color);
-	// 	expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
-    // });
+		let pawns = board.getPawnsOfColorOnBoard(player1.color);
+		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
+    });
+
+	it("should correctly find some pawns in main ring and some pawns in home row", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_four, null], board, 2);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 40);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_two, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE - 2);
+
+		let pawns = board.getPawnsOfColorOnBoard(player1.color);
+		expect(pawns).to.deep.equal([pawn_four, pawn_one, pawn_three, pawn_two]);
+    });
+
+	it("should correctly find some pawns in main ring and some pawns in home spot", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_four, null], board, 9);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 20);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_two], board, c.ENTRY_TO_HOME_OFFSET);
+				
+		let pawns = board.getPawnsOfColorOnBoard(player1.color);
+		expect(pawns).to.deep.equal([pawn_four, pawn_one, pawn_three, pawn_two]);
+    });
+
+	it("should correctly find some pawns in home row and some pawns in home spot", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_two, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE - 2);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_four, pawn_one], board, c.ENTRY_TO_HOME_OFFSET);
+				
+		let pawns = board.getPawnsOfColorOnBoard(player1.color);
+		expect(pawns).to.deep.equal([pawn_three, pawn_two, pawn_four, pawn_one]);
+    });
+
+	it("should correctly find some pawns in main ring, some pawns in home row and some pawns in home spot", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_four, null], board, 0);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_two, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE - 2);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_OFFSET);
+				
+		let pawns = board.getPawnsOfColorOnBoard(player1.color);
+		expect(pawns).to.deep.equal([pawn_four, pawn_three, pawn_two, pawn_one]);
+    });
 });
