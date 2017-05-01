@@ -7,26 +7,30 @@ import { MoveEnter } from './MoveEnter';
 import { MoveForward } from './MoveForward';
 import * as d from './Distances';
 
-class FirstPawnMover extends BasicPlayer {
+export class FirstPawnMover extends BasicPlayer {
 	rc: RulesChecker = new RulesChecker();
 
 	doMove(brd: Board, distances: number[]): _Move[] {
 		let pawns_in_order: Pawn[] = brd.getPawnsOfColor(this.color);
+		return this.movesForPawns(brd, distances, pawns_in_order.reverse());
+	}
+
+	movesForPawns(brd: Board, distances: number[], pawns: Pawn[]): _Move[] {
 		let moves: _Move[] = [];
 		
 		let found: boolean;
 		do {
 			found = false;
 
-			for (let i = pawns_in_order.length - 1; i >= 0; i--) {
-				let pawn = pawns_in_order[i];
+			for (let i = 0; i < pawns.length; i++) {
+				let pawn = pawns[i];
 				let move = this.moveForPawn(distances, pawn, brd);
 
 				if (move !== null) {
 					found = true;
 					moves.push(move);
 					
-					distances = d.consumeDistance(distances, move);
+					distances = d.consumeMove(distances, move);
 
 					let bonus = brd.makeMove(move);
 					if (bonus !== null)
