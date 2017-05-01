@@ -11,9 +11,13 @@ Does not mean comprehensive
 - makeMove
 - getSpotAtOffsetFromEntry
 - getBaseSpot
+- getPawnsOfColor
+- getPawnsOfColorOnBoard
+- getPawnsOfColorInBase
 - getPawnsOfColorOnBoardHelper - will be tested through getPawnsOfColorOnBoard
 - getOccupiedSpotsOfColorOnBoard - assuming correct if findPawn and getPawnsOfColorOnBoard pass tests
 - getBlockadesOfColor
+- getSpotAtOffsetFromSpot
 
 ## Assumed Correct
 
@@ -22,12 +26,9 @@ Does not mean comprehensive
 
 ## Needs Tests
 
-- getSpotAtOffsetFromSpot
 - moveOnePawnBackToBase
 - findPawn
 - handleSpecialLandings
 - landingWillBop
 - getHomeSpots
 - getHomeRowStarts
-- getPawnsOfColorOnBoard
-- getPawnsOfColorInBase

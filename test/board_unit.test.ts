@@ -190,6 +190,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer;
+	let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, distances: number[]): _Move[] {
@@ -206,23 +207,89 @@ describe("getSpotAtOffsetFromSpot tests", () => {
         board = new Board(players);
     });
 
-	// it("should correctly get same spot if offset equals 0", () => {
-	// 	let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-	// 	let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
+	it("should correctly get same spot if offset equals 0", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
 		
-	// 	let index = c.HOME_ROW_SIZE;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
 		
-	// 	expect(spot.index).to.equal(index);
-    // });
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(MainRingSpot);
+    });
 
-    // it("should correctly get main ring spot after entry main ring spot", () => {
-	// 	let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-	// 	let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
+	it("should correctly get main ring spot at random offset (i.e. 5)", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, 5, player1.color) as _Spot;
 		
-	// 	let index = c.HOME_ROW_SIZE;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
 		
-	// 	expect(spot.index).to.equal(index);
-    // });
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(MainRingSpot);
+    });
+
+	it("should correctly get last main ring spot before home row", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET - 1, player1.color) as _Spot;
+		
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["HOME_ROW_ENTRY"];
+		
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(MainRingSpot);
+    });
+
+	it("should correctly get first spot of home row", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
+		
+		let index = 0;
+		
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(HomeRowSpot);
+    });
+
+	it("should correctly get last spot of home row", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_OFFSET - 1, player1.color) as _Spot;
+		
+		let index = c.HOME_ROW_SIZE - 1;
+		
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(HomeRowSpot);
+    });
+
+	it("should correctly get home spot", () => {
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
+		
+		let index = c.HOME_ROW_SIZE;
+		
+		expect(spot.index).to.equal(index);
+		expect(spot).to.be.an.instanceof(HomeSpot);
+    });
+
+	it("should correctly fail to get spot if ran with blockade check and blockade exists", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 5);
+		
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockade_on_spot_checker);
+		
+		expect(res).to.be.null;
+    });
+
+	it("should correctly fail to get spot if ran with blockade check and blockade exists in home row", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
+		
+		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockade_on_spot_checker);
+		
+		expect(res).to.be.null;
+    });
 });
 
 
