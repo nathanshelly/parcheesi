@@ -19,6 +19,9 @@ Does not mean comprehensive
 - getBlockadesOfColor
 - getSpotAtOffsetFromSpot
 - moveOnePawnBackToBase
+- findPawn
+- getHomeSpots
+- getHomeRowStarts
 
 ## Assumed Correct
 
@@ -27,8 +30,5 @@ Does not mean comprehensive
 
 ## Needs Tests
 
-- findPawn
 - handleSpecialLandings
 - landingWillBop
-- getHomeSpots
-- getHomeRowStarts

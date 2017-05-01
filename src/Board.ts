@@ -222,7 +222,7 @@ export class Board {
 		return this.getHomeRowStarts().map(hrs => {
 			// TODO - test if one-liner below works, if so use it instead
 			// return this.getSpotAtOffsetFromSpot(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
-			while (hrs.next() !instanceof HomeSpot)
+			while (!(hrs.next() instanceof HomeSpot))
 				hrs = hrs.next() as HomeRowSpot;
 
 			return hrs.next() as HomeSpot;

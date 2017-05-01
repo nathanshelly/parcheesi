@@ -1,5 +1,6 @@
 import { Color } from './Color'
 
+export const NUM_PLAYERS = 4;
 export const NUM_PLAYER_PAWNS = 4;
 export const MAX_N_PAWNS_BASE = NUM_PLAYER_PAWNS;
 export const MAX_N_PAWNS_HOME_SPOT = NUM_PLAYER_PAWNS;

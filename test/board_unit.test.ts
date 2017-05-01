@@ -759,3 +759,67 @@ describe("findPawn tests", () => {
 		expect(() => { board.findPawn(pawn_two); }).to.throw(Error);
     });
 });
+
+describe("getHomeRowStarts ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should correctly find c.NUM_PLAYERS home row spots", () => {
+		let home_row_spots = board.getHomeRowStarts();
+		let res = home_row_spots.every(spot => { return spot instanceof HomeRowSpot; });
+
+		expect(res).to.be.true;
+		expect(home_row_spots.length).to.equal(c.NUM_PLAYERS);
+    });
+});
+
+describe("getHomeSpots ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should correctly find c.NUM_PLAYERS home spots", () => {
+		let home_spots = board.getHomeSpots();
+		let res = home_spots.every(spot => { return spot instanceof HomeSpot; });
+
+		expect(res).to.be.true;
+		expect(home_spots.length).to.equal(c.NUM_PLAYERS);
+    });
+});
