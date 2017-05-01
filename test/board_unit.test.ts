@@ -443,3 +443,68 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 		expect(pawns).to.deep.equal([pawn_four, pawn_three, pawn_two, pawn_one]);
     });
 });
+
+describe("getPawnsOfColorOnBoard tests (order matters)", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+    
+	it("should correctly find all pawns", () => {
+		let pawns = board.getPawnsOfColor(player1.color);
+		expect(pawns.length).to.equal(4);
+    });
+
+	it("should correctly find pawns in base and pawns in main ring", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		let pawn_three = new Pawn(2, player1.color);
+		let pawn_four = new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 0);
+		
+		let pawns = board.getPawnsOfColor(player1.color);
+		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
+    });
+
+	it("should correctly find pawns in base and pawns in home row", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		let pawn_three = new Pawn(2, player1.color);
+		let pawn_four = new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		
+		let pawns = board.getPawnsOfColor(player1.color);
+		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
+    });
+
+	it("should correctly find pawns in base and pawns in home spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		let pawn_three = new Pawn(2, player1.color);
+		let pawn_four = new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_OFFSET);
+		
+		let pawns = board.getPawnsOfColor(player1.color);
+		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
+    });
+});
