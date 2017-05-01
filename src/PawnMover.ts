@@ -1,20 +1,15 @@
 import * as d from './Distances';
-import * as checker from '../src/RulesChecker'
+import * as checker from './RulesChecker';
+
+import { _Move } from './_Move';
+import { MoveEnter } from './MoveEnter';
+import { MoveForward } from './MoveForward';
 
 import { Pawn } from './Pawn';
 import { Board } from './Board';
-import { _Move } from './_Move';
-import { PawnMover } from './PawnMover';
-import { MoveEnter } from './MoveEnter';
 import { BasicPlayer } from './BasicPlayer';
-import { MoveForward } from './MoveForward';
 
-export class FirstPawnMover extends PawnMover {
-	doMove(brd: Board, distances: number[]): _Move[] {
-		let pawns_in_order: Pawn[] = brd.getPawnsOfColor(this.color);
-		return this.movesForPawns(brd, distances, pawns_in_order.reverse());
-	}
-
+export abstract class PawnMover extends BasicPlayer {
 	movesForPawns(brd: Board, distances: number[], pawns: Pawn[]): _Move[] {
 		let moves: _Move[] = [];
 		
@@ -62,4 +57,6 @@ export class FirstPawnMover extends PawnMover {
 
 		return null;
 	}
+
 }
+
