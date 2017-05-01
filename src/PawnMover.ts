@@ -10,12 +10,15 @@ import { Board } from './Board';
 import { BasicPlayer } from './BasicPlayer';
 
 export abstract class PawnMover extends BasicPlayer {
-	movesForPawns(brd: Board, distances: number[], pawns: Pawn[]): _Move[] {
+	movesForPawns(brd: Board, distances: number[], reverse_pawns: boolean): _Move[] {
+
 		let moves: _Move[] = [];
 		
 		let found: boolean;
+		let pawns: Pawn[];
 		do {
 			found = false;
+			pawns = reverse_pawns ? brd.getPawnsOfColor(this.color).reverse() : brd.getPawnsOfColor(this.color);
 
 			for (let i = 0; i < pawns.length; i++) {
 				let pawn = pawns[i];

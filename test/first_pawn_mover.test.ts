@@ -95,7 +95,7 @@ describe("First pawn movers", () => {
     expect((move2 as MoveForward).pawn).to.deep.equal(pawns[0]);
   });
 
-  it("should conclude on two forward moves with two two pawns outside, both moving the same pawn", () => {
+  it("should conclude on two forward moves with two twwo pawns outside, both moving the same pawn", () => {
     let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
