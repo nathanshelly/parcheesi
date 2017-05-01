@@ -33,10 +33,7 @@ export class RulesChecker {
 			if(this.legalMove(move, possible_distances, player, board, starting_blockades)) {
 				let possible_bonus: number | null = board.makeMove(move);
 
-				if(move instanceof MoveForward)
-					possible_distances = _distances.consumeDistance(possible_distances, move.distance);
-				else
-					possible_distances = _distances.consumeDistance(possible_distances)
+				possible_distances = _distances.consumeMove(possible_distances, move);
 
 				if(possible_bonus !== null)
 					possible_distances = _distances.addDistance(possible_distances, possible_bonus);

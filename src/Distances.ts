@@ -33,7 +33,7 @@ export function addDistance(current_distances: number[], new_distance: number): 
 	return current_distances;
 }
 
-export function consumeDistance(current_distances: number[], move: _Move): number[] {
+export function consumeMove(current_distances: number[], move: _Move): number[] {
 	return (move instanceof MoveEnter)
 					? consumeMoveEnterDistance(current_distances)
 					: consumeMoveForwardDistance(current_distances, (move as MoveForward).distance);
