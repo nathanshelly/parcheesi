@@ -11,6 +11,8 @@ export class HomeSpot extends _Spot {
 
     color: Color;
 
+    index: number = c.HOME_ROW_SIZE; // for debugging purposes
+
     constructor(color: Color) {
         super();
         

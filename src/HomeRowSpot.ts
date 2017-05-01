@@ -13,11 +13,14 @@ export class HomeRowSpot extends _Spot {
 
     private _next: HomeRowSpot | HomeSpot;
 
+    index: number; // for debugging purposes
+
     constructor(ind: number, color: Color) {
         super();
 
         this.pawns = _.fill(new Array(this.max_n_pawns), null);
         this.color = color;
+        this.index = ind;
 
         if (ind === c.HOME_ROW_SIZE)
             this._next = new HomeSpot(color);

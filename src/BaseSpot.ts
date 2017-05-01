@@ -13,6 +13,8 @@ export class BaseSpot extends _Spot {
     
     private _next: MainRingSpot;
 
+    index: number = -1; // for debugging purposes
+
     constructor(_next: MainRingSpot, color: Color) {
         super();
 

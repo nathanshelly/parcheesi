@@ -8,7 +8,10 @@ export abstract class _Spot {
     max_n_pawns: number;
     pawns: (Pawn | null)[];
 
+    index: number; // for debugging purposes
+
     abstract has_blockade(): boolean;
+
     
     n_pawns(): number { return this.get_live_pawns().length; };
     

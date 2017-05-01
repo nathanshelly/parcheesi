@@ -13,6 +13,7 @@ Does not mean comprehensive
 - getBaseSpot
 - getPawnsOfColorOnBoardHelper - will be tested through getPawnsOfColorOnBoard
 - getOccupiedSpotsOfColorOnBoard - assuming correct if findPawn and getPawnsOfColorOnBoard pass tests
+- getBlockadesOfColor
 
 ## Assumed Correct
 
@@ -21,7 +22,6 @@ Does not mean comprehensive
 
 ## Needs Tests
 
-- getBlockadesOfColor
 - getSpotAtOffsetFromSpot
 - moveOnePawnBackToBase
 - findPawn

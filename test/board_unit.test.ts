@@ -48,88 +48,168 @@ describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
         expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
     });
 
-		it("should correctly identify no blockades of color when only blockades of other color on board", () => {
-			let pawn_one = new Pawn(0, player2.color);
-			let pawn_two = new Pawn(1, player2.color);
-			
-			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
-				
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
+	it("should correctly identify no blockades of color when only blockades of other color on board", () => {
+		let pawn_one = new Pawn(0, player2.color);
+		let pawn_two = new Pawn(1, player2.color);
+		
+		tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
 
-			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player2.color);
-				
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
+		tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player2.color);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(0);
     });
 
-		it("should correctly identify blockade of your color on entry spot", () => {
-			let pawn_one = new Pawn(0, player1.color);
-			let pawn_two = new Pawn(1, player1.color);
-			
-			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
+	it("should correctly identify blockade of your color on entry spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		
+		tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-		it("should correctly identify blockade of your color on arbitrary spot", () => {
-			let pawn_one = new Pawn(0, player1.color);
-			let pawn_two = new Pawn(1, player1.color);
-			
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 20);
+	it("should correctly identify blockade of your color on arbitrary spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 20);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
 
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
-
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-		it("should correctly identify blockade of your color on your home row", () => {
-			let pawn_one = new Pawn(0, player1.color);
-			let pawn_two = new Pawn(1, player1.color);
-			
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 68);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
+	it("should correctly identify blockade of your color on your home row", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 68);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(1);
     });
 
-		it("should correctly identify two blockades of your color on arbitrary spots", () => {
-			let pawn_one 		= new Pawn(0, player1.color);
-			let pawn_two 		= new Pawn(1, player1.color);
-			let pawn_three 	= new Pawn(2, player1.color);
-			let pawn_four 	= new Pawn(3, player1.color);
-			
-			tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
-			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 20);
+	it("should correctly identify two blockades of your color on arbitrary spots", () => {
+		let pawn_one 		= new Pawn(0, player1.color);
+		let pawn_two 		= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+		
+		tm.placePawnsOnGivenColorEntrySpot([pawn_one, pawn_two], board, player1.color);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 20);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
 
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
-
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
-			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 41);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 40);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 41);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
 
-		it("should correctly identify two blockades of your color on your home row", () => {
-			let pawn_one 		= new Pawn(0, player1.color);
-			let pawn_two 		= new Pawn(1, player1.color);
-			let pawn_three 	= new Pawn(2, player1.color);
-			let pawn_four 	= new Pawn(3, player1.color);
-			
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 69);
-			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 66);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
+	it("should correctly identify two blockades of your color on your home row", () => {
+		let pawn_one 		= new Pawn(0, player1.color);
+		let pawn_two 		= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 69);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 66);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
 
-		it("should correctly identify two blockades of your color on home row and main ring", () => {
-			let pawn_one 		= new Pawn(0, player1.color);
-			let pawn_two 		= new Pawn(1, player1.color);
-			let pawn_three 	= new Pawn(2, player1.color);
-			let pawn_four 	= new Pawn(3, player1.color);
-			
-			tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 41);
-			tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 68);
-
-			expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
+	it("should correctly identify two blockades of your color on home row and main ring", () => {
+		let pawn_one 		= new Pawn(0, player1.color);
+		let pawn_two 		= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 41);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 68);
+		expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
     });
+});
+
+describe("getSpotAtOffsetFromEntry tests", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        players = [player1];
+        board = new Board(players);
+    });
+
+    it("should correctly get main ring spot outside base", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		let index = board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index;
+		
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly get main ring spot 5 spots after base", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
+		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 5) % c.MAIN_RING_SIZE
+		
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly get main ring spot at distance that wraps around end of board (40 spots after base)", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(40, player1.color) as _Spot;
+		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 40) % c.MAIN_RING_SIZE;
+		
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly get last main ring spot at offset from entry spot", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET, player1.color) as _Spot;
+		let index = 0;
+		
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly get home row spot at offset from entry spot", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.MAIN_RING_SIZE, player1.color) as _Spot;
+		let index = c.MAIN_RING_SIZE - c.ENTRY_TO_HOME_START_OFFSET;
+		
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly get home spot at offset from entry spot", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
+		let index = c.HOME_ROW_SIZE;
+		
+		expect(spot.index).to.equal(index);
+    });
+});
+
+describe("getSpotAtOffsetFromSpot tests", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+    // it("should correctly get main ring spot after another main ring spot", () => {
+	// 	expect(board.getBlockadesOfColor(player1.color).length).to.equal(2);
+    // });
 });
