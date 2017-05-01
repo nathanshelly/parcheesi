@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
-import * as c from '../src/Constants'
 import * as tm from './testMethods'
+import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -147,6 +147,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
 		let index = board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index;
 		
+		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
     });
 
@@ -154,6 +155,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
 		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 5) % c.MAIN_RING_SIZE
 		
+		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
     });
 
@@ -161,6 +163,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(40, player1.color) as _Spot;
 		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 40) % c.MAIN_RING_SIZE;
 		
+		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
     });
 
@@ -168,6 +171,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
 		let index = 0;
 		
+		expect(spot).to.be.instanceof(HomeRowSpot);
 		expect(spot.index).to.equal(index);
     });
 
@@ -175,6 +179,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.MAIN_RING_SIZE, player1.color) as _Spot;
 		let index = c.MAIN_RING_SIZE - c.ENTRY_TO_HOME_ROW_START_OFFSET;
 		
+		expect(spot).to.be.instanceof(HomeRowSpot);
 		expect(spot.index).to.equal(index);
     });
 
@@ -182,6 +187,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
 		let index = c.HOME_ROW_SIZE;
 		
+		expect(spot).to.be.instanceof(HomeSpot);
 		expect(spot.index).to.equal(index);
     });
 });
@@ -671,5 +677,85 @@ describe("moveOnePawnBackToBase tests", () => {
 		let remove_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
 		
 		expect(() => { board.moveOnePawnBackToBase(remove_spot); }).to.throw(Error);
+    });
+});
+
+describe("findPawn tests", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should correctly find a pawn in base spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let spot = board.findPawn(pawn_one);
+
+		let index = c.TEST_BASE_INDEX;
+
+		expect(spot).to.be.instanceof(BaseSpot);
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly find a pawn in main ring", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 0);
+		let spot = board.findPawn(pawn_one);
+
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"];
+
+		expect(spot).to.be.instanceof(MainRingSpot);
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly find a pawn in home row", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		let spot = board.findPawn(pawn_one);
+
+		let index = 0;
+
+		expect(spot).to.be.instanceof(HomeRowSpot);
+		expect(spot.index).to.equal(index);
+    });
+
+	it("should correctly find a pawn in home spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_OFFSET);
+		let spot = board.findPawn(pawn_one);
+
+		let index = c.HOME_ROW_SIZE;
+
+		expect(spot).to.be.instanceof(HomeSpot);
+		expect(spot.index).to.equal(index);
+    });
+	
+	it("should error if given pawn of invalid id", () => {
+		let pawn_one = new Pawn(-1, player1.color);
+
+		expect(() => { board.findPawn(pawn_one); }).to.throw(Error);
+
+		let pawn_two = new Pawn(c.NUM_PLAYER_PAWNS + 1, player1.color);
+
+		expect(() => { board.findPawn(pawn_two); }).to.throw(Error);
     });
 });

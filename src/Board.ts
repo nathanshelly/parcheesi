@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import * as c from './Constants'
+import * as checker from './RulesChecker'
 
 import { Pawn } from './Pawn'
 import { Color } from './Color'
@@ -103,6 +104,10 @@ export class Board {
 	}
 	
 	findPawn(pawn: Pawn): _Spot {
+		// maybe check valid color?
+		if(checker.pawnIdOutsideLegalRange(pawn))
+			throw new Error("given a pawn with invalid ID")
+		
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
 		if(base_spot.pawn_exists(pawn))
 			return base_spot

@@ -1,15 +1,15 @@
-import { BasicPlayer } from './BasicPlayer';
+import * as d from './Distances';
+import * as checker from '../src/RulesChecker'
+
+import { Pawn } from './Pawn';
 import { Board } from './Board';
 import { _Move } from './_Move';
-import { Pawn } from './Pawn';
-import { RulesChecker } from './RulesChecker';
+
 import { MoveEnter } from './MoveEnter';
+import { BasicPlayer } from './BasicPlayer';
 import { MoveForward } from './MoveForward';
-import * as d from './Distances';
 
 export class FirstPawnMover extends BasicPlayer {
-	rc: RulesChecker = new RulesChecker();
-
 	doMove(brd: Board, distances: number[]): _Move[] {
 		let pawns_in_order: Pawn[] = brd.getPawnsOfColor(this.color);
 		return this.movesForPawns(brd, distances, pawns_in_order.reverse());
@@ -49,13 +49,13 @@ export class FirstPawnMover extends BasicPlayer {
 		
 		if (board.pawnInBase(pawn)) {
 			move = new MoveEnter(pawn);
-			if (this.rc.legalMoveEnter(move, distances, board))
+			if (checker.legalMoveEnter(move, distances, board))
 				return move;
 		}
 		else {
 			for (let i = 0; i < distances.length; i++) {
 				move = new MoveForward(pawn, distances[i]);
-				if (this.rc.legalMove(move, distances, this, board, board.getBlockadesOfColor(this.color)))
+				if (checker.legalMove(move, distances, this, board, board.getBlockadesOfColor(this.color)))
 					return move;
 			}	
 		}
@@ -63,4 +63,3 @@ export class FirstPawnMover extends BasicPlayer {
 		return null;
 	}
 }
-

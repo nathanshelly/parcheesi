@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import * as c from '../src/Constants'
+import * as checker from '../src/RulesChecker'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -7,7 +8,6 @@ import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
-import { RulesChecker } from '../src/RulesChecker'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -22,11 +22,8 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-
-
 describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () => {
     let game: Parcheesi;
-    let checker: RulesChecker = new RulesChecker();
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, distances: number[]): _Move[] {

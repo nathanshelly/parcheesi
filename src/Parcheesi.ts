@@ -30,7 +30,7 @@ export class Parcheesi implements _Parcheesi {
 		for (let i = 0; i < homes.length; ++i)
 			// TODO - test if below works, cleaner than looking for null
 			// if (homes[i].n_pawns() === c.NUM_PLAYER_PAWNS)
-			if (homes[i].pawns.indexOf(null) != -1)
+			if (homes[i].pawns.indexOf(null) !== -1)
 				return homes[i].color;
 
 		return null;

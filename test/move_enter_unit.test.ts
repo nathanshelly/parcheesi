@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 import * as tm from './testMethods'
 import * as c from '../src/Constants'
+import * as checker from '../src/RulesChecker'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -8,7 +9,6 @@ import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
-import { RulesChecker } from '../src/RulesChecker'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -25,7 +25,6 @@ import 'mocha';
 
 describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with correct number:', () => {
     let game: Parcheesi;
-    let checker: RulesChecker = new RulesChecker();
 
     beforeEach(() => {
         game = new Parcheesi();
@@ -64,7 +63,6 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
 
 describe('Unit tests for confirming pawn is in base spot:', () => {
     let game: Parcheesi;
-    let checker: RulesChecker = new RulesChecker();
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, distances: number[]): _Move[] {
@@ -100,7 +98,6 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
 });
 
 describe('Unit tests for entering pawn:', () => {
-    let rc: RulesChecker;
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
@@ -110,10 +107,6 @@ describe('Unit tests for entering pawn:', () => {
             throw new Error('Method not implemented - not needed when manually building moves.');
         }
     }
-
-    before(() => {
-        rc = new RulesChecker();
-    });
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -132,7 +125,7 @@ describe('Unit tests for entering pawn:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Green);
         tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
-        expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if blockade of opponent color exists on home spot', () => {
@@ -140,10 +133,10 @@ describe('Unit tests for entering pawn:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
         tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
-        expect(rc.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
     });
 
     it('should correctly identify if no blockade of same color exists on home spot', () => {
-        expect(rc.blockadeOnHome(Color.Yellow, board)).to.equal(false);
+        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(false);
     });
 });

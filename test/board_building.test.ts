@@ -7,7 +7,6 @@ import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
 import { BasicPlayer } from '../src/BasicPlayer'
-import { RulesChecker } from '../src/RulesChecker'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
