@@ -21,7 +21,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
-describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality", () => {
+describe("Filename: board_integration.test.ts\n\nThe board's move-making functionality", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
@@ -74,11 +74,11 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the main ring to the home row correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET - 2);
 
         let move = new MoveForward(pawn, 6);
         
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 4, player1.color) as _Spot;
+        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 4, player1.color) as _Spot;
         
         expect(end.n_pawns()).to.equal(0);
         
@@ -89,12 +89,12 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the main ring to the home spot correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET - 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET - 2);
 
         let offset = c.HOME_ROW_SIZE + 2;
         let move = new MoveForward(pawn, offset);
         
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
+        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
         
         expect(end.n_pawns()).to.equal(0);
         
@@ -105,11 +105,11 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the home row to the home row correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 2);
 
         let move = new MoveForward(pawn, 2);
         
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 4, player1.color) as _Spot;
+        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 4, player1.color) as _Spot;
         
         expect(end.n_pawns()).to.equal(0);
         
@@ -120,11 +120,11 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should perform forward moves from the home row to the home spot correctly", () => {
         let pawn = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 2);
 
         let move = new MoveForward(pawn, c.HOME_ROW_SIZE - 2);
         
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
+        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
         
         expect(end.n_pawns()).to.equal(0);
         
@@ -154,14 +154,14 @@ describe("Filename: board_unit.test.ts\n\nThe board's move-making functionality"
 
     it("should correctly form blockades on the home row", () => {
         let pawn0 = new Pawn(0, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, c.ENTRY_TO_HOME_START_OFFSET + 2);
+        tm.placePawnsAtOffsetFromYourEntry([pawn0, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 2);
 
         let pawn1 = new Pawn(1, player1.color);
-        tm.placePawnsAtOffsetFromYourEntry([pawn1, null], board, c.ENTRY_TO_HOME_START_OFFSET);
+        tm.placePawnsAtOffsetFromYourEntry([pawn1, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
 
         let move = new MoveForward(pawn1, 2);
 
-        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_START_OFFSET + 2, player1.color) as _Spot;
+        let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 2, player1.color) as _Spot;
         expect(end.n_pawns()).to.equal(1);
         expect(end.has_blockade()).to.be.false;
 
