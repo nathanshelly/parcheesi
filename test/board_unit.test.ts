@@ -292,7 +292,6 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     });
 });
 
-
 describe("getPawnsOfColorInBase tests", () => {
     let board: Board;
     let players: _Player[];
@@ -573,5 +572,104 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 		
 		let pawns = board.getPawnsOfColor(player1.color);
 		expect(pawns).to.deep.equal([pawn_three, pawn_four, pawn_one, pawn_two]);
+    });
+});
+
+describe("moveOnePawnBackToBase tests", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should correctly move back one of several pawns on main ring spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 0);
+		let remove_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		
+		board.moveOnePawnBackToBase(remove_spot);
+
+		let pawns = board.getPawnsOfColorInBase(player1.color);
+		expect(pawns.length).to.equal(c.NUM_PLAYER_PAWNS - 1);
+    });
+
+	it("should correctly move back one of several pawns on home row spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		let pawn_three = new Pawn(2, player1.color);
+		let pawn_four = new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 0);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+
+		let remove_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
+		
+		board.moveOnePawnBackToBase(remove_spot);
+
+		let pawns = board.getPawnsOfColorInBase(player1.color);
+		expect(pawns.length).to.equal(c.NUM_PLAYER_PAWNS - 3);
+    });
+
+	it("should correctly move back one pawn on main ring spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 20);
+		let remove_spot = board.getSpotAtOffsetFromEntry(20, player1.color) as _Spot;
+		
+		board.moveOnePawnBackToBase(remove_spot);
+
+		let pawns = board.getPawnsOfColorInBase(player1.color);
+		expect(pawns.length).to.equal(c.NUM_PLAYER_PAWNS);
+    });
+
+	it("should correctly move back one pawn on home row spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+		let pawn_two = new Pawn(1, player1.color);
+		let pawn_three = new Pawn(2, player1.color);
+		let pawn_four = new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 0);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, null], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_four, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
+
+		let remove_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color) as _Spot;
+		
+		board.moveOnePawnBackToBase(remove_spot);
+
+		let pawns = board.getPawnsOfColorInBase(player1.color);
+		expect(pawns.length).to.equal(c.NUM_PLAYER_PAWNS - 3);
+    });
+
+	it("should correctly error when trying to move back pawn from home spot", () => {
+		let pawn_one = new Pawn(0, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_OFFSET);
+		let remove_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
+		
+		expect(() => { board.moveOnePawnBackToBase(remove_spot); }).to.throw(Error);
+    });
+
+	it("should correctly error when trying to move back pawn from spot with no pawns", () => {
+		let remove_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
+		
+		expect(() => { board.moveOnePawnBackToBase(remove_spot); }).to.throw(Error);
     });
 });
