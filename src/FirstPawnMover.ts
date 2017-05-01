@@ -35,6 +35,8 @@ export class FirstPawnMover extends BasicPlayer {
 					let bonus = brd.makeMove(move);
 					if (bonus !== null)
 						distances.push(bonus);
+					
+					break;
 				}
 			}
 		} while (distances.length > 0 && found)

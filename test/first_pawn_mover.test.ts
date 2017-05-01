@@ -27,7 +27,7 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on an enter move for a pawn in the base", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     let dice = [5, 6];
 
@@ -39,7 +39,7 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on a forward move for a pawn outside", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
     
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
 
@@ -54,7 +54,7 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on an enter move and a forward move in order when all pawns are inside", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     let dice = [5, 6];
 
@@ -69,12 +69,12 @@ describe("First pawn movers", () => {
 
     expect((move2 as MoveForward).distance).to.equal(6);
 
-    expect((move1 as MoveForward).pawn).to.deep.equal(pawns[0]);
+    expect((move1 as MoveEnter).pawn).to.deep.equal(pawns[0]);
     expect((move2 as MoveForward).pawn).to.deep.equal(pawns[0]);
   });
 
   it("should conclude on two forward moves with one pawn outside, both moving that pawn", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
 
@@ -96,7 +96,7 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on two forward moves with two two pawns outside, both moving the same pawn", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
     tm.placePawnsOnGivenColorEntrySpot([pawns[1], null], board, mover.color);
@@ -119,7 +119,7 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on no moves when all pawns are in the base and no enter numbers are rolled", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     let dice = [1, 1];
 
@@ -129,10 +129,10 @@ describe("First pawn movers", () => {
   });
 
   it("should conclude on no moves when all pawns are in the base and the entry is blockaded", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
     let dummies = board.getPawnsOfColor(dummy.color);
 
-    tm.placePawnsOnGivenColorEntrySpot([dummies[0], dummies[1]], board, dummy.color);
+    tm.placePawnsOnGivenColorEntrySpot([dummies[0], dummies[1]], board, mover.color);
 
     let dice = [5, 6];
 
@@ -142,7 +142,7 @@ describe("First pawn movers", () => {
   });
 
   it("should return three moves when advancing the furthest pawn results in a home spot bonus and all dice + bonus can be used", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE - 2);
     tm.placePawnsOnGivenColorEntrySpot([pawns[1], null], board, mover.color);
@@ -163,7 +163,7 @@ describe("First pawn movers", () => {
   });
 
   it("should return three moves when the furthest pawn is outside and advancing it results in a bop bonus and all dice + bonus can be used", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
     let dummies = board.getPawnsOfColor(dummy.color);
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 5);
@@ -186,7 +186,7 @@ describe("First pawn movers", () => {
   });
 
   it("should return three moves when all pawns are in the base and entering it results in a bop bonus and all dice + bonus can be used", () => {
-    let pawns = board.getPawnsOfColor(mover.color);
+    let pawns = board.getPawnsOfColor(mover.color).reverse();
     let dummies = board.getPawnsOfColor(dummy.color);
 
     tm.placePawnsOnGivenColorEntrySpot([dummies[0], null], board, mover.color);
@@ -199,7 +199,7 @@ describe("First pawn movers", () => {
 
     expect(moves[0]).to.be.an.instanceOf(MoveEnter);
     expect(moves[1]).to.be.an.instanceOf(MoveForward);
-    expect(mover[2]).to.be.an.instanceOf(MoveForward);
+    expect(moves[2]).to.be.an.instanceOf(MoveForward);
     
     expect((moves[1] as MoveForward).distance).to.equal(6);
     expect((moves[2] as MoveForward).distance).to.equal(c.BOP_BONUS);

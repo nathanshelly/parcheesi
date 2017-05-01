@@ -40,7 +40,7 @@ export function consumeMove(current_distances: number[], move: _Move): number[] 
 }
 	
 function consumeMoveForwardDistance(current_distances: number[], distance_to_consume: number): number[] {
-	if(!(distance_to_consume in current_distances))
+	if(current_distances.indexOf(distance_to_consume) === -1)
 		throw new Error("That distance isn't in the array and can't be consumed!");
 	
 	return consumeSingleDistance(current_distances, distance_to_consume);
