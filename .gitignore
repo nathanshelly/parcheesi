@@ -2,3 +2,4 @@ node_modules
 out
 submission.tgz
 .vscode
+*.swp
