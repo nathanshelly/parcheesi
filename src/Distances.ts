@@ -1,4 +1,7 @@
-import * as c from '../src/Constants'
+import * as c from './Constants'
+import { _Move } from './_Move';
+import { MoveEnter } from './MoveEnter';
+import { MoveForward } from './MoveForward';
 
 export function rollDice(all_pawns_out: boolean): number[] {
 	let initial_roll: number[] = [this.rollDie(), this.rollDie()];
@@ -30,10 +33,10 @@ export function addDistance(current_distances: number[], new_distance: number): 
 	return current_distances;
 }
 
-export function consumeDistance(current_distances: number[], distance_to_consume?: number): number[] {
-	return (typeof distance_to_consume === 'undefined') 
+export function consumeDistance(current_distances: number[], move: _Move): number[] {
+	return (move instanceof MoveEnter)
 					? consumeMoveEnterDistance(current_distances)
-					: consumeMoveForwardDistance(current_distances, distance_to_consume);
+					: consumeMoveForwardDistance(current_distances, (move as MoveForward).distance);
 }
 	
 function consumeMoveForwardDistance(current_distances: number[], distance_to_consume: number): number[] {
