@@ -516,7 +516,7 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
     });
 });
 
-describe("getPawnsOfColorOnBoard tests (order matters)", () => {
+describe("getPawnsOfColor tests (order matters)", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
@@ -821,5 +821,103 @@ describe("getHomeSpots ", () => {
 
 		expect(res).to.be.true;
 		expect(home_spots.length).to.equal(c.NUM_PLAYERS);
+    });
+});
+
+describe("landingWillBop ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should correctly report MoveForward that pawn landing on single pawn of other color on non safe spot is a bop", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 1);
+		let landing_spot = board.getSpotAtOffsetFromEntry(1, player1.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_one, 1);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.true;
+    });
+
+	it("should report that MoveForward pawn landing on single pawn of other color on safe spot is not a bop", () => {
+		let player1_pawn_one 	= new Pawn(0, player1.color);
+		let player2_pawn_one 	= new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 0);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_one, 1);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.false;
+    });
+
+	it("should report that MoveEnter pawn landing on single pawn of other color on your entry spot is a bop", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, null], board, c.OFFSET_BETWEEN_ENTRIES);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player1_pawn_one);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.true;
+    });
+
+	it("should report that MoveEnter pawn landing on single pawn of other color on safe spot that is not your entry spot is not a bop", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 0);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player2_pawn_one);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.false;
+    });
+
+	it("should report that MoveEnter pawn landing on blockade of other color on your entry spot is not a bop", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player1_pawn_two = new Pawn(1, player1.color);
+
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, player1_pawn_two], board, c.OFFSET_BETWEEN_ENTRIES);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player1_pawn_one);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.false;
+    });
+
+	it("should report that MoveForward pawn landing on single pawn of same color is not a bop", () => {
+		let player2_pawn_two = new Pawn(0, player2.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, null], board, 34);
+		let landing_spot = board.getSpotAtOffsetFromEntry(34, player2.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_two, 1);
+
+		expect(board.landingWillBop(move, landing_spot)).to.be.false;
     });
 });

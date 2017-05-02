@@ -9,7 +9,7 @@ import { MoveForward } from '../src/MoveForward';
 import * as tm from './testMethods';
 import * as c from '../src/Constants';
 
-describe("First pawn movers", () => {
+describe("Last pawn movers", () => {
   let mover: LastPawnMover;
   let dummy: LastPawnMover;
   let board: Board;

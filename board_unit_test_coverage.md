@@ -22,6 +22,7 @@ Does not mean comprehensive
 - findPawn
 - getHomeSpots
 - getHomeRowStarts
+- landingWillBop
 
 ## Assumed Correct
 
@@ -31,4 +32,3 @@ Does not mean comprehensive
 ## Needs Tests
 
 - handleSpecialLandings
-- landingWillBop
