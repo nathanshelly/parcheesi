@@ -6,10 +6,12 @@
 
 #### Sequence cheats
 
+- makeMove
 - multiple moves in a roll
-	- 
 - multiple rolls in a turn
-	- 
+- winner
+- reformedBlockade
+- other RulesChecker methods
 
 #### Main cheats
 

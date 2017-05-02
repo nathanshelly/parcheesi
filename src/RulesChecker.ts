@@ -85,7 +85,7 @@ export function legalMoveFoward(move: MoveForward, possible_distances: number[],
 	// if move attempts to move onto or through blockade
 	let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findPawn(move.pawn),
 																									move.distance,
-																									player.color,
+																									move.pawn.color,
 																									blockade_on_spot_checker);
 	
 	// overshot home
@@ -97,7 +97,7 @@ export function legalMoveFoward(move: MoveForward, possible_distances: number[],
 		return true;
 
 	// can't reform blockade on same roll
-	if(this.reformedBlockade(move.pawn, final_spot, starting_blockades))
+	if(reformedBlockade(move.pawn, final_spot, starting_blockades))
 		return false;
 
 	// reached homeRowSpot and didn't reform blockade, no further ways to cheat
@@ -107,7 +107,7 @@ export function legalMoveFoward(move: MoveForward, possible_distances: number[],
 	// last way to cheat:
 	// bopping pawn on safety spot
 	if(final_spot instanceof MainRingSpot)
-		if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== player.color)
+		if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== move.pawn.color)
 			return board.landingWillBop(move, final_spot);
 
 	// no cheat found, we have a legal MoveForward
