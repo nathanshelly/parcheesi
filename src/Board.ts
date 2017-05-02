@@ -68,9 +68,11 @@ export class Board {
 			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
 		
 		old_spot.remove_pawn(move.pawn);
+		let possible_bonus: number | null = this.handleSpecialLandings(move, new_spot);
+		
 		new_spot.add_pawn(move.pawn);
 		
-		return this.handleSpecialLandings(move, new_spot);
+		return possible_bonus;
 	}
 
 	handleSpecialLandings(move: _Move, spot: _Spot): number | null {
@@ -84,13 +86,12 @@ export class Board {
 		return null;
 	}
 
-	// at this point we know spot has no blockades, contracts again?
-	landingWillBop(move: _Move, spot: MainRingSpot): boolean {
-		return (move instanceof MoveEnter ? true : !spot.sanctuary)
-					 && spot.get_live_pawns().some(pawn => { return pawn !== null && pawn.color !== move.pawn.color; });
+	landingWillBop(move: _Move, landing_spot: MainRingSpot): boolean {
+		return (move instanceof MoveEnter ? _.isEqual(landing_spot, this.getEntrySpot(move.pawn.color)) : !landing_spot.sanctuary)
+					 && landing_spot.n_pawns() === (c.NUM_PAWNS_IN_BLOCKADE - 1)
+					 && landing_spot.get_live_pawns().some(pawn => { return pawn.color !== move.pawn.color; });
 	}
 
-	// at least one pawn on this spot
 	moveOnePawnBackToBase(spot: _Spot) {
 		if(spot.n_pawns() === 0)
 			throw new Error("tried to move back pawn from spot with no pawns");
