@@ -23,6 +23,8 @@ Does not mean comprehensive
 - getHomeSpots
 - getHomeRowStarts
 - landingWillBop
+- earnedBopBonus
+- earnedHomeBonus
 
 ## Assumed Correct
 
@@ -31,6 +33,4 @@ Does not mean comprehensive
 
 ## Needs Tests
 
-- earnedBopBonus
-- earnedHomeBonus
 - handleSpecialLandings

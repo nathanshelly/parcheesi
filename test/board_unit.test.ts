@@ -921,3 +921,147 @@ describe("landingWillBop ", () => {
 		expect(board.landingWillBop(move, landing_spot)).to.be.false;
     });
 });
+
+describe("earnedHomeBonus ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+        players = [player1];
+        
+        board = new Board(players);
+    });
+
+	it("should reward home bonus if given home spot", () => {
+		let landing_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color);
+		if(landing_spot !== null)
+			expect(board.earnedHomeBonus(landing_spot)).to.equal(c.HOME_SPOT_BONUS);
+    });
+
+	it("should not reward home bonus if given main ring spot", () => {
+		let landing_spot = board.getSpotAtOffsetFromEntry(c.OFFSET_BETWEEN_ENTRIES, player1.color);
+		if(landing_spot !== null)
+			expect(board.earnedHomeBonus(landing_spot)).to.be.null;
+    });
+
+	it("should not reward home bonus if given home row spot", () => {
+		let landing_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color);
+		if(landing_spot !== null)
+			expect(board.earnedHomeBonus(landing_spot)).to.be.null;
+    });
+
+	it("should not reward home bonus if given base spot", () => {
+		let landing_spot = board.getBaseSpot(player1.color)
+		if(landing_spot !== null)
+			expect(board.earnedHomeBonus(landing_spot)).to.be.null;
+    });
+});
+
+describe("earnedBopBonus ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should reward and move back pawn for bop of MoveForward pawn landing on single pawn of other color on non safe spot", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 1);
+		let landing_spot = board.getSpotAtOffsetFromEntry(1, player1.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_one, 1);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.equal(c.BOP_BONUS);
+		expect(board.getPawnsOfColorInBase(player1.color).length).to.equal(c.NUM_PLAYER_PAWNS);
+    });
+
+	it("should give no reward for no bop from MoveForward pawn landing on single pawn of other color on safe spot", () => {
+		let player1_pawn_one 	= new Pawn(0, player1.color);
+		let player2_pawn_one 	= new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 0);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_one, 1);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.be.null;
+    });
+
+	it("should reward and move back pawn for bop of MoveEnter pawn landing on single pawn of other color on your entry spot", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, null], board, c.OFFSET_BETWEEN_ENTRIES);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player1_pawn_one);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.equal(c.BOP_BONUS);
+		expect(board.getPawnsOfColorInBase(player2.color).length).to.equal(c.NUM_PLAYER_PAWNS);
+    });
+
+	it("should give no reward for no bop from MoveEnter pawn landing on single pawn of other color on safe spot that is not your entry spot", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player1_pawn_one, null], board, 0);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player2_pawn_one);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.be.null;
+    });
+
+	it("should give no reward for no bop from MoveEnter pawn landing on blockade of other color on your entry spot", () => {
+		let player1_pawn_one = new Pawn(0, player1.color);
+		let player1_pawn_two = new Pawn(1, player1.color);
+
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, player1_pawn_two], board, c.OFFSET_BETWEEN_ENTRIES);
+		let landing_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as MainRingSpot;
+		
+		let move = new MoveEnter(player1_pawn_one);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.be.null;
+    });
+
+	it("should give no reward for no bop from MoveForward pawn landing on single pawn of same color", () => {
+		let player2_pawn_two = new Pawn(0, player2.color);
+		let player2_pawn_one = new Pawn(2, player2.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([player2_pawn_one, null], board, 34);
+		let landing_spot = board.getSpotAtOffsetFromEntry(34, player2.color) as MainRingSpot;
+		
+		let move = new MoveForward(player2_pawn_two, 1);
+
+		expect(board.earnedBopBonus(move, landing_spot)).to.be.null;
+    });
+});
