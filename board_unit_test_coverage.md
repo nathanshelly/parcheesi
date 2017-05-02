@@ -31,4 +31,6 @@ Does not mean comprehensive
 
 ## Needs Tests
 
+- earnedBopBonus
+- earnedHomeBonus
 - handleSpecialLandings

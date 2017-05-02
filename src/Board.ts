@@ -76,14 +76,30 @@ export class Board {
 	}
 
 	handleSpecialLandings(move: _Move, spot: _Spot): number | null {
-		if(spot instanceof HomeSpot)
-			return c.HOME_SPOT_BONUS;
-		if(spot instanceof MainRingSpot && this.landingWillBop(move, spot)) {
+		let maybe_home_bonus = this.earnedHomeBonus(spot);
+		let maybe_bop_bonus = spot instanceof MainRingSpot 
+													? this.earnedBopBonus(move, spot)
+													: null;
+
+		if(maybe_home_bonus !== null && maybe_bop_bonus !== null)
+			throw new Error("Can't earn two bonuses in one move")
+		else if(maybe_home_bonus === null && maybe_bop_bonus === null)
+			return null;
+		else
+			return maybe_home_bonus === null ? maybe_bop_bonus : maybe_home_bonus;
+	}
+
+	earnedHomeBonus(spot: _Spot): number | null {
+		return spot instanceof HomeSpot ? c.HOME_SPOT_BONUS : null;
+	}
+
+	earnedBopBonus(move: _Move, spot: MainRingSpot): number | null {
+		if(this.landingWillBop(move, spot)) {
 			this.moveOnePawnBackToBase(spot);
 			return c.BOP_BONUS;
 		}
-
-		return null;
+		else
+			return null;
 	}
 
 	landingWillBop(move: _Move, landing_spot: MainRingSpot): boolean {
