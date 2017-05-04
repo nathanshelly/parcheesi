@@ -1,0 +1,7 @@
+red
+
+<board><start><pawn><color>yellow</color><id>3</id></pawn><pawn><color>yellow</color><id>2</id></pawn><pawn><color>yellow</color><id>1</id></pawn><pawn><color>yellow</color><id>0</id></pawn><pawn><color>red</color><id>3</id></pawn><pawn><color>red</color><id>2</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>green</color><id>3</id></pawn><pawn><color>green</color><id>2</id></pawn><pawn><color>blue</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn><pawn><color>blue</color><id>0</id></pawn></start><main><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>23</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>23</loc></piece-loc><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>22</loc></piece-loc></main><home-rows></home-rows><home></home></board>
+
+<dice><die>1</die><die>2</die></dice>
+
+<moves></moves>

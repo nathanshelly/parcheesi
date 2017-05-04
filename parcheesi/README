@@ -1,0 +1,39 @@
+To run the programs in this bundle, download and install Racket v6.9:
+
+    http://www.racket-lang.org/
+
+* Run the valid move checker by first being in the directory
+  containing this file and then running:
+
+     racket valid-move.rkt <filename>
+
+  The script will print out the board that results from taking the
+  move contained in the filename, or that it was an illegal move.
+
+  The input file is expected to contain a color on the first line, and
+  then be followed by the XML for a board, the XML for the dice (if
+  the doubles bonus applies, then all four dice should be sent) and
+  the XML for the desired moves.
+
+  See the xml-tests/ for some example test cases you should consider
+  using on your implementation. (You will need to implement the parser
+  first before you can use them.)
+
+  Use this script to test other examples where you're not sure or just
+  to help out testing the server that you'll eventually be using your
+  player with.
+
+* To see a board, run this script:
+
+    racket show-board.rkt -h
+
+  The `-h` flag shows you the options the script supports.
+
+* To run a tournament, run this script:
+
+   racket tournament.rkt
+
+  Passing a command line argument indicates what port to run the
+  server on. Connect up to 20 players and, once their names appear in
+  the list, click "start tournament" to start playing.
+  

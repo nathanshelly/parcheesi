@@ -1,0 +1,7 @@
+yellow
+
+<board><start><pawn><color>red</color><id>3</id></pawn><pawn><color>red</color><id>2</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>red</color><id>0</id></pawn><pawn><color>green</color><id>3</id></pawn><pawn><color>green</color><id>2</id></pawn><pawn><color>green</color><id>1</id></pawn><pawn><color>green</color><id>0</id></pawn><pawn><color>blue</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn><pawn><color>blue</color><id>0</id></pawn></start><main><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>51</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>51</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>3</id></pawn><loc>50</loc></piece-loc></main><home-rows></home-rows><home><pawn><color>yellow</color><id>0</id></pawn></home></board>
+
+<dice><die>4</die><die>1</die></dice>
+
+<moves></moves>

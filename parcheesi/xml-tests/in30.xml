@@ -1,0 +1,7 @@
+yellow
+
+<board><start><pawn><color>red</color><id>3</id></pawn><pawn><color>red</color><id>2</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>red</color><id>0</id></pawn><pawn><color>green</color><id>3</id></pawn><pawn><color>green</color><id>2</id></pawn><pawn><color>green</color><id>1</id></pawn><pawn><color>green</color><id>0</id></pawn><pawn><color>blue</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn><pawn><color>blue</color><id>0</id></pawn></start><main><piece-loc><pawn><color>yellow</color><id>3</id></pawn><loc>2</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>2</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>0</id></pawn><loc>0</loc></piece-loc></main><home-rows></home-rows><home></home></board>
+
+<dice><die>6</die><die>6</die><die>1</die><die>1</die></dice>
+
+<moves><move-piece-main><pawn><color>yellow</color><id>2</id></pawn><start>2</start><distance>6</distance></move-piece-main><move-piece-main><pawn><color>yellow</color><id>1</id></pawn><start>1</start><distance>1</distance></move-piece-main><move-piece-main><pawn><color>yellow</color><id>1</id></pawn><start>2</start><distance>6</distance></move-piece-main><move-piece-main><pawn><color>yellow</color><id>3</id></pawn><start>2</start><distance>1</distance></move-piece-main></moves>
