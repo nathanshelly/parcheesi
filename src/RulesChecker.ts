@@ -49,7 +49,7 @@ export function legalMove(move: _Move, possible_distances: number[], player: _Pl
 	if(move instanceof MoveEnter)
 		return this.legalMoveEnter(move, possible_distances, board);
 	else if (move instanceof MoveForward)
-		return this.legalMoveFoward(move, possible_distances, player, board, starting_blockades);
+		return this.legalMoveFoward(move, possible_distances, board, starting_blockades);
 
 	return false;
 }
@@ -70,7 +70,7 @@ export function hasFive(possible_distances: number[]): boolean {
 
 // MAIN RING CHECKS
 
-export function legalMoveFoward(move: MoveForward, possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
+export function legalMoveFoward(move: MoveForward, possible_distances: number[], board: Board, starting_blockades: Pawn[][]): boolean {
 		if  (move.distance < 1
 			|| move.distance > c.LARGEST_POSSIBLE_MOVE
 			|| possible_distances.indexOf(move.distance) === -1

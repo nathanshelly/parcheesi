@@ -52,7 +52,8 @@ export class Board {
 
 		for (let i = 0; i < players.length; i++) {
 			let player_color = players[i].color;
-			this.bases[player_color] = new BaseSpot(this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY_FROM_BASE"]], player_color);
+			let entrance_index = this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY_FROM_BASE"]];
+			this.bases[player_color] = new BaseSpot(entrance_index, player_color);
 		}
 	}
 
