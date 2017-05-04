@@ -39,7 +39,6 @@ export class Roll {
 					if(possible_bonus !== null)
 						this.possible_distances.push(possible_bonus)
 				}
-					
 				else
 					return false;
 			}

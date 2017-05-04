@@ -4,7 +4,7 @@ import { MoveEnter } from './MoveEnter';
 import { MoveForward } from './MoveForward';
 
 export function rollDice(all_pawns_out: boolean): number[] {
-	let initial_roll: number[] = [this.rollDie(), this.rollDie()];
+	let initial_roll: number[] = [rollDie(), rollDie()];
 	return isDoubles(initial_roll) && all_pawns_out ? initial_roll.concat(doublesOpposites(initial_roll[0])) : initial_roll;
 }
 
