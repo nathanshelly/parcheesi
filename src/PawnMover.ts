@@ -47,13 +47,16 @@ export abstract class PawnMover extends BasicPlayer {
 		
 		if (board.pawnInBase(pawn)) {
 			move = new MoveEnter(pawn);
-			if (checker.legalMoveEnter(move, distances, board))
+			// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
+			if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
 				return move;
 		}
 		else {
 			for (let i = 0; i < distances.length; i++) {
 				move = new MoveForward(pawn, distances[i]);
-				if (checker.legalMove(move, distances, this, board, board.getBlockadesOfColor(this.color)))
+
+				// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
+				if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
 					return move;
 			}	
 		}
