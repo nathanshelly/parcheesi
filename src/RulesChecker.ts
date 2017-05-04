@@ -34,7 +34,7 @@ export function legalRoll(moves: _Move[], possible_distances: number[], player: 
 			possible_distances = _distances.consumeMove(possible_distances, move);
 
 			if(possible_bonus !== null)
-				possible_distances = _distances.addDistance(possible_distances, possible_bonus);
+				possible_distances.push(possible_bonus);
 		}
 	}
 

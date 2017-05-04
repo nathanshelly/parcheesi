@@ -28,11 +28,6 @@ function doublesOpposites(visible_face: number): number[] {
 	});
 }
 
-export function addDistance(current_distances: number[], new_distance: number): number[] {
-	current_distances.push(new_distance);
-	return current_distances;
-}
-
 export function consumeMove(current_distances: number[], move: _Move): number[] {
 	return (move instanceof MoveEnter)
 					? consumeMoveEnterDistance(current_distances)

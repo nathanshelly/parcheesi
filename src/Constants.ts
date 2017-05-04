@@ -21,6 +21,10 @@ export const LARGEST_POSSIBLE_MOVE = 20; // bopping bonus
 export const HOME_SPOT_BONUS = 10;
 export const BOP_BONUS = 20;
 
+export const MAX_DOUBLES = 3;
+export const NUM_DICE = 2;
+export const NUM_DOUBLES_DICE = 2;
+
 export const SAFE_SPOT_INDICES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67]
 
 // Because objects suck, please make sure these keys line up correct colors
