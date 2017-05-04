@@ -252,4 +252,8 @@ export class Board {
 			let home_color: Color = parseInt(key) as Color;
 			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"]].next(home_color) as HomeRowSpot;
 		})};
+
+	areAllPawnsOut(color: Color): boolean {
+		return this.getPawnsOfColorInBase(color).length === 0;
+	}
 }
