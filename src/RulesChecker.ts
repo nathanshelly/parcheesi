@@ -107,7 +107,7 @@ export function legalMoveFoward(move: MoveForward, possible_distances: number[],
 	// last way to cheat:
 	// bopping pawn on safety spot
 	if(final_spot instanceof MainRingSpot)
-		if(!this.isSpotEmpty(final_spot) && final_spot.color_of_pawns() !== move.pawn.color)
+		if(!this.isSpotEmpty(final_spot) && final_spot.colorOfPawns() !== move.pawn.color)
 			return board.landingWillBop(move, final_spot);
 
 	// no cheat found, we have a legal MoveForward
@@ -115,14 +115,14 @@ export function legalMoveFoward(move: MoveForward, possible_distances: number[],
 }
 
 export function isSpotEmpty(spot: _Spot): boolean {
-	return spot.n_pawns() === 0;
+	return spot.nPawns() === 0;
 }
 
 export function reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
 	if(spot.has_blockade())
 		throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
 	
-	let would_be_pawns: Pawn[] = spot.get_live_pawns();
+	let would_be_pawns: Pawn[] = spot.getLivePawns();
 	would_be_pawns.push(pawn);
 	// sorting for equality check
 	would_be_pawns = would_be_pawns.sort();

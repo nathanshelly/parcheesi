@@ -68,10 +68,10 @@ export class Board {
 		else
 			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
 		
-		old_spot.remove_pawn(move.pawn);
+		old_spot.removePawn(move.pawn);
 		let possible_bonus: number | null = this.handleSpecialLandings(move, new_spot);
 		
-		new_spot.add_pawn(move.pawn);
+		new_spot.addPawn(move.pawn);
 		
 		return possible_bonus;
 	}
@@ -105,20 +105,20 @@ export class Board {
 
 	landingWillBop(move: _Move, landing_spot: MainRingSpot): boolean {
 		return (move instanceof MoveEnter ? _.isEqual(landing_spot, this.getEntrySpot(move.pawn.color)) : !landing_spot.sanctuary)
-					 && landing_spot.n_pawns() === (c.NUM_PAWNS_IN_BLOCKADE - 1)
-					 && landing_spot.get_live_pawns().some(pawn => { return pawn.color !== move.pawn.color; });
+					 && landing_spot.nPawns() === (c.NUM_PAWNS_IN_BLOCKADE - 1)
+					 && landing_spot.getLivePawns().some(pawn => { return pawn.color !== move.pawn.color; });
 	}
 
 	moveOnePawnBackToBase(spot: _Spot) {
-		if(spot.n_pawns() === 0)
+		if(spot.nPawns() === 0)
 			throw new Error("tried to move back pawn from spot with no pawns");
 		if(spot instanceof HomeSpot)
 			throw new Error("tried to move back pawn from home spot");
 		
-		let moving_pawn: Pawn = spot.get_live_pawns()[0];
-		spot.remove_pawn(moving_pawn)
+		let moving_pawn: Pawn = spot.getLivePawns()[0];
+		spot.removePawn(moving_pawn)
 
-		this.bases[moving_pawn.color].add_pawn(moving_pawn)
+		this.bases[moving_pawn.color].addPawn(moving_pawn)
 	}
 	
 	findPawn(pawn: Pawn): _Spot {
@@ -127,13 +127,13 @@ export class Board {
 			throw new Error("given a pawn with invalid ID")
 		
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
-		if(base_spot.pawn_exists(pawn))
+		if(base_spot.pawnExists(pawn))
 			return base_spot
 
 		let spot: _Spot = this.getEntrySpot(pawn.color);
 		// spot cannot be null here as we have verified that pawn is
 		// valid and must exist on board, write into contract?
-		while(!spot.pawn_exists(pawn))
+		while(!spot.pawnExists(pawn))
 			spot = this.getNextSpot(spot, pawn.color) as _Spot;
 
 		return spot;
@@ -193,13 +193,13 @@ export class Board {
 		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
 		
 		// get tuples of pawns (sorted for later equality) from spots that have blockades
-		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.get_live_pawns().sort(); });
+		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.getLivePawns().sort(); });
 		return currently_blockaded_pawns;
 	}
 
 	// invariant: pawns color and id are correct
 	pawnInBase(pawn: Pawn): boolean {
-		return this.getBaseSpot(pawn.color).pawn_exists(pawn);
+		return this.getBaseSpot(pawn.color).pawnExists(pawn);
 	};
 
 	getOccupiedSpotsOfColorOnBoard(color: Color): _Spot[] {
@@ -220,7 +220,7 @@ export class Board {
 	}
 
 	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
-		let live_pawns: Pawn[] = spot.get_live_pawns();
+		let live_pawns: Pawn[] = spot.getLivePawns();
 		let append_pawns: Pawn[] = (live_pawns.length > 0 && live_pawns[0].color === color) ? live_pawns : [];
 		
 		let next_spot: _Spot | null = this.getNextSpot(spot, color);
@@ -232,7 +232,7 @@ export class Board {
 	}
 	
 	getPawnsOfColorInBase(color: Color): Pawn[] {
-		return this.bases[color].get_live_pawns();
+		return this.bases[color].getLivePawns();
 	}
 
 	// any reason not to use getSpotAtOffsetFromSpot to advance forward length of home row?

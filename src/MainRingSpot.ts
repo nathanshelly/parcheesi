@@ -42,5 +42,5 @@ export class MainRingSpot extends _Spot {
         return this.next_main;
     }
 
-    has_blockade(): boolean {return this.n_pawns() === c.MAX_N_PAWNS_MAIN}
+    has_blockade(): boolean {return this.nPawns() === c.MAX_N_PAWNS_MAIN}
 }

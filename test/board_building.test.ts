@@ -46,14 +46,14 @@ describe('Filename: board_building.test.ts\n\nA board with no players', () => {
         let hr_starts = board.getHomeRowStarts();
 
         hr_starts.forEach(hrs => {
-            expect(hrs.n_pawns()).to.equal(0);
+            expect(hrs.nPawns()).to.equal(0);
 
             while (hrs.next() !instanceof HomeSpot) {
                 hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.n_pawns()).to.equal(0);
+                expect(hrs.nPawns()).to.equal(0);
             }
 
-            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
+            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
         });
     });
 });
@@ -94,14 +94,14 @@ describe('A board with one player', () => {
         let hr_starts = board.getHomeRowStarts();
 
         hr_starts.forEach(hrs => {
-            expect(hrs.n_pawns()).to.equal(0);
+            expect(hrs.nPawns()).to.equal(0);
 
             while (hrs.next() !instanceof HomeSpot) {
                 hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.n_pawns()).to.equal(0);
+                expect(hrs.nPawns()).to.equal(0);
             }
 
-            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
+            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
         });
     });
 
@@ -182,14 +182,14 @@ describe('A board with four players', () => {
         let hr_starts = board.getHomeRowStarts();
 
         hr_starts.forEach(hrs => {
-            expect(hrs.n_pawns()).to.equal(0);
+            expect(hrs.nPawns()).to.equal(0);
 
             while (hrs.next() !instanceof HomeSpot) {
                 hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.n_pawns()).to.equal(0);
+                expect(hrs.nPawns()).to.equal(0);
             }
 
-            expect((hrs.next() as HomeSpot).n_pawns()).to.equal(0);
+            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
         });
     });
 

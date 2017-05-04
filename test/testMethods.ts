@@ -20,19 +20,19 @@ export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], boar
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')
 
-	if((next_spot.n_pawns() + pawns.length) > next_spot.max_n_pawns)
+	if((next_spot.nPawns() + pawns.length) > next_spot.max_n_pawns)
 		throw new Error('tried to place too many pawns on spot')
 
 	removeOldPawns(pawns, board);
 
 	for(let i = 0; i < pawns.length; i++)
 		if(pawns[i] !== null)
-			next_spot.add_pawn(pawns[i] as Pawn);
+			next_spot.addPawn(pawns[i] as Pawn);
 }
 
 function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 	pawns.forEach(pawn => {
 		if(pawn !== null)
-			board.findPawn(pawn).remove_pawn(pawn);
+			board.findPawn(pawn).removePawn(pawn);
 	});
 }

@@ -50,11 +50,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
         let entry = board.getEntrySpot(player1.color);
 
-        expect(entry.n_pawns()).to.equal(0);
+        expect(entry.nPawns()).to.equal(0);
 
         board.makeMove(move);
 
-        expect(entry.n_pawns()).to.equal(1);
+        expect(entry.nPawns()).to.equal(1);
     });
 
     it("should perform forward moves from the main ring to the main ring correctly", () => {
@@ -65,11 +65,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
         let end = board.getSpotAtOffsetFromEntry(3, player1.color) as _Spot;
         
-        expect(end.n_pawns()).to.equal(0);
+        expect(end.nPawns()).to.equal(0);
 
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
     });
 
     it("should perform forward moves from the main ring to the home row correctly", () => {
@@ -80,11 +80,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 4, player1.color) as _Spot;
         
-        expect(end.n_pawns()).to.equal(0);
+        expect(end.nPawns()).to.equal(0);
         
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
     });
 
     it("should perform forward moves from the main ring to the home spot correctly", () => {
@@ -96,11 +96,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
         
-        expect(end.n_pawns()).to.equal(0);
+        expect(end.nPawns()).to.equal(0);
         
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
     });
 
     it("should perform forward moves from the home row to the home row correctly", () => {
@@ -111,11 +111,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 4, player1.color) as _Spot;
         
-        expect(end.n_pawns()).to.equal(0);
+        expect(end.nPawns()).to.equal(0);
         
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
     });
 
     it("should perform forward moves from the home row to the home spot correctly", () => {
@@ -126,11 +126,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + c.HOME_ROW_SIZE, player1.color) as _Spot;
         
-        expect(end.n_pawns()).to.equal(0);
+        expect(end.nPawns()).to.equal(0);
         
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
     });
 
     it("should correctly form blockades on the main ring", () => {
@@ -143,12 +143,12 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         let move = new MoveForward(pawn1, 4);
 
         let end = board.getSpotAtOffsetFromEntry(4, player1.color) as _Spot;
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
         expect(end.has_blockade()).to.be.false;
 
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(2);
+        expect(end.nPawns()).to.equal(2);
         expect(end.has_blockade()).to.be.true;
     });
 
@@ -162,12 +162,12 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         let move = new MoveForward(pawn1, 2);
 
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 2, player1.color) as _Spot;
-        expect(end.n_pawns()).to.equal(1);
+        expect(end.nPawns()).to.equal(1);
         expect(end.has_blockade()).to.be.false;
 
         board.makeMove(move);
 
-        expect(end.n_pawns()).to.equal(2);
+        expect(end.nPawns()).to.equal(2);
         expect(end.has_blockade()).to.be.true;
     });
 });
