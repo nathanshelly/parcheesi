@@ -196,7 +196,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer;
-	let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
+	let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };
 
     class PrettyDumbPlayer extends BasicPlayer {
         doMove(brd: Board, distances: number[]): _Move[] {
@@ -1191,5 +1191,35 @@ describe("handleSpecialLandings ", () => {
 		let move = new MoveForward(player2_pawn_two, 1);
 
 		expect(board.handleSpecialLandings(move, landing_spot)).to.be.null;
+    });
+});
+
+describe("baseSpots ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    class PrettyDumbPlayer extends BasicPlayer {
+        doMove(brd: Board, distances: number[]): _Move[] {
+            throw new Error('Method not implemented - not needed when manually building moves.');
+        }
+    }
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should always know they don't have a blockade", () => {
+		let landing_spot = board.getBaseSpot(player1.color);
+		
+		expect(landing_spot.hasBlockade()).to.be.false;
     });
 });

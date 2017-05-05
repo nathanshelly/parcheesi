@@ -614,6 +614,8 @@ describe("Legal forward moves:", () => {
         let res = move_one.isLegal(board, player1, distances, board.getBlockadesOfColor(player1.color));
         expect(res).to.be.true;
 
+        board.makeMove(move_one);
+
         res = move_two.isLegal(board, player1, distances, board.getBlockadesOfColor(player1.color))
         expect(res).to.be.true;
     });
