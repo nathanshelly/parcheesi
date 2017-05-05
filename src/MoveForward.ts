@@ -30,7 +30,7 @@ export class MoveForward implements _Move {
       || !checker.verifyPawn(this.pawn, player.color))
 				return false;
     
-    let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
+    let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };
 
     // getSpotAtOffsetFromSpot implicitly checks that distance is not off board 
     // (which itself implicitly checks that they enter home on exact value)

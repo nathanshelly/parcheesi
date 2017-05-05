@@ -22,7 +22,7 @@ import { MainRingSpot } from './MainRingSpot'
 // ENTRANCE CHECKS
 
 export function blockadeOnHome(color: Color, board: Board): boolean {
-	return board.getEntrySpot(color).has_blockade();
+	return board.getEntrySpot(color).hasBlockade();
 }
 
 export function hasFive(possible_distances: number[]): boolean {
@@ -36,7 +36,7 @@ export function isSpotEmpty(spot: _Spot): boolean {
 }
 
 export function reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
-	if(spot.has_blockade())
+	if(spot.hasBlockade())
 		throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
 	
 	let would_be_pawns: Pawn[] = spot.getLivePawns();

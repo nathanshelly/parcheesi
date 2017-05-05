@@ -20,5 +20,5 @@ export class HomeSpot extends _Spot {
         this.color = color;
     }
 
-    has_blockade(): boolean {return false};
+    hasBlockade(): boolean {return false};
 }

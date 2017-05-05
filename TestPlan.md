@@ -6,6 +6,8 @@
 
 #### Sequence cheats
 
+- MoveForward unit tests
+
 - makeMove
 - multiple moves in a roll
 - multiple rolls in a turn

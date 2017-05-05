@@ -11,7 +11,6 @@ import { _Player } from './_Player'
 
 export class Turn {
     private num_doubles: number = 0;
-    private rolled_doubles: boolean;
     private is_taken: boolean;
     board: Board;
     player: _Player;
@@ -28,11 +27,12 @@ export class Turn {
             this.is_taken = true;
 
         let all_pawns_out: boolean = this.board.areAllPawnsOut(this.player.color);
+        let rolled_doubles: boolean;
 
         do {
             let die = d.rollDice(all_pawns_out);
-            this.rolled_doubles = die.length === c.NUM_DOUBLES_DICE;
-            if(this.rolled_doubles) {
+            rolled_doubles = die.length === c.NUM_DOUBLES_DICE;
+            if(rolled_doubles) {
                 this.num_doubles++;
                 if(this.num_doubles === c.MAX_DOUBLES)
                     break;
@@ -44,7 +44,7 @@ export class Turn {
             
             if(!roll.take())
                 return null;
-        } while(this.rolled_doubles && this.num_doubles < c.MAX_DOUBLES);
+        } while(rolled_doubles && this.num_doubles < c.MAX_DOUBLES);
 
         if(this.num_doubles === c.MAX_DOUBLES)
             console.log("DO SOMETHING HERE");

@@ -10,7 +10,7 @@ export abstract class _Spot {
 
     index: number; // for debugging purposes
 
-    abstract has_blockade(): boolean;
+    abstract hasBlockade(): boolean;
 
     nPawns(): number { return this.getLivePawns().length; };
     

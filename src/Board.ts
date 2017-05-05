@@ -190,7 +190,7 @@ export class Board {
 		// filter to unique spots (keeps first of duplicate items)
 		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
 		// filter spots to only spots with blockades
-		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
+		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.hasBlockade()});
 		
 		// get tuples of pawns (sorted for later equality) from spots that have blockades
 		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.getLivePawns().sort(); });

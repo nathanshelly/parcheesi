@@ -32,5 +32,5 @@ export class HomeRowSpot extends _Spot {
         return this._next;
     }
 
-    has_blockade(): boolean {return this.nPawns() === c.MAX_N_PAWNS_HOME_ROW}
+    hasBlockade(): boolean {return this.nPawns() === c.MAX_N_PAWNS_HOME_ROW}
 }
