@@ -10,7 +10,6 @@ import { BasicPlayer } from './BasicPlayer';
 
 export abstract class PawnMover extends BasicPlayer {
 	movesForPawns(brd: Board, distances: number[], reverse_pawns: boolean): _Move[] {
-
 		let moves: _Move[] = [];
 		
 		let found: boolean;

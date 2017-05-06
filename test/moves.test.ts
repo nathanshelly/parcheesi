@@ -22,47 +22,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: moves.test.ts\n\nNon-move-specific cheating:', () => {
-    let game: Parcheesi;
-    let board: Board;
-    
-    beforeEach(() => {
-        game = new Parcheesi();
-        let player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Green);
-        game.register(player1)
-        game.start();
-    });
-
-    it('moving a pawn of the wrong color should fail', () => {
-        let pawn = new Pawn(1, Color.Blue);
-        expect(pawn.isExpectedColor(Color.Red)).to.equal(false);
-    })
-
-    it('moving a pawn of the right color should succeed', () => {
-        let pawn = new Pawn(1, Color.Blue);
-        expect(pawn.isExpectedColor(Color.Blue)).to.equal(true);
-    })
-
-    it('moving a pawn of legal id should succeed', () => {
-        let pawn = new Pawn(3, Color.Blue);
-        expect(pawn.hasIdInLegalRange()).to.equal(true);
-    })
-
-    it('moving a pawn of illegal id should fail', () => {
-        let pawn = new Pawn(4, Color.Blue);
-        expect(pawn.hasIdInLegalRange()).to.equal(false);
-    })
-
-    // come back to this when makeAllLegalMoves is implemented
-    // it('leaving valid moves unused should fail', () => {
-    // })
-
-    // it('leaving no valid moves unused should succeed', () => {
-    // })
-})
-
-describe("Enter move cheats", () => {
+describe("Filename: moves.test.ts\n\nEnter move cheats", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
