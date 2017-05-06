@@ -22,21 +22,21 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
+class PrettyDumbPlayer extends BasicPlayer {
+    doMove(brd: Board, distances: number[]): _Move[] {
+        throw new Error('Method not implemented - not needed in testing board instantiaton.');
+    }
+}
+
 describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () => {
     let game: Parcheesi;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
-        }
-    }
-
-		beforeEach(() => {
-			game = new Parcheesi();
-			let player1 = new PrettyDumbPlayer();
-			player1.startGame(Color.Green);
-			game.register(player1)
-			game.start();
+    beforeEach(() => {
+        game = new Parcheesi();
+        let player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Green);
+        game.register(player1)
+        game.start();
     });
 
     it('should correctly identify if number five in possible moves', () => {

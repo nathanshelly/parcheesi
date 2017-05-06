@@ -21,16 +21,16 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
+class PrettyDumbPlayer extends BasicPlayer {
+    doMove(brd: Board, distances: number[]): _Move[] {
+        throw new Error('Method not implemented - not needed when manually building moves.');
+    }
+}
+
 describe("Filename: board_integration.test.ts\n\nThe board's move-making functionality", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();

@@ -58,12 +58,13 @@ describe('Filename: board_building.test.ts\n\nA board with no players', () => {
     });
 });
 
-describe('A board with one player', () => {
-    class ReallyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
-        }
+class ReallyDumbPlayer extends BasicPlayer {
+    doMove(brd: Board, distances: number[]): _Move[] {
+        throw new Error('Method not implemented - not needed in testing board instantiaton.');
     }
+}
+
+describe('A board with one player', () => {    
     let players: ReallyDumbPlayer[];
     let board: Board;
 
@@ -138,11 +139,6 @@ describe('A board with one player', () => {
 });
 
 describe('A board with four players', () => {
-    class ReallyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
-        }
-    }
     let players: ReallyDumbPlayer[];
     let board: Board;
 

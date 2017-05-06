@@ -23,20 +23,19 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
+class PrettyDumbPlayer extends BasicPlayer {
+    doMove(brd: Board, distances: number[]): _Move[] {
+        throw new Error('Method not implemented - not needed when manually building moves.');
+    }
+}
+
 describe('Filename: moves.test.ts\n\nNon-move-specific cheating:', () => {
     let game: Parcheesi;
     let board: Board;
-
-    class WrongMoveCheater extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            let move1 = new MoveForward(new Pawn(0, Color.Blue), 10);
-            return [move1];
-        }
-    }
-
+    
     beforeEach(() => {
         game = new Parcheesi();
-        let player1 = new WrongMoveCheater();
+        let player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Green);
         game.register(player1)
         game.start();
@@ -74,12 +73,6 @@ describe("Enter move cheats", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -175,12 +168,6 @@ describe("Legal enter moves:", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -255,12 +242,6 @@ describe("Forward move cheats:", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -450,12 +431,6 @@ describe("Legal forward moves:", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();

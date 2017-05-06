@@ -21,16 +21,16 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
+class PrettyDumbPlayer extends BasicPlayer {
+	doMove(brd: Board, distances: number[]): _Move[] {
+		throw new Error('Method not implemented - not needed when manually building moves.');
+	}
+}
+
 describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -129,12 +129,6 @@ describe("getSpotAtOffsetFromEntry tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -197,12 +191,6 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer;
 	let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -303,12 +291,6 @@ describe("getPawnsOfColorInBase tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -355,12 +337,6 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -521,12 +497,6 @@ describe("getPawnsOfColor tests (order matters)", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -585,12 +555,6 @@ describe("moveOnePawnBackToBase tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -685,12 +649,6 @@ describe("findPawn tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -765,12 +723,6 @@ describe("getHomeRowStarts ", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -797,12 +749,6 @@ describe("getHomeSpots ", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -828,12 +774,6 @@ describe("landingWillBop ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -927,12 +867,6 @@ describe("earnedHomeBonus ", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -970,12 +904,6 @@ describe("earnedBopBonus ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -1070,12 +998,6 @@ describe("handleSpecialLandings ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -1198,12 +1120,6 @@ describe("baseSpots ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();

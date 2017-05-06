@@ -61,15 +61,15 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
     });
 });
 
+class PrettyDumbPlayer extends BasicPlayer {
+    doMove(brd: Board, distances: number[]): _Move[] {
+        throw new Error('Method not implemented - not needed in testing board instantiaton.');
+    }
+}
+
 describe('Unit tests for confirming pawn is in base spot:', () => {
     let game: Parcheesi;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed in testing board instantiaton.');
-        }
-    }
-
+    
     beforeEach(() => {
         game = new Parcheesi();
         let player1 = new PrettyDumbPlayer();
@@ -101,12 +101,6 @@ describe('Unit tests for confirming MoveEnter respects blockades:', () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
