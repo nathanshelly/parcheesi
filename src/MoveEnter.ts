@@ -1,4 +1,4 @@
-import * as checker from './RulesChecker'
+import * as d from './Distances'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
@@ -17,6 +17,6 @@ export class MoveEnter implements _Move {
     if(!this.pawn.verify(player.color))
       return false;
 
-    return checker.hasFive(possible_distances) && !checker.blockadeOnHome(player.color, board) && board.pawnInBase(this.pawn);
+    return d.hasFive(possible_distances) && !board.blockadeOnHome(player.color) && board.pawnInBase(this.pawn);
   }
 }

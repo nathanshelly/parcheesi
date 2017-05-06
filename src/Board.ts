@@ -1,6 +1,5 @@
 import * as _ from 'lodash'
 import * as c from './Constants'
-import * as checker from './RulesChecker'
 
 import { Pawn } from './Pawn'
 import { Color } from './Color'
@@ -257,5 +256,24 @@ export class Board {
 
 	areAllPawnsOut(color: Color): boolean {
 		return this.getPawnsOfColorInBase(color).length === 0;
+	}
+
+	blockadeOnHome(color: Color): boolean {
+		return this.getEntrySpot(color).hasBlockade();
+	}
+
+	// confirm Findler's saying that blockades should only be checked at end of a roll
+	// if so move this into roll object
+	//  better location for this?
+	reformsBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
+		if(spot.hasBlockade())
+			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
+		
+		let would_be_pawns: Pawn[] = spot.getLivePawns();
+		would_be_pawns.push(pawn);
+		// sorting for equality check
+		would_be_pawns = would_be_pawns.sort();
+
+		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
 	}
 }

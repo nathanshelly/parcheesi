@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 import * as c from '../src/Constants'
-import * as checker from '../src/RulesChecker'
+import * as d from '../src/Distances'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -35,7 +35,7 @@ describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () 
 
     it('should', () => {
         let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 1];
-        expect(checker.hasFive(possible_distances)).to.equal(true);
+        expect(d.hasFive(possible_distances)).to.equal(true);
     });
 
 });

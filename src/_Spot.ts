@@ -18,6 +18,10 @@ export abstract class _Spot {
     // (either Pawn[] or [] which is still Pawn[])
     getLivePawns(): Pawn[] { return this.pawns.filter(p => { return p !== null}) as Pawn[]; };
 
+    isEmpty(): boolean {
+        return this.nPawns() === 0;
+    }
+
     // check if given pawn is in pawns array
     // doesn't allow more than one of same pawn in array
     pawnExists(pawn: Pawn): boolean { return this.pawns.filter(p => { return _.isEqual(p, pawn); }).length === 1}

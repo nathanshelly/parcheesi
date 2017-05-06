@@ -186,7 +186,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer;
-	let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };
+	let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -264,7 +264,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 7);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockade_on_spot_checker);
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });
@@ -276,7 +276,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockade_on_spot_checker);
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });

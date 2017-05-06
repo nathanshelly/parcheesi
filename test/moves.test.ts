@@ -1,7 +1,6 @@
 import * as _ from 'lodash'
 import * as tm from './testMethods'
 import * as c from '../src/Constants'
-import * as checker from '../src/RulesChecker'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'

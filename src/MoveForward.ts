@@ -1,5 +1,4 @@
 import * as c from './Constants'
-import * as checker from './RulesChecker'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
@@ -30,16 +29,16 @@ export class MoveForward implements _Move {
       || !this.pawn.verify(player.color))
 				return false;
     
-    let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };
+    let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
 
     // getSpotAtOffsetFromSpot implicitly checks that distance is not off board 
     // (which itself implicitly checks that they enter home on exact value)
-    // passed in blockade_on_spot_checker will cause getSpotAtOffsetFromSpot to return null
+    // passed in blockadeOnSpotChecker will cause getSpotAtOffsetFromSpot to return null
     // if move attempts to move onto or through blockade
     let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findPawn(this.pawn),
                                                     this.distance,
                                                     player.color,
-                                                    blockade_on_spot_checker);
+                                                    blockadeOnSpotChecker);
     
     // overshot home
     if(final_spot === null)
@@ -50,7 +49,7 @@ export class MoveForward implements _Move {
       return true;
 
     // can't reform blockade on same roll
-    if(checker.reformedBlockade(this.pawn, final_spot, starting_blockades))
+    if(board.reformsBlockade(this.pawn, final_spot, starting_blockades))
       return false;
 
     // reached homeRowSpot and didn't reform blockade, no further ways to cheat
@@ -60,7 +59,7 @@ export class MoveForward implements _Move {
     // last way to cheat:
     // bopping pawn on safety spot
     if(final_spot instanceof MainRingSpot)
-      if(!checker.isSpotEmpty(final_spot) && final_spot.colorOfPawns() !== player.color)
+      if(!final_spot.isEmpty() && final_spot.colorOfPawns() !== player.color)
         return board.landingWillBop(this, final_spot);
 
     // no cheat found, we have a legal MoveForward

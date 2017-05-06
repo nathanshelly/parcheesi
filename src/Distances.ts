@@ -72,6 +72,10 @@ function consumeSingleDistance(current_distances: number[], distance_to_consume:
 	return current_distances;
 }
 
+export function hasFive(possible_distances: number[]): boolean {
+	return findFive(possible_distances).length > 0;
+}
+
 // returns pairs in set of pairs that sum to c.ENTRY_VALUE
 export function findFive(current_distances: number[]): [number, number][] {
 	let pairs = distanceCombinations(current_distances);

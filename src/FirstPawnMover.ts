@@ -1,5 +1,4 @@
 import * as d from './Distances';
-import * as checker from '../src/RulesChecker'
 
 import { Board } from './Board';
 import { _Move } from './_Move';

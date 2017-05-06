@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import * as tm from './testMethods'
 import * as c from '../src/Constants'
-import * as checker from '../src/RulesChecker'
+import * as d from '../src/Distances'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -32,32 +32,32 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
     
     it('should correctly identify if number five in possible moves', () => {
         let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 1];
-        expect(checker.hasFive(possible_distances)).to.equal(true);
+        expect(d.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if number five in possible moves', () => {
         let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 2, c.VALUE_TO_ENTER_ON, 2];
-        expect(checker.hasFive(possible_distances)).to.equal(true);
+        expect(d.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify 1 and 4 combination summing to five in possible moves', () => {
         let possible_distances: number[] = [1, 4];
-        expect(checker.hasFive(possible_distances)).to.equal(true);
+        expect(d.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if combination summing to five in possible moves', () => {
         let possible_distances: number[] = [2, 3];
-        expect(checker.hasFive(possible_distances)).to.equal(true);
+        expect(d.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if no five or combination of c.VALUE_TO_ENTER_ON', () => {
         let possible_distances: number[] = [1, 2];
-        expect(checker.hasFive(possible_distances)).to.equal(false);
+        expect(d.hasFive(possible_distances)).to.equal(false);
     });
 
     it('should correctly identify if no five or combination of c.VALUE_TO_ENTER_ON', () => {
         let possible_distances: number[] = [3, 4, 3, 4];
-        expect(checker.hasFive(possible_distances)).to.equal(false);
+        expect(d.hasFive(possible_distances)).to.equal(false);
     });
 });
 
@@ -113,7 +113,7 @@ describe('Unit tests for confirming MoveEnter respects blockades:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Green);
         tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
 
-        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(board.blockadeOnHome(Color.Green)).to.equal(true);
     });
 
     it('should correctly identify if blockade of opponent color exists on home spot', () => {
@@ -121,10 +121,10 @@ describe('Unit tests for confirming MoveEnter respects blockades:', () => {
         let blockade_pawn_2 = new Pawn(1, Color.Blue);
         tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, Color.Green);
         
-        expect(checker.blockadeOnHome(Color.Green, board)).to.equal(true);
+        expect(board.blockadeOnHome(Color.Green)).to.equal(true);
     });
 
     it('should correctly identify if no blockade of same color exists on home spot', () => {
-        expect(checker.blockadeOnHome(Color.Yellow, board)).to.equal(false);
+        expect(board.blockadeOnHome(Color.Yellow)).to.equal(false);
     });
 });
