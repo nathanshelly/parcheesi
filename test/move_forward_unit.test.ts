@@ -7,7 +7,7 @@ import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -21,12 +21,6 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 import { expect } from 'chai';
 import 'mocha';
-
-class PrettyDumbPlayer extends BasicPlayer {
-    doMove(brd: Board, distances: number[]): _Move[] {
-        throw new Error('Method not implemented - not needed in testing board instantiaton.');
-    }
-}
 
 describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () => {
     let game: Parcheesi;

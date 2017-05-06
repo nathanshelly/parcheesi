@@ -5,7 +5,7 @@ import * as c from '../src/Constants'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { _Player } from '../src/_Player'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -21,11 +21,7 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
-class PrettyDumbPlayer extends BasicPlayer {
-	doMove(brd: Board, distances: number[]): _Move[] {
-		throw new Error('Method not implemented - not needed when manually building moves.');
-	}
-}
+
 
 describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
     let board: Board;
@@ -1137,5 +1133,44 @@ describe("baseSpots ", () => {
 		let landing_spot = board.getBaseSpot(player1.color);
 		
 		expect(landing_spot.hasBlockade()).to.be.false;
+    });
+});
+
+describe("areAllPawnsOut ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer;
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+        players = [player1];
+        
+        board = new Board(players);
+    });
+
+	it("should return true if all pawns are out of the base", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 1);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 0);
+		
+		expect(board.areAllPawnsOut(player1.color)).to.be.true;
+    });
+
+	it("should return false if any pawns are in the base", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 1);
+		
+		expect(board.areAllPawnsOut(player1.color)).to.be.false;
+    });
+
+	it("should return false if all pawns are in the base", () => {
+		expect(board.areAllPawnsOut(player1.color)).to.be.false;
     });
 });

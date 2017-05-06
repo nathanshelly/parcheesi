@@ -60,6 +60,7 @@ export class Board {
 	// invariant at this point move is legal
 	makeMove(move: _Move): number | null {
 		let old_spot: _Spot = this.findPawn(move.pawn);
+		
 		let new_spot: _Spot;
 
 		if(move instanceof MoveForward)
@@ -83,6 +84,7 @@ export class Board {
 													: null;
 
 		if(maybe_home_bonus !== null && maybe_bop_bonus !== null)
+			// should never enter here
 			throw new Error("Can't earn two bonuses in one move")
 		else if(maybe_home_bonus === null && maybe_bop_bonus === null)
 			return null;

@@ -5,7 +5,7 @@ import * as tm from './testMethods'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { _Player } from '../src/_Player'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -20,12 +20,6 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 import { expect } from 'chai'
 import 'mocha'
-
-class PrettyDumbPlayer extends BasicPlayer {
-    doMove(brd: Board, distances: number[]): _Move[] {
-        throw new Error('Method not implemented - not needed when manually building moves.');
-    }
-}
 
 describe("Filename: board_integration.test.ts\n\nThe board's move-making functionality", () => {
     let board: Board;

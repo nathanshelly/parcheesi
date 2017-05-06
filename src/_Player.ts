@@ -14,5 +14,5 @@ export interface _Player {
 
   // inform the player that they have suffered
   // a doubles penalty
-	DoublesPenalty(): void;
+	doublesPenalty(): void;
 }

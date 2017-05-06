@@ -6,7 +6,7 @@ import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -20,6 +20,19 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 import { expect } from 'chai';
 import 'mocha';
+
+function checkHomeRows(hr_starts: HomeRowSpot[]) {
+    hr_starts.forEach(hrs => {
+        expect(hrs.nPawns()).to.equal(0);
+
+        while (hrs.next() !instanceof HomeSpot) {
+            hrs = hrs.next() as HomeRowSpot;
+            expect(hrs.nPawns()).to.equal(0);
+        }
+
+        expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
+    });
+}
 
 describe('Filename: board_building.test.ts\n\nA board with no players', () => {
     let board = new Board([]);
@@ -44,32 +57,16 @@ describe('Filename: board_building.test.ts\n\nA board with no players', () => {
 
     it('should not have any pawns in the home rows', () => {
         let hr_starts = board.getHomeRowStarts();
-
-        hr_starts.forEach(hrs => {
-            expect(hrs.nPawns()).to.equal(0);
-
-            while (hrs.next() !instanceof HomeSpot) {
-                hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.nPawns()).to.equal(0);
-            }
-
-            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
-        });
+        checkHomeRows(hr_starts);
     });
 });
 
-class ReallyDumbPlayer extends BasicPlayer {
-    doMove(brd: Board, distances: number[]): _Move[] {
-        throw new Error('Method not implemented - not needed in testing board instantiaton.');
-    }
-}
-
 describe('A board with one player', () => {    
-    let players: ReallyDumbPlayer[];
+    let players: PrettyDumbPlayer[];
     let board: Board;
 
     before(() => {
-        let player1 = new ReallyDumbPlayer();
+        let player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Green);
         
         players = [player1];
@@ -93,17 +90,7 @@ describe('A board with one player', () => {
 
     it('should not have any pawns in the home rows', () => {
         let hr_starts = board.getHomeRowStarts();
-
-        hr_starts.forEach(hrs => {
-            expect(hrs.nPawns()).to.equal(0);
-
-            while (hrs.next() !instanceof HomeSpot) {
-                hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.nPawns()).to.equal(0);
-            }
-
-            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
-        });
+        checkHomeRows(hr_starts);
     });
 
     it('should have no pawns in the main ring', () => {
@@ -139,20 +126,20 @@ describe('A board with one player', () => {
 });
 
 describe('A board with four players', () => {
-    let players: ReallyDumbPlayer[];
+    let players: PrettyDumbPlayer[];
     let board: Board;
 
     before(() => {
-        let player1 = new ReallyDumbPlayer();
+        let player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Green);
 
-        let player2 = new ReallyDumbPlayer();
+        let player2 = new PrettyDumbPlayer();
         player2.startGame(Color.Blue);
 
-        let player3 = new ReallyDumbPlayer();
+        let player3 = new PrettyDumbPlayer();
         player3.startGame(Color.Red);
 
-        let player4 = new ReallyDumbPlayer();
+        let player4 = new PrettyDumbPlayer();
         player4.startGame(Color.Yellow);
         
         players = [player1, player2, player3, player4];
@@ -176,17 +163,7 @@ describe('A board with four players', () => {
 
     it('should not have any pawns in the home rows', () => {
         let hr_starts = board.getHomeRowStarts();
-
-        hr_starts.forEach(hrs => {
-            expect(hrs.nPawns()).to.equal(0);
-
-            while (hrs.next() !instanceof HomeSpot) {
-                hrs = hrs.next() as HomeRowSpot;
-                expect(hrs.nPawns()).to.equal(0);
-            }
-
-            expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
-        });
+        checkHomeRows(hr_starts);
     });
 
     it('should have no pawns in the main ring', () => {

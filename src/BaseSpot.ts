@@ -3,6 +3,7 @@ import * as c from './Constants'
 
 import { Pawn } from './Pawn'
 import { Color } from './Color'
+
 import { _Spot } from './_Spot'
 import { MainRingSpot } from './MainRingSpot'
 

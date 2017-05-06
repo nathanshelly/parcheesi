@@ -8,7 +8,7 @@ import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -60,12 +60,6 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
         expect(checker.hasFive(possible_distances)).to.equal(false);
     });
 });
-
-class PrettyDumbPlayer extends BasicPlayer {
-    doMove(brd: Board, distances: number[]): _Move[] {
-        throw new Error('Method not implemented - not needed in testing board instantiaton.');
-    }
-}
 
 describe('Unit tests for confirming pawn is in base spot:', () => {
     let game: Parcheesi;

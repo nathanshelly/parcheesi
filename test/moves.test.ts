@@ -8,7 +8,7 @@ import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Parcheesi } from '../src/Parcheesi'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -22,12 +22,6 @@ import { MainRingSpot } from '../src/MainRingSpot'
 
 import { expect } from 'chai';
 import 'mocha';
-
-class PrettyDumbPlayer extends BasicPlayer {
-    doMove(brd: Board, distances: number[]): _Move[] {
-        throw new Error('Method not implemented - not needed when manually building moves.');
-    }
-}
 
 describe('Filename: moves.test.ts\n\nNon-move-specific cheating:', () => {
     let game: Parcheesi;
