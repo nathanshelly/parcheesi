@@ -37,22 +37,22 @@ describe('Filename: moves.test.ts\n\nNon-move-specific cheating:', () => {
 
     it('moving a pawn of the wrong color should fail', () => {
         let pawn = new Pawn(1, Color.Blue);
-        expect(checker.pawnIsWrongColor(pawn, Color.Red)).to.equal(true);
+        expect(pawn.isExpectedColor(Color.Red)).to.equal(false);
     })
 
     it('moving a pawn of the right color should succeed', () => {
         let pawn = new Pawn(1, Color.Blue);
-        expect(checker.pawnIsWrongColor(pawn, Color.Blue)).to.equal(false);
+        expect(pawn.isExpectedColor(Color.Blue)).to.equal(true);
     })
 
     it('moving a pawn of legal id should succeed', () => {
         let pawn = new Pawn(3, Color.Blue);
-        expect(checker.pawnIdOutsideLegalRange(pawn)).to.equal(false);
+        expect(pawn.hasIdInLegalRange()).to.equal(true);
     })
 
     it('moving a pawn of illegal id should fail', () => {
         let pawn = new Pawn(4, Color.Blue);
-        expect(checker.pawnIdOutsideLegalRange(pawn)).to.equal(true);
+        expect(pawn.hasIdInLegalRange()).to.equal(false);
     })
 
     // come back to this when makeAllLegalMoves is implemented

@@ -14,7 +14,7 @@ export class MoveEnter implements _Move {
   }
 
   isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
-    if(!checker.verifyPawn(this.pawn, player.color))
+    if(!this.pawn.verify(player.color))
       return false;
 
     return checker.hasFive(possible_distances) && !checker.blockadeOnHome(player.color, board) && board.pawnInBase(this.pawn);

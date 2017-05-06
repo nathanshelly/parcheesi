@@ -27,7 +27,7 @@ export class MoveForward implements _Move {
 			|| this.distance > c.LARGEST_POSSIBLE_MOVE
 			|| possible_distances.indexOf(this.distance) === -1
 			|| board.pawnInBase(this.pawn)
-      || !checker.verifyPawn(this.pawn, player.color))
+      || !this.pawn.verify(player.color))
 				return false;
     
     let blockade_on_spot_checker = (spot: _Spot) => { return spot.hasBlockade(); };

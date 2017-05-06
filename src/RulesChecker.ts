@@ -47,23 +47,6 @@ export function reformedBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pa
 	return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
 }
 
-// GLOBAL MOVE CHECKS
-
-// verify that pawn is correct:
-// pawn's color matches player
-// pawn's ID is legal
-export function verifyPawn(pawn: Pawn, color: Color): boolean {
-	return !pawnIsWrongColor(pawn, color) && !pawnIdOutsideLegalRange(pawn);
-}
-
-export function pawnIsWrongColor(pawn: Pawn, color: Color): boolean {
-	return pawn.color !== color;
-}
-
-export function pawnIdOutsideLegalRange(pawn: Pawn): boolean {
-	return pawn.id >= c.NUM_PLAYER_PAWNS || pawn.id < 0
-}
-
 // checks if all legal moves have been made
 export function madeAllLegalMoves(possible_distances: number[], player: _Player, board: Board, starting_blockades: Pawn[][]): boolean {
 	return ! (legalMoveEnterPossible(possible_distances, player, board, starting_blockades)

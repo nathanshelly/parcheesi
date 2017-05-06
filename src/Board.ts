@@ -125,7 +125,7 @@ export class Board {
 	
 	findPawn(pawn: Pawn): _Spot {
 		// maybe check valid color?
-		if(checker.pawnIdOutsideLegalRange(pawn))
+		if(!pawn.hasIdInLegalRange())
 			throw new Error("given a pawn with invalid ID")
 		
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
