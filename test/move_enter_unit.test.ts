@@ -31,12 +31,12 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
     });
     
     it('should correctly identify if number five in possible moves', () => {
-        let possible_distances: number[] = [5, 1];
+        let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 1];
         expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
     it('should correctly identify if number five in possible moves', () => {
-        let possible_distances: number[] = [5, 2, 5, 2];
+        let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 2, c.VALUE_TO_ENTER_ON, 2];
         expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
@@ -50,12 +50,12 @@ describe('Filename: move_enter_unit.test.ts\n\nUnit tests for entering with corr
         expect(checker.hasFive(possible_distances)).to.equal(true);
     });
 
-    it('should correctly identify if no five or combination of 5', () => {
+    it('should correctly identify if no five or combination of c.VALUE_TO_ENTER_ON', () => {
         let possible_distances: number[] = [1, 2];
         expect(checker.hasFive(possible_distances)).to.equal(false);
     });
 
-    it('should correctly identify if no five or combination of 5', () => {
+    it('should correctly identify if no five or combination of c.VALUE_TO_ENTER_ON', () => {
         let possible_distances: number[] = [3, 4, 3, 4];
         expect(checker.hasFive(possible_distances)).to.equal(false);
     });
@@ -97,7 +97,7 @@ describe('Unit tests for confirming pawn is in base spot:', () => {
     });
 });
 
-describe('Unit tests for entering pawn:', () => {
+describe('Unit tests for confirming MoveEnter respects blockades:', () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;

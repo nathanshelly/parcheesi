@@ -49,7 +49,7 @@ describe("Last pawn movers", () => {
 
     expect(move).to.not.be.null;
     expect(move).to.be.an.instanceOf(MoveForward);
-    expect((move as MoveForward).distance).to.equal(5);
+    expect((move as MoveForward).distance).to.equal(c.VALUE_TO_ENTER_ON);
     expect((move as MoveForward).pawn).to.deep.equal(pawns[0]);
   });
 
@@ -198,7 +198,7 @@ describe("Last pawn movers", () => {
 
     tm.placePawnsOnGivenColorEntrySpot([dummies[0], dummies[1]], board, mover.color);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice);
 

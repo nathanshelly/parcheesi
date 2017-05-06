@@ -1,4 +1,5 @@
 import * as _distances from '../src/Distances'
+import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -16,28 +17,28 @@ describe('Filename: distances.test.ts\n\nConsumption of distances:', () => {
     });
 	
 	it("should successfully consume unique distance in array", () => {
-		let old_array = [1, 3, 5, 20];
+		let old_array = [1, 3, c.VALUE_TO_ENTER_ON, 20];
 		let new_array = _distances.consumeMove(old_array, new MoveForward(pawn, 3));
 
-		expect(new_array).to.deep.equal([1, 5, 20]);
+		expect(new_array).to.deep.equal([1, c.VALUE_TO_ENTER_ON, 20]);
 	});
 
 	it("should successfully consume another unique distance in array", () => {
-		let old_array = [1, 3, 5, 20];
+		let old_array = [1, 3, c.VALUE_TO_ENTER_ON, 20];
 		let new_array = _distances.consumeMove(old_array, new MoveForward(pawn, 20));
 
-		expect(new_array).to.deep.equal([1, 3, 5]);
+		expect(new_array).to.deep.equal([1, 3, c.VALUE_TO_ENTER_ON]);
 	});
 
 	it("should successfully consume first of duplicate distances in array", () => {
-		let old_array = [1, 3, 5, 20, 3];
+		let old_array = [1, 3, c.VALUE_TO_ENTER_ON, 20, 3];
 		let new_array = _distances.consumeMove(old_array, new MoveForward(pawn, 3));
 
-		expect(new_array).to.deep.equal([1, 5, 20, 3]);
+		expect(new_array).to.deep.equal([1, c.VALUE_TO_ENTER_ON, 20, 3]);
 	});
 
 	it("should error when asked to consume non-existent distance", () => {
-		let old_array = [1, 3, 5, 20];
+		let old_array = [1, 3, c.VALUE_TO_ENTER_ON, 20];
 
 		expect(() => { _distances.consumeMove(old_array, new MoveForward(pawn, 6)); }).to.throw(Error);
 	});
@@ -49,7 +50,7 @@ describe('Filename: distances.test.ts\n\nConsumption of distances:', () => {
 	});
 
 	it("should correctly consume five on MoveEnter", () => {
-		let old_array = [1, 5, 2];
+		let old_array = [1, c.VALUE_TO_ENTER_ON, 2];
 
 		let new_array = _distances.consumeMove(old_array, new MoveEnter(pawn));
 		expect(new_array).to.deep.equal([1, 2]);

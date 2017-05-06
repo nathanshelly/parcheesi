@@ -151,9 +151,9 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		expect(spot.index).to.equal(index);
     });
 
-	it("should correctly get main ring spot 5 spots after base", () => {
-		let spot: _Spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
-		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 5) % c.MAIN_RING_SIZE
+	it("should correctly get main ring spot 7 spots after base", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
+		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 7) % c.MAIN_RING_SIZE
 		
 		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
@@ -214,20 +214,20 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     });
 
 	it("should correctly get same spot if offset equals 0", () => {
-		let start_spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
+		let start_spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
 		let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
 		
-		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
 		expect(spot.index).to.equal(index);
 		expect(spot).to.be.an.instanceof(MainRingSpot);
     });
 
-	it("should correctly get main ring spot at random offset (i.e. 5)", () => {
+	it("should correctly get main ring spot at random offset (i.e. 7)", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, 5, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, 7, player1.color) as _Spot;
 		
-		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
 		expect(spot.index).to.equal(index);
 		expect(spot).to.be.an.instanceof(MainRingSpot);
@@ -277,7 +277,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		let pawn_two = new Pawn(1, player1.color);
 
-		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 5);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 7);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
 		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockade_on_spot_checker);

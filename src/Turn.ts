@@ -37,8 +37,6 @@ export class Turn {
                 if(this.num_doubles === c.MAX_DOUBLES)
                     break;
             }
-                
-
             let moves: _Move[] = this.player.doMove(this.board, die);
             let roll = new Roll(this.board, this.player, moves, die);
             

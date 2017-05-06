@@ -29,7 +29,7 @@ describe("First pawn movers", () => {
   it("should conclude on an enter move for a pawn in the base", () => {
     let pawns = board.getPawnsOfColor(mover.color).reverse();
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let move = mover.moveForPawn(dice, pawns[0], board);
 
@@ -43,20 +43,20 @@ describe("First pawn movers", () => {
     
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let move = mover.moveForPawn(dice, pawns[0], board);
 
     expect(move).to.not.be.null;
     expect(move).to.be.an.instanceOf(MoveForward);
-    expect((move as MoveForward).distance).to.equal(5);
+    expect((move as MoveForward).distance).to.equal(c.VALUE_TO_ENTER_ON);
     expect((move as MoveForward).pawn).to.deep.equal(pawns[0]);
   });
 
   it("should conclude on an enter move and a forward move in order when all pawns are inside", () => {
     let pawns = board.getPawnsOfColor(mover.color).reverse();
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice)
 
@@ -78,7 +78,7 @@ describe("First pawn movers", () => {
 
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice)
 
@@ -88,7 +88,7 @@ describe("First pawn movers", () => {
     let move1 = moves[0];
     let move2 = moves[1];
 
-    expect((move1 as MoveForward).distance).to.equal(5);
+    expect((move1 as MoveForward).distance).to.equal(c.VALUE_TO_ENTER_ON);
     expect((move2 as MoveForward).distance).to.equal(6);
 
     expect((move1 as MoveForward).pawn).to.deep.equal(pawns[0]);
@@ -101,7 +101,7 @@ describe("First pawn movers", () => {
     tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 6);
     tm.placePawnsOnGivenColorEntrySpot([pawns[1], null], board, mover.color);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice)
 
@@ -111,7 +111,7 @@ describe("First pawn movers", () => {
     let move1 = moves[0];
     let move2 = moves[1];
 
-    expect((move1 as MoveForward).distance).to.equal(5);
+    expect((move1 as MoveForward).distance).to.equal(c.VALUE_TO_ENTER_ON);
     expect((move2 as MoveForward).distance).to.equal(6);
 
     expect((move1 as MoveForward).pawn).to.deep.equal(pawns[0]);
@@ -134,7 +134,7 @@ describe("First pawn movers", () => {
 
     tm.placePawnsOnGivenColorEntrySpot([dummies[0], dummies[1]], board, mover.color);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice);
 
@@ -166,17 +166,17 @@ describe("First pawn movers", () => {
     let pawns = board.getPawnsOfColor(mover.color).reverse();
     let dummies = board.getPawnsOfColor(dummy.color);
 
-    tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, 5);
+    tm.placePawnsAtOffsetFromYourEntry([pawns[0], null], board, c.VALUE_TO_ENTER_ON);
     tm.placePawnsAtOffsetFromYourEntry([dummies[0], null], board, c.OFFSET_BETWEEN_ENTRIES + 10);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice);
 
     expect(moves.length).to.equal(3);
     moves.forEach(m => { expect(m).to.be.an.instanceOf(MoveForward); });
     
-    expect((moves[0] as MoveForward).distance).to.equal(5);
+    expect((moves[0] as MoveForward).distance).to.equal(c.VALUE_TO_ENTER_ON);
     expect((moves[1] as MoveForward).distance).to.equal(6);
     expect((moves[2] as MoveForward).distance).to.equal(c.BOP_BONUS);
 
@@ -191,7 +191,7 @@ describe("First pawn movers", () => {
 
     tm.placePawnsOnGivenColorEntrySpot([dummies[0], null], board, mover.color);
 
-    let dice = [5, 6];
+    let dice = [c.VALUE_TO_ENTER_ON, 6];
 
     let moves = mover.doMove(board, dice);
 

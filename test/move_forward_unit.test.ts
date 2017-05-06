@@ -39,5 +39,9 @@ describe('Filename: move_foward_unit.test.ts\n\nUnit tests for main moves:', () 
 			game.start();
     });
 
-    
+    it('should correctly identify if number five in possible moves', () => {
+        let possible_distances: number[] = [c.VALUE_TO_ENTER_ON, 1];
+        expect(checker.hasFive(possible_distances)).to.equal(true);
+    });
+
 });
