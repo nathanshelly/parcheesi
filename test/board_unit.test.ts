@@ -21,8 +21,6 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai'
 import 'mocha'
 
-
-
 describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
     let board: Board;
     let players: _Player[];
