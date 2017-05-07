@@ -24,13 +24,8 @@ import 'mocha';
 function checkHomeRows(hr_starts: HomeRowSpot[]) {2
     hr_starts.forEach(hrs => {
         expect(hrs.nPawns()).to.equal(0);
-
-        while (hrs.next(hrs.color) !instanceof HomeSpot) {
+        while (hrs !instanceof HomeSpot)
             hrs = hrs.next(hrs.color) as HomeRowSpot;
-            expect(hrs.nPawns()).to.equal(0);
-        }
-
-        expect((hrs.next(hrs.color) as HomeSpot).nPawns()).to.equal(0);
     });
 }
 
