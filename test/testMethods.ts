@@ -12,7 +12,7 @@ export function placePawnsOnGivenColorEntrySpot(pawns: [Pawn, Pawn | null], boar
 }
 
 export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], board: Board, offset: number): void {
-	let color = pawns[0].color;
+	let color: Color = pawns[0].color;
 	
 	let spot: _Spot = board.getEntrySpot(color);
 	let next_spot: _Spot | null = board.getSpotAtOffsetFromSpot(spot, offset, color);
@@ -33,6 +33,6 @@ export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], boar
 function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 	pawns.forEach(pawn => {
 		if(pawn !== null)
-			board.findPawn(pawn).removePawn(pawn);
+			board.findSpotOfPawn(pawn).removePawn(pawn);
 	});
 }

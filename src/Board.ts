@@ -1,6 +1,5 @@
 import * as _ from 'lodash'
 import * as c from './Constants'
-import * as checker from './RulesChecker'
 
 import { Pawn } from './Pawn'
 import { Color } from './Color'
@@ -59,14 +58,15 @@ export class Board {
 
 	// invariant at this point move is legal
 	makeMove(move: _Move): number | null {
-		let old_spot: _Spot = this.findPawn(move.pawn);
+		let old_spot: _Spot = this.findSpotOfPawn(move.pawn);
+		
 		let new_spot: _Spot;
 
 		if(move instanceof MoveForward)
 			new_spot = this.getSpotAtOffsetFromSpot(old_spot, move.distance, move.pawn.color) as _Spot;
 		// move is MoveEnter
 		else
-			new_spot = this.getNextSpot(old_spot, move.pawn.color) as _Spot;
+			new_spot = old_spot.next(move.pawn.color) as _Spot;
 		
 		old_spot.removePawn(move.pawn);
 		let possible_bonus: number | null = this.handleSpecialLandings(move, new_spot);
@@ -83,6 +83,7 @@ export class Board {
 													: null;
 
 		if(maybe_home_bonus !== null && maybe_bop_bonus !== null)
+			// should never enter here
 			throw new Error("Can't earn two bonuses in one move")
 		else if(maybe_home_bonus === null && maybe_bop_bonus === null)
 			return null;
@@ -121,9 +122,9 @@ export class Board {
 		this.bases[moving_pawn.color].addPawn(moving_pawn)
 	}
 	
-	findPawn(pawn: Pawn): _Spot {
+	findSpotOfPawn(pawn: Pawn): _Spot {
 		// maybe check valid color?
-		if(checker.pawnIdOutsideLegalRange(pawn))
+		if(!pawn.hasIdInLegalRange())
 			throw new Error("given a pawn with invalid ID")
 		
 		let base_spot: BaseSpot = this.getBaseSpot(pawn.color);
@@ -134,7 +135,7 @@ export class Board {
 		// spot cannot be null here as we have verified that pawn is
 		// valid and must exist on board, write into contract?
 		while(!spot.pawnExists(pawn))
-			spot = this.getNextSpot(spot, pawn.color) as _Spot;
+			spot = spot.next(pawn.color) as _Spot;
 
 		return spot;
 	}
@@ -144,9 +145,14 @@ export class Board {
 		let next_spot: _Spot | null = spot;
 		
 		while(distance-- > 0) {
-			next_spot = this.getNextSpot(next_spot, color);
-			// trigger that they've cheated instead?
-			if(next_spot === null || predicates.some(predicate => { return predicate(next_spot as _Spot); }))
+			if(spot instanceof HomeSpot)
+				// still have distance to go but on home spot
+				return null;
+			
+			// next_spot must be spot here
+			next_spot = next_spot.next(color) as _Spot;
+
+			if(predicates.some(predicate => { return predicate(next_spot as _Spot); }))
 				return null;
 		}
 
@@ -156,17 +162,6 @@ export class Board {
 	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
 		let spot = this.getEntrySpot(color);
 		return this.getSpotAtOffsetFromSpot(spot, distance, color);
-	}
-
-	getNextSpot(spot: _Spot, color: Color): _Spot | null {
-		if(spot instanceof MainRingSpot)
-			return spot.next(color);
-		else if(spot instanceof HomeRowSpot || spot instanceof BaseSpot)
-			return spot.next();
-		// spot is HomeSpot, has no next
-		// trigger that they've cheated instead?
-		else
-			return null;
 	}
 
 	getEntrySpot(color: Color): MainRingSpot {
@@ -190,7 +185,7 @@ export class Board {
 		// filter to unique spots (keeps first of duplicate items)
 		let unique_spots = pawn_spots.filter((spot, index, self) => {return index === self.indexOf(spot)});
 		// filter spots to only spots with blockades
-		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.has_blockade()});
+		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.hasBlockade()});
 		
 		// get tuples of pawns (sorted for later equality) from spots that have blockades
 		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.getLivePawns().sort(); });
@@ -203,7 +198,7 @@ export class Board {
 	};
 
 	getOccupiedSpotsOfColorOnBoard(color: Color): _Spot[] {
-		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findPawn(pawn); });
+		return this.getPawnsOfColorOnBoard(color).map(pawn => { return this.findSpotOfPawn(pawn); });
 	}
 
 	getPawnsOfColor(color: Color): Pawn[] {
@@ -223,27 +218,22 @@ export class Board {
 		let live_pawns: Pawn[] = spot.getLivePawns();
 		let append_pawns: Pawn[] = (live_pawns.length > 0 && live_pawns[0].color === color) ? live_pawns : [];
 		
-		let next_spot: _Spot | null = this.getNextSpot(spot, color);
-
-		if(next_spot === null)
+		if(spot instanceof HomeSpot)
 			return append_pawns
 		
+		// can't return null because if spot was home spot we would have
+		// already returned
+		let next_spot: _Spot = spot.next(color) as _Spot;
 		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, next_spot));
 	}
 	
 	getPawnsOfColorInBase(color: Color): Pawn[] {
 		return this.bases[color].getLivePawns();
 	}
-
-	// any reason not to use getSpotAtOffsetFromSpot to advance forward length of home row?
+	
 	getHomeSpots(): HomeSpot[] {
 		return this.getHomeRowStarts().map(hrs => {
-			// TODO - test if one-liner below works, if so use it instead
-			// return this.getSpotAtOffsetFromSpot(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
-			while (!(hrs.next() instanceof HomeSpot))
-				hrs = hrs.next() as HomeRowSpot;
-
-			return hrs.next() as HomeSpot;
+			return this.getSpotAtOffsetFromSpot(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
 		});
 	}
 
@@ -252,4 +242,27 @@ export class Board {
 			let home_color: Color = parseInt(key) as Color;
 			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"]].next(home_color) as HomeRowSpot;
 		})};
+
+	areAllPawnsOut(color: Color): boolean {
+		return this.getPawnsOfColorInBase(color).length === 0;
+	}
+
+	blockadeOnHome(color: Color): boolean {
+		return this.getEntrySpot(color).hasBlockade();
+	}
+
+	// confirm Findler's saying that blockades should only be checked at end of a roll
+	// if so move this into roll object
+	//  better location for this?
+	reformsBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
+		if(spot.hasBlockade())
+			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
+		
+		let would_be_pawns: Pawn[] = spot.getLivePawns();
+		would_be_pawns.push(pawn);
+		// sorting for equality check
+		would_be_pawns = would_be_pawns.sort();
+
+		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
+	}
 }

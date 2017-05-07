@@ -5,7 +5,7 @@ import * as c from '../src/Constants'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { _Player } from '../src/_Player'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -25,12 +25,6 @@ describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -129,12 +123,6 @@ describe("getSpotAtOffsetFromEntry tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -151,9 +139,9 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 		expect(spot.index).to.equal(index);
     });
 
-	it("should correctly get main ring spot 5 spots after base", () => {
-		let spot: _Spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
-		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 5) % c.MAIN_RING_SIZE
+	it("should correctly get main ring spot 7 spots after base", () => {
+		let spot: _Spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
+		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 7) % c.MAIN_RING_SIZE
 		
 		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
@@ -196,13 +184,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer;
-	let blockade_on_spot_checker = (spot: _Spot) => { return spot.has_blockade(); };
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
+	let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -214,20 +196,20 @@ describe("getSpotAtOffsetFromSpot tests", () => {
     });
 
 	it("should correctly get same spot if offset equals 0", () => {
-		let start_spot = board.getSpotAtOffsetFromEntry(5, player1.color) as _Spot;
+		let start_spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
 		let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
 		
-		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
 		expect(spot.index).to.equal(index);
 		expect(spot).to.be.an.instanceof(MainRingSpot);
     });
 
-	it("should correctly get main ring spot at random offset (i.e. 5)", () => {
+	it("should correctly get main ring spot at random offset (i.e. 7)", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, 5, player1.color) as _Spot;
+		let spot = board.getSpotAtOffsetFromSpot(start_spot, 7, player1.color) as _Spot;
 		
-		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 5;
+		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
 		expect(spot.index).to.equal(index);
 		expect(spot).to.be.an.instanceof(MainRingSpot);
@@ -277,10 +259,10 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		let pawn_two = new Pawn(1, player1.color);
 
-		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 5);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 7);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockade_on_spot_checker);
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });
@@ -292,7 +274,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockade_on_spot_checker);
+		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });
@@ -302,12 +284,6 @@ describe("getPawnsOfColorInBase tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -355,12 +331,6 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -521,12 +491,6 @@ describe("getPawnsOfColor tests (order matters)", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -585,12 +549,6 @@ describe("moveOnePawnBackToBase tests", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -685,12 +643,6 @@ describe("findPawn tests", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -705,7 +657,7 @@ describe("findPawn tests", () => {
 
 	it("should correctly find a pawn in base spot", () => {
 		let pawn_one = new Pawn(0, player1.color);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.TEST_BASE_INDEX;
 
@@ -717,7 +669,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 0);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"];
 
@@ -729,7 +681,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = 0;
 
@@ -741,7 +693,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_OFFSET);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.HOME_ROW_SIZE;
 
@@ -752,11 +704,11 @@ describe("findPawn tests", () => {
 	it("should error if given pawn of invalid id", () => {
 		let pawn_one = new Pawn(-1, player1.color);
 
-		expect(() => { board.findPawn(pawn_one); }).to.throw(Error);
+		expect(() => { board.findSpotOfPawn(pawn_one); }).to.throw(Error);
 
 		let pawn_two = new Pawn(c.NUM_PLAYER_PAWNS + 1, player1.color);
 
-		expect(() => { board.findPawn(pawn_two); }).to.throw(Error);
+		expect(() => { board.findSpotOfPawn(pawn_two); }).to.throw(Error);
     });
 });
 
@@ -764,12 +716,6 @@ describe("getHomeRowStarts ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -797,12 +743,6 @@ describe("getHomeSpots ", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -828,12 +768,6 @@ describe("landingWillBop ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -927,12 +861,6 @@ describe("earnedHomeBonus ", () => {
     let players: _Player[];
     let player1: PrettyDumbPlayer;
 
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
-
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.Blue);
@@ -970,12 +898,6 @@ describe("earnedBopBonus ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -1070,12 +992,6 @@ describe("handleSpecialLandings ", () => {
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -1191,5 +1107,68 @@ describe("handleSpecialLandings ", () => {
 		let move = new MoveForward(player2_pawn_two, 1);
 
 		expect(board.handleSpecialLandings(move, landing_spot)).to.be.null;
+    });
+});
+
+describe("baseSpots ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Red);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+
+	it("should always know they don't have a blockade", () => {
+		let landing_spot = board.getBaseSpot(player1.color);
+		
+		expect(landing_spot.hasBlockade()).to.be.false;
+    });
+});
+
+describe("areAllPawnsOut ", () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer;
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+        players = [player1];
+        
+        board = new Board(players);
+    });
+
+	it("should return true if all pawns are out of the base", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		let pawn_three 	= new Pawn(2, player1.color);
+		let pawn_four 	= new Pawn(3, player1.color);
+
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 1);
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_four], board, 0);
+		
+		expect(board.areAllPawnsOut(player1.color)).to.be.true;
+    });
+
+	it("should return false if any pawns are in the base", () => {
+		let pawn_one 	= new Pawn(0, player1.color);
+		let pawn_two 	= new Pawn(1, player1.color);
+		
+		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 1);
+		
+		expect(board.areAllPawnsOut(player1.color)).to.be.false;
+    });
+
+	it("should return false if all pawns are in the base", () => {
+		expect(board.areAllPawnsOut(player1.color)).to.be.false;
     });
 });

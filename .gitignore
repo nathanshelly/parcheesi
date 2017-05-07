@@ -3,3 +3,5 @@ out
 submission.tgz
 .vscode
 *.swp
+coverage
+.nyc_output

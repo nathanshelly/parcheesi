@@ -1,3 +1,6 @@
+import * as _ from 'lodash'
+
+import { Turn } from './Turn'
 import { Board } from './Board'
 import { Color } from './Color'
 import { _Player } from './_Player'
@@ -20,9 +23,34 @@ export class Parcheesi implements _Parcheesi {
 	// start a game
 	start(): void {
 		this.board = new Board(this.players);
+	};
 
+	// start a real game
+	start_real_game(): void {
+		if(this.players.length === 0)
+			throw new Error("No players!")
+
+		this.board = new Board(this.players);
+
+		let turn: number = 0;
 		// player turns loop
-		// while(true)
+		while(!this.winner()) {
+			let board_copy: Board = _.cloneDeep(this.board);
+			let current_turn: Turn = new Turn(board_copy, this.players[turn]);
+			
+			let possible_new_board = current_turn.take();
+			// possible_new_board !== null 
+			// 	? this.board = possible_new_board 
+			// 	: this.bootPlayer();
+
+			if(possible_new_board !== null)
+				this.board = possible_new_board;
+			else
+				// handle cheater
+
+			// needs to be more sophisticated once we start booting cheaters
+			turn = (turn + 1) % this.players.length;
+		}
 	};
 
 	winner(): Color | null {

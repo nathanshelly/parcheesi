@@ -28,9 +28,9 @@ export class HomeRowSpot extends _Spot {
             this._next = new HomeSpot(color);
     }
 
-    next(): HomeRowSpot | HomeSpot {
+    next(color: Color): _Spot | null {
         return this._next;
     }
 
-    has_blockade(): boolean {return this.nPawns() === c.MAX_N_PAWNS_HOME_ROW}
+    hasBlockade(): boolean {return this.nPawns() === c.MAX_N_PAWNS_HOME_ROW}
 }

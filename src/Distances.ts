@@ -4,7 +4,7 @@ import { MoveEnter } from './MoveEnter';
 import { MoveForward } from './MoveForward';
 
 export function rollDice(all_pawns_out: boolean): number[] {
-	let initial_roll: number[] = [this.rollDie(), this.rollDie()];
+	let initial_roll: number[] = [rollDie(), rollDie()];
 	return isDoubles(initial_roll) && all_pawns_out ? initial_roll.concat(doublesOpposites(initial_roll[0])) : initial_roll;
 }
 
@@ -26,11 +26,6 @@ function doublesOpposites(visible_face: number): number[] {
 	return [null, null].map(i => {
 		return max_pips_on_both_sides - visible_face;
 	});
-}
-
-export function addDistance(current_distances: number[], new_distance: number): number[] {
-	current_distances.push(new_distance);
-	return current_distances;
 }
 
 export function consumeMove(current_distances: number[], move: _Move): number[] {
@@ -75,6 +70,10 @@ function consumePair(current_distances: number[], pair_to_consume: [number, numb
 function consumeSingleDistance(current_distances: number[], distance_to_consume: number):  number[] {
 	current_distances.splice(current_distances.indexOf(distance_to_consume), 1);
 	return current_distances;
+}
+
+export function hasFive(possible_distances: number[]): boolean {
+	return findFive(possible_distances).length > 0;
 }
 
 // returns pairs in set of pairs that sum to c.ENTRY_VALUE

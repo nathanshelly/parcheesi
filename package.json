@@ -4,14 +4,36 @@
     "@types/mocha": "^2.2.40",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
+    "nyc": "^10.3.0",
+    "source-map-support": "^0.4.15",
     "ts-node": "^3.0.2"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+    "test": "mocha",
+    "cover": "nyc npm test"
   },
   "dependencies": {
     "@types/lodash": "^4.14.62",
     "lodash": "^4.17.4",
     "typescript": "^2.2.2"
-  }
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "reporter": [
+      "clover",
+      "lcov",
+      "text-summary"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "sourceMap": true,
+  "instrument": true
 }

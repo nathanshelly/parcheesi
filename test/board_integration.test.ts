@@ -5,7 +5,7 @@ import * as tm from './testMethods'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { _Player } from '../src/_Player'
-import { BasicPlayer } from '../src/BasicPlayer'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
@@ -25,12 +25,6 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
     let board: Board;
     let players: _Player[];
     let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
-
-    class PrettyDumbPlayer extends BasicPlayer {
-        doMove(brd: Board, distances: number[]): _Move[] {
-            throw new Error('Method not implemented - not needed when manually building moves.');
-        }
-    }
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
@@ -144,12 +138,12 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
         let end = board.getSpotAtOffsetFromEntry(4, player1.color) as _Spot;
         expect(end.nPawns()).to.equal(1);
-        expect(end.has_blockade()).to.be.false;
+        expect(end.hasBlockade()).to.be.false;
 
         board.makeMove(move);
 
         expect(end.nPawns()).to.equal(2);
-        expect(end.has_blockade()).to.be.true;
+        expect(end.hasBlockade()).to.be.true;
     });
 
     it("should correctly form blockades on the home row", () => {
@@ -163,11 +157,11 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
         let end = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET + 2, player1.color) as _Spot;
         expect(end.nPawns()).to.equal(1);
-        expect(end.has_blockade()).to.be.false;
+        expect(end.hasBlockade()).to.be.false;
 
         board.makeMove(move);
 
         expect(end.nPawns()).to.equal(2);
-        expect(end.has_blockade()).to.be.true;
+        expect(end.hasBlockade()).to.be.true;
     });
 });

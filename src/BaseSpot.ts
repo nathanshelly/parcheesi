@@ -1,9 +1,10 @@
 import * as _ from 'lodash'
 import * as c from './Constants'
 
-import { _Spot } from './_Spot'
 import { Pawn } from './Pawn'
 import { Color } from './Color'
+
+import { _Spot } from './_Spot'
 import { MainRingSpot } from './MainRingSpot'
 
 export class BaseSpot extends _Spot {
@@ -24,9 +25,9 @@ export class BaseSpot extends _Spot {
         this._next = _next;
     }
 
-    next(): MainRingSpot {
+    next(color: Color): _Spot | null {
         return this._next;
     }
 
-    has_blockade(): boolean {return false;}
+    hasBlockade(): boolean {return false;}
 }
