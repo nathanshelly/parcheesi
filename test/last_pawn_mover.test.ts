@@ -6,7 +6,7 @@ import { Board } from '../src/Board';
 import { Color } from '../src/Color';
 import { MoveEnter } from '../src/MoveEnter';
 import { MoveForward } from '../src/MoveForward';
-import * as tm from './testMethods';
+import * as tm from './TestMethods';
 import * as c from '../src/Constants';
 
 describe("Last pawn movers", () => {

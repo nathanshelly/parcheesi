@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as tm from './testMethods'
+import * as tm from './TestMethods'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -483,6 +483,33 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 				
 		let pawns = board.getPawnsOfColorOnBoard(player1.color);
 		expect(pawns).to.deep.equal([pawn_four, pawn_three, pawn_two, pawn_one]);
+    });
+});
+
+describe('pawnInBase tests:', () => {
+	let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer;
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+    
+        board = new Board([player1]);
+    });
+    
+    it('should correctly identify that blue 0 pawn is in base spot', () => {
+        expect(board.pawnInBase(new Pawn(0, player1.color))).to.equal(true);
+    });
+    
+    it('should correctly identify that blue 0 pawn is not in base spot', () => {
+		let pawn = new Pawn(0, player1.color);
+		board.getBaseSpot(player1.color).removePawn(pawn);
+        expect(board.pawnInBase(pawn)).to.equal(false);
+    });
+
+    it('should correctly identify that pawn of unregistered player is not in base spot', () => {
+        expect(() => { board.pawnInBase(new Pawn(0, Color.Green)); }).to.throw(Error);
     });
 });
 
@@ -1170,5 +1197,43 @@ describe("areAllPawnsOut ", () => {
 
 	it("should return false if all pawns are in the base", () => {
 		expect(board.areAllPawnsOut(player1.color)).to.be.false;
+    });
+});
+
+describe('blockadeOnEntrySpot tests:', () => {
+    let board: Board;
+    let players: _Player[];
+    let player1: PrettyDumbPlayer, player2: PrettyDumbPlayer;
+
+    beforeEach(() => {
+        player1 = new PrettyDumbPlayer();
+        player1.startGame(Color.Blue);
+
+        player2 = new PrettyDumbPlayer();
+        player2.startGame(Color.Green);
+
+        players = [player1, player2];
+        
+        board = new Board(players);
+    });
+    
+    it('should correctly identify if blockade of same color exists on home spot', () => {
+        let blockade_pawn_1 = new Pawn(0, player1.color);
+        let blockade_pawn_2 = new Pawn(1, player1.color);
+        tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, player1.color);
+
+        expect(board.blockadeOnEntrySpot(player1.color)).to.equal(true);
+    });
+
+    it('should correctly identify if blockade of opponent color exists on home spot', () => {
+        let blockade_pawn_1 = new Pawn(0, player1.color);
+        let blockade_pawn_2 = new Pawn(1, player1.color);
+        tm.placePawnsOnGivenColorEntrySpot([blockade_pawn_1, blockade_pawn_2], board, player2.color);
+        
+        expect(board.blockadeOnEntrySpot(player2.color)).to.equal(true);
+    });
+
+    it('should correctly identify if no blockade exists on home spot', () => {
+        expect(board.blockadeOnEntrySpot(player1.color)).to.equal(false);
     });
 });

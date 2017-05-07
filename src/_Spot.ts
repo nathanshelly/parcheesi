@@ -22,8 +22,7 @@ export abstract class _Spot {
     
     isEmpty(): boolean { return this.nPawns() === 0; }
 
-    // TODO: maybe not self-explanatory enough? even necessary?
-    colorOfPawns(): Color | null { return this.nPawns() > 0 ? this.getLivePawns()[0].color : null; }
+    colorOfPawnsOnSpot(): Color | null { return this.nPawns() > 0 ? this.getLivePawns()[0].color : null; }
     
     // check if given pawn is in pawns array
     // doesn't allow more than one of same pawn in array

@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as tm from './testMethods'
+import * as tm from './TestMethods'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'

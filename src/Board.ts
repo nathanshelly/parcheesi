@@ -247,7 +247,7 @@ export class Board {
 		return this.getPawnsOfColorInBase(color).length === 0;
 	}
 
-	blockadeOnHome(color: Color): boolean {
+	blockadeOnEntrySpot(color: Color): boolean {
 		return this.getEntrySpot(color).hasBlockade();
 	}
 

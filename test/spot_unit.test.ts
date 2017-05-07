@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as tm from './testMethods'
+import * as tm from './TestMethods'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -155,11 +155,11 @@ describe("colorOfPawns tests", () => {
 	});
 
 	it("should correctly say spot has pawns of color blue", () => {
-		expect(board.getBaseSpot(player1.color).colorOfPawns()).to.equal(Color.Blue);
+		expect(board.getBaseSpot(player1.color).colorOfPawnsOnSpot()).to.equal(Color.Blue);
 	});
 
 	it("should correctly return null for spot with no pawns", () => {
-		expect(board.getEntrySpot(player1.color).colorOfPawns()).to.equal(null);
+		expect(board.getEntrySpot(player1.color).colorOfPawnsOnSpot()).to.equal(null);
 	});
 });
 

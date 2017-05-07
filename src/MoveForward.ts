@@ -22,12 +22,9 @@ export class MoveForward implements _Move {
   }
 
   isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
-    // first two checks here redundant, remove?
-    if  (this.distance < 1
-			|| this.distance > c.LARGEST_POSSIBLE_MOVE
-			|| possible_distances.indexOf(this.distance) === -1
-			|| board.pawnInBase(this.pawn)
-      || !this.pawn.verify(player.color))
+    if  (possible_distances.indexOf(this.distance) === -1
+			   || board.pawnInBase(this.pawn)
+         || !this.pawn.verify(player.color))
 				return false;
     
     // getSpotAtOffsetFromSpot implicitly checks that distance is not off board 
@@ -57,8 +54,7 @@ export class MoveForward implements _Move {
     // last way to cheat:
     // bopping pawn on safety spot
     if(final_spot instanceof MainRingSpot)
-      // final_spot.colorOfPawns unnecessary?
-      if(!final_spot.isEmpty() && final_spot.colorOfPawns() !== player.color)
+      if(!final_spot.isEmpty() && final_spot.colorOfPawnsOnSpot() !== player.color)
         return board.landingWillBop(this, final_spot);
 
     // no cheat found, we have a legal MoveForward

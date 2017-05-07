@@ -17,6 +17,6 @@ export class MoveEnter implements _Move {
     if(!this.pawn.verify(player.color))
       return false;
 
-    return d.hasFive(possible_distances) && !board.blockadeOnHome(player.color) && board.pawnInBase(this.pawn);
+    return d.hasFive(possible_distances) && !board.blockadeOnEntrySpot(player.color) && board.pawnInBase(this.pawn);
   }
 }
