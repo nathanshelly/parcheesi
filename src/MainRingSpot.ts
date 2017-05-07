@@ -36,8 +36,8 @@ export class MainRingSpot extends _Spot {
         this.next_main = spot;
     }
 
-    next(c: Color): HomeRowSpot | MainRingSpot {
-        if (this.first_home && this.first_home.color === c)
+    next(color: Color): _Spot | null {
+        if (this.first_home && this.first_home.color === color)
             return this.first_home;
         return this.next_main;
     }

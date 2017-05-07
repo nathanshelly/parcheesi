@@ -12,6 +12,8 @@ export abstract class _Spot {
 
     abstract hasBlockade(): boolean;
 
+    abstract next(color: Color): _Spot | null;
+
     // cast as Pawn[] because TypeScript doesn't understand that filter will ensure no null in list:
     // (either Pawn[] or [] which is still Pawn[])
     getLivePawns(): Pawn[] { return this.pawns.filter(p => { return p !== null}) as Pawn[]; };
@@ -20,6 +22,7 @@ export abstract class _Spot {
     
     isEmpty(): boolean { return this.nPawns() === 0; }
 
+    // TODO: maybe not self-explanatory enough? even necessary?
     colorOfPawns(): Color | null { return this.nPawns() > 0 ? this.getLivePawns()[0].color : null; }
     
     // check if given pawn is in pawns array

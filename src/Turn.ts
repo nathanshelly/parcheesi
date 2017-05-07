@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import * as c from './Constants'
 import * as d from './Distances'
 
@@ -30,15 +31,18 @@ export class Turn {
         let rolled_doubles: boolean;
 
         do {
-            let die = d.rollDice(all_pawns_out);
-            rolled_doubles = die.length === c.NUM_DOUBLES_DICE;
+            let dice = d.rollDice(all_pawns_out);
+            rolled_doubles = dice.length === c.NUM_DOUBLES_DICE;
             if(rolled_doubles) {
                 this.num_doubles++;
                 if(this.num_doubles === c.MAX_DOUBLES)
                     break;
             }
-            let moves: _Move[] = this.player.doMove(this.board, die);
-            let roll = new Roll(this.board, this.player, moves, die);
+
+            // TODO - is this where we want to clone board?
+            let board_copy = _.cloneDeep(this.board);
+            let moves: _Move[] = this.player.doMove(board_copy, dice);
+            let roll = new Roll(this.board, this.player, moves, dice);
             
             if(!roll.take())
                 return null;

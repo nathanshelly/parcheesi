@@ -25,7 +25,7 @@ export class BaseSpot extends _Spot {
         this._next = _next;
     }
 
-    next(): MainRingSpot {
+    next(color: Color): _Spot | null {
         return this._next;
     }
 

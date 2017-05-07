@@ -22,6 +22,7 @@ export class MoveForward implements _Move {
   }
 
   isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
+    // first two checks here redundant, remove?
     if  (this.distance < 1
 			|| this.distance > c.LARGEST_POSSIBLE_MOVE
 			|| possible_distances.indexOf(this.distance) === -1
@@ -29,18 +30,15 @@ export class MoveForward implements _Move {
       || !this.pawn.verify(player.color))
 				return false;
     
-    let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
-
     // getSpotAtOffsetFromSpot implicitly checks that distance is not off board 
     // (which itself implicitly checks that they enter home on exact value)
     // passed in blockadeOnSpotChecker will cause getSpotAtOffsetFromSpot to return null
     // if move attempts to move onto or through blockade
-    let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findPawn(this.pawn),
+    let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
+    let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findSpotOfPawn(this.pawn),
                                                     this.distance,
                                                     player.color,
                                                     blockadeOnSpotChecker);
-    
-    // overshot home
     if(final_spot === null)
       return false;
     
@@ -59,6 +57,7 @@ export class MoveForward implements _Move {
     // last way to cheat:
     // bopping pawn on safety spot
     if(final_spot instanceof MainRingSpot)
+      // final_spot.colorOfPawns unnecessary?
       if(!final_spot.isEmpty() && final_spot.colorOfPawns() !== player.color)
         return board.landingWillBop(this, final_spot);
 

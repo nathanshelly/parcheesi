@@ -28,7 +28,7 @@ export class HomeRowSpot extends _Spot {
             this._next = new HomeSpot(color);
     }
 
-    next(): HomeRowSpot | HomeSpot {
+    next(color: Color): _Spot | null {
         return this._next;
     }
 

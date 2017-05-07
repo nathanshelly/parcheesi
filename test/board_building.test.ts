@@ -21,16 +21,16 @@ import { MainRingSpot } from '../src/MainRingSpot'
 import { expect } from 'chai';
 import 'mocha';
 
-function checkHomeRows(hr_starts: HomeRowSpot[]) {
+function checkHomeRows(hr_starts: HomeRowSpot[]) {2
     hr_starts.forEach(hrs => {
         expect(hrs.nPawns()).to.equal(0);
 
-        while (hrs.next() !instanceof HomeSpot) {
-            hrs = hrs.next() as HomeRowSpot;
+        while (hrs.next(hrs.color) !instanceof HomeSpot) {
+            hrs = hrs.next(hrs.color) as HomeRowSpot;
             expect(hrs.nPawns()).to.equal(0);
         }
 
-        expect((hrs.next() as HomeSpot).nPawns()).to.equal(0);
+        expect((hrs.next(hrs.color) as HomeSpot).nPawns()).to.equal(0);
     });
 }
 
@@ -120,7 +120,7 @@ describe('A board with one player', () => {
             let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY_FROM_BASE"];
             let entry_spot = board.mainRing[entry_ind];
 
-            expect(base.next()).to.deep.equal(entry_spot);
+            expect(base.next(base.color)).to.deep.equal(entry_spot);
         }
     });
 });
@@ -193,7 +193,7 @@ describe('A board with four players', () => {
             let entry_ind = c.COLOR_HOME_AND_ENTRY[base.color]["ENTRY_FROM_BASE"];
             let entry_spot = board.mainRing[entry_ind];
 
-            expect(base.next()).to.deep.equal(entry_spot);
+            expect(base.next(base.color)).to.deep.equal(entry_spot);
         }
     });
 });

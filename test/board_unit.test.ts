@@ -657,7 +657,7 @@ describe("findPawn tests", () => {
 
 	it("should correctly find a pawn in base spot", () => {
 		let pawn_one = new Pawn(0, player1.color);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.TEST_BASE_INDEX;
 
@@ -669,7 +669,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, 0);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"];
 
@@ -681,7 +681,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = 0;
 
@@ -693,7 +693,7 @@ describe("findPawn tests", () => {
 		let pawn_one = new Pawn(0, player1.color);
 		
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, null], board, c.ENTRY_TO_HOME_OFFSET);
-		let spot = board.findPawn(pawn_one);
+		let spot = board.findSpotOfPawn(pawn_one);
 
 		let index = c.HOME_ROW_SIZE;
 
@@ -704,11 +704,11 @@ describe("findPawn tests", () => {
 	it("should error if given pawn of invalid id", () => {
 		let pawn_one = new Pawn(-1, player1.color);
 
-		expect(() => { board.findPawn(pawn_one); }).to.throw(Error);
+		expect(() => { board.findSpotOfPawn(pawn_one); }).to.throw(Error);
 
 		let pawn_two = new Pawn(c.NUM_PLAYER_PAWNS + 1, player1.color);
 
-		expect(() => { board.findPawn(pawn_two); }).to.throw(Error);
+		expect(() => { board.findSpotOfPawn(pawn_two); }).to.throw(Error);
     });
 });
 

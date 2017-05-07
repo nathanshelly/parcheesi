@@ -222,11 +222,9 @@ describe("addPawn tests", () => {
 		expect(() => { board.getBaseSpot(player1.color).addPawn(pawn_one); }).to.throw(Error);
 	});
 
-	it("should error when trying to add pawn to full spot where it already is", () => {
-		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
-		let base_spot = board.getBaseSpot(player1.color);
-		
-		expect(() => { base_spot.addPawn(pawn_two); }).to.throw(Error);
+	it("should error when trying to add pawn to spot where it already is", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_two, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		expect(() => { board.getBaseSpot(player1.color).addPawn(pawn_one); }).to.throw(Error);
 	});
 
 	it("should correctly add pawn to base spot then error on next add to now full spot", () => {
@@ -271,5 +269,69 @@ describe("addPawn tests", () => {
 		expect(main_ring_spot.nPawns()).to.equal(main_ring_spot.max_n_pawns);
 		expect(main_ring_spot.pawnExists(pawn_two)).to.be.true;
 		expect(() => { main_ring_spot.addPawn(pawn_two); }).to.throw(Error);
+	});
+});
+
+describe("removePawn tests", () => {
+	let board: Board;
+	let player1: PrettyDumbPlayer;
+	let pawn_one: Pawn, pawn_two: Pawn, pawn_three: Pawn, pawn_four: Pawn;
+
+	beforeEach(() => {
+		player1 = new PrettyDumbPlayer();
+		player1.startGame(Color.Blue);
+	
+		board = new Board([player1]);
+
+		pawn_one 		= new Pawn(0, player1.color);
+		pawn_two 		= new Pawn(1, player1.color);
+		pawn_three 	= new Pawn(2, player1.color);
+		pawn_four 	= new Pawn(3, player1.color);
+	});
+
+	it("should error when trying remove pawn that doesn't exist on spot", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		expect(() => { board.getBaseSpot(player1.color).removePawn(pawn_one); }).to.throw(Error);
+	});
+
+	it("should successfully remove pawn from spot, then other pawn from spot", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		let base_spot = board.getBaseSpot(player1.color);
+
+		base_spot.removePawn(pawn_two);
+		expect(base_spot.nPawns()).to.equal(1);
+
+		base_spot.removePawn(pawn_four);
+		expect(base_spot.nPawns()).to.equal(0);
+	});
+
+	it("should successfully remove pawn, then remove pawn again, then error on next removal from now empty main ring spot", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, 3);
+		let main_ring_spot = board.getSpotAtOffsetFromEntry(3, player1.color) as _Spot;
+		
+		main_ring_spot.removePawn(pawn_three);
+		main_ring_spot.removePawn(pawn_one);
+		
+		expect(main_ring_spot.nPawns()).to.equal(0);
+	});
+
+	it("should successfully remove pawn, then remove pawn again, then error on next removal from now empty home row spot", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+		let home_row_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
+		
+		home_row_spot.removePawn(pawn_three);
+		home_row_spot.removePawn(pawn_one);
+		
+		expect(home_row_spot.nPawns()).to.equal(0);
+	});
+
+	it("should successfully remove pawn, then remove pawn again, then error on next removal from now empty home spot", () => {
+		tm.placePawnsAtOffsetFromYourEntry([pawn_three, pawn_one], board, c.ENTRY_TO_HOME_OFFSET);
+		let home_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
+		
+		home_spot.removePawn(pawn_three);
+		home_spot.removePawn(pawn_one);
+		
+		expect(home_spot.nPawns()).to.equal(0);
 	});
 });

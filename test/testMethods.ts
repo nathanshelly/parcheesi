@@ -33,6 +33,6 @@ export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], boar
 function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 	pawns.forEach(pawn => {
 		if(pawn !== null)
-			board.findPawn(pawn).removePawn(pawn);
+			board.findSpotOfPawn(pawn).removePawn(pawn);
 	});
 }
