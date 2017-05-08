@@ -5,13 +5,14 @@ import { Color } from '../Color';
 import { Pawn } from '../Pawn';
 
 class PlayerServer {
-	app: express.Application;
+	private app: express.Application;
 
 	constructor() {
 		this.app = express();
 	}
 
 	start() {
+		this.init_routes();
 		this.app.listen(config.PORT, this._listen);
 	}
 
@@ -20,11 +21,8 @@ class PlayerServer {
 	}
 
 	private init_routes() {
-		
 		this.app.get('/', this.root_route);
-
 		this.app.post('/do_move', this.do_move_route);
-
 		this.app.post('/start_game', this.start_game_route);
 	}
 
@@ -50,4 +48,7 @@ class PlayerServer {
 		// res.send(name);
 	}
 }
+
+const s = new PlayerServer();
+s.start();
 
