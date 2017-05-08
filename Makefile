@@ -6,10 +6,10 @@ all:
 clean:
 	rm -rf out/ coverage/ .nyc_output/
 
-test:
+test: clean all
 	npm test
 
-cover:
+cover: clean all
 	npm run cover
 
 tar:
