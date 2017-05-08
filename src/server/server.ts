@@ -13,9 +13,9 @@ class PlayerServer {
 		this.n_player = new NPlayer(new FirstPawnMover());
 	}
 
-	start() {
+	start(port: number) {
 		this.init_routes();
-		this.app.listen(config.PORT, this._listen);
+		this.app.listen(port, this._listen);
 	}
 
 	private _listen() {
@@ -56,5 +56,5 @@ class PlayerServer {
 }
 
 const s = new PlayerServer();
-s.start();
+s.start(config.PORT);
 
