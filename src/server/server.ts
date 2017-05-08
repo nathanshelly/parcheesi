@@ -1,9 +1,6 @@
 import express = require('express');
 import * as config from './config';
 
-import { Color } from '../Color';
-import { Pawn } from '../Pawn';
-
 class PlayerServer {
 	private app: express.Application;
 
@@ -27,25 +24,33 @@ class PlayerServer {
 	}
 
 	private root_route(req: express.Request, res: express.Response) {
+		console.log(`root request from ${req.originalUrl}, IP: ${req.ip}`);
 		res.send("Hello world!");
 	}
 
 	private do_move_route(req: express.Request, res: express.Response) {
+		console.log(`do_move request from ${req.originalUrl}, IP: ${req.ip}`);
+
 		const xml: string = req.body;
 		
 		// const moves = nplayer.doMove(xml);
 
 		res.set('Content-Type', 'text/xml');
 		//res.send(moves);
+		
+		res.send("do_move out to lunch - try again later");
 	}
 
 	private start_game_route(req: express.Request, res: express.Response) {
+		console.log(`start_game request from ${req.originalUrl}, IP: ${req.ip}`);
 		const xml: string = req.body;
 
 		// const name = nplayer.startGame(xml);
 	
 		res.set('Content-Type', 'text/xml');
 		// res.send(name);
+
+		res.send("start_game out to dinner - try again tomorrow");
 	}
 }
 
