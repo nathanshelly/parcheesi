@@ -58,4 +58,4 @@ export const COLOR_ENUM_TO_STRING = {
 // divide by two cuz typescript enum
 export const N_COLORS = Object.keys(Color).length / 2;
 export const TEST_BASE_INDEX = -1;
-export const TEST_NAME = "Rǝad";
+export const TEST_NAME = 'Rǝad';

@@ -16,7 +16,7 @@ var parser = new x2js();
 
 // request translation
 export function startGameXMLToColor(start_game: string): Color {
-	let color = parser.xml2js(start_game);
+	let color: object = parser.xml2js(start_game);
 	return c.COLOR_STRING_TO_ENUM[color['start-game']];
 }
 
@@ -28,13 +28,14 @@ export function nameResponseXML(name: string): string {
 // doubles-penalty - response translation
 // request action implicit in server path
 export function doublesPenaltyResponse() {
-	return '<void></void>'
+	return '<void></void>';
 }
 
 // do-move - request and response translation
 
 // request translation
-export function doMoveXMLToBoardDice(board: string): [Board, number[]] {
+export function doMoveXMLToBoardDice(board_and_dice_xml: string): [Board, number[]] {
+	let board_and_dice: object = parser.xml2js(board)
 
 	// placeholder values
 	return [new Board([new PrettyDumbPlayer()]), [1]];
