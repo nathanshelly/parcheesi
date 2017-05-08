@@ -7,7 +7,7 @@ export interface _Player {
 	color: Color;
 	// inform the player that a game has started
   // and what color the player is.
-	startGame(color: Color): void;
+	startGame(color: Color): string;
 
   // ask the player what move they want to make
 	doMove(brd: Board, distances: number[]): _Move[];

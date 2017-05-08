@@ -15,7 +15,7 @@ function rollDie(): number {
 
 function isDoubles(dice: number[]): boolean {
 	// checks if dice in roll are doubles
-	return dice[0] === dice[1];
+	return dice.length === 2 && dice[0] === dice[1];
 }
 
 function doublesOpposites(visible_face: number): number[] {
@@ -28,6 +28,10 @@ function doublesOpposites(visible_face: number): number[] {
 	});
 }
 
+export function distanceInDistances(distance: number, distances: number[]): boolean {
+	return distances.indexOf(distance) !== -1;
+}
+
 export function consumeMove(current_distances: number[], move: _Move): number[] {
 	return (move instanceof MoveEnter)
 					? consumeMoveEnterDistance(current_distances)
@@ -35,7 +39,7 @@ export function consumeMove(current_distances: number[], move: _Move): number[] 
 }
 	
 function consumeMoveForwardDistance(current_distances: number[], distance_to_consume: number): number[] {
-	if(current_distances.indexOf(distance_to_consume) === -1)
+	if(!distanceInDistances(distance_to_consume, current_distances))
 		throw new Error("That distance isn't in the array and can't be consumed!");
 	
 	return consumeSingleDistance(current_distances, distance_to_consume);

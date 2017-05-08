@@ -5,8 +5,7 @@
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "nyc": "^10.3.0",
-    "source-map-support": "^0.4.15",
-    "ts-node": "^3.0.2"
+    "source-map-support": "^0.4.15"
   },
   "scripts": {
     "test": "mocha",
@@ -16,9 +15,11 @@
     "@types/express": "^4.0.35",
     "@types/lodash": "^4.14.62",
     "express": "^4.15.2",
-    "lodash": "^4.17.4",
     "ts-node": "^3.0.4",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.2",
+    "@types/xml2json": "^0.10.0",
+    "lodash": "^4.17.4",
+    "xml2json": "^0.11.0"
   },
   "nyc": {
     "extension": [

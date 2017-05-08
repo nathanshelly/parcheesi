@@ -1,4 +1,5 @@
 import * as c from './Constants'
+import * as d from './Distances'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
@@ -22,7 +23,7 @@ export class MoveForward implements _Move {
   }
 
   isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
-    if  (possible_distances.indexOf(this.distance) === -1
+    if  (!d.distanceInDistances(this.distance, possible_distances)
 			   || board.pawnInBase(this.pawn)
          || !this.pawn.verify(player.color))
 				return false;

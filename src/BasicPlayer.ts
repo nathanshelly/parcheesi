@@ -6,8 +6,9 @@ import { Board } from './Board'
 export abstract class BasicPlayer implements _Player {
     color: Color;
 
-    startGame(color: Color): void {
+    startGame(color: Color): string {
         this.color = color;
+        return "Pumpkin spice lattes are delicious";
     };
 
     doublesPenalty(): void { console.log("Fricking doubles."); };
