@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import * as d from '../src/Distances'
 import * as c from '../src/Constants'
 
@@ -9,7 +10,15 @@ import { MoveForward } from '../src/MoveForward'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: distances.test.ts\n\nConsumption of distances:', () => {
+describe('Filename: distances.test.ts\n\nrollDice pseudo test:', () => {
+    it('should not have any number outside 0-6 for 1000 rolls', () => {		
+		let arr = _.fill(new Array(1000), null).map(_ => { return d.rollDice(false); });
+		let res = arr.some(distances => { return distances.some(distance => { return distance < 0 || distance > 6; }); });
+        expect(res).to.equal(false);
+    });
+});
+
+describe('consumeMove tests:', () => {
 	let pawn: Pawn;
 	
 	beforeEach(() => {
@@ -71,7 +80,24 @@ describe('Filename: distances.test.ts\n\nConsumption of distances:', () => {
 	});
 });
 
-describe('Unit tests for hasFive (implicitly tests findFive):', () => {
+describe('distanceInDistances test:', () => {
+	it('should correctly identify if given distance in distances', () => {
+		let distance: number = c.VALUE_TO_ENTER_ON;
+		expect(d.distanceInDistances(distance, [c.VALUE_TO_ENTER_ON, 20])).to.equal(true);
+	});
+	
+	it('should correctly identify if given distance in distances', () => {
+		let distance: number = 2;
+		expect(d.distanceInDistances(distance, [c.VALUE_TO_ENTER_ON, 2])).to.equal(true);
+	});
+	
+	it('should correctly identify if given distance not in distances', () => {
+		let distance: number = 6;
+		expect(d.distanceInDistances(distance, [c.VALUE_TO_ENTER_ON, 20])).to.equal(false);
+	});
+});
+
+describe('hasFive tests (implicitly tests findFive):', () => {
     it('should correctly identify if number five in possible distances', () => {
         let possibled: number[] = [c.VALUE_TO_ENTER_ON, 1];
         expect(d.hasFive(possibled)).to.equal(true);
@@ -102,3 +128,4 @@ describe('Unit tests for hasFive (implicitly tests findFive):', () => {
         expect(d.hasFive(possibled)).to.equal(false);
     });
 });
+
