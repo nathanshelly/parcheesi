@@ -28,10 +28,10 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         

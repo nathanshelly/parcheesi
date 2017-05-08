@@ -28,7 +28,7 @@ describe("Filename: spot_unit.test.ts\n\ngetLivePawns tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 
@@ -71,7 +71,7 @@ describe("nPawn tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 
@@ -113,7 +113,7 @@ describe("isEmpty tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 
@@ -149,13 +149,13 @@ describe("colorOfPawns tests", () => {
 	
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 	});
 
 	it("should correctly say spot has pawns of color blue", () => {
-		expect(board.getBaseSpot(player1.color).colorOfPawnsOnSpot()).to.equal(Color.Blue);
+		expect(board.getBaseSpot(player1.color).colorOfPawnsOnSpot()).to.equal(Color.blue);
 	});
 
 	it("should correctly return null for spot with no pawns", () => {
@@ -170,7 +170,7 @@ describe("pawnExists tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 
@@ -208,7 +208,7 @@ describe("addPawn tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 
@@ -279,7 +279,7 @@ describe("removePawn tests", () => {
 
 	beforeEach(() => {
 		player1 = new PrettyDumbPlayer();
-		player1.startGame(Color.Blue);
+		player1.startGame(Color.blue);
 	
 		board = new Board([player1]);
 

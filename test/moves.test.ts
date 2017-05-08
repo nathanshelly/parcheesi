@@ -29,10 +29,10 @@ describe("Filename: moves.test.ts\n\nEnter move cheats", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -123,10 +123,10 @@ describe("Legal enter moves:", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -198,10 +198,10 @@ describe("Forward move cheats:", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -387,10 +387,10 @@ describe("Legal forward moves:", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         

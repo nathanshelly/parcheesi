@@ -16,10 +16,10 @@ describe("First pawn movers", () => {
 
   before(() => {
     mover = new FirstPawnMover();
-    mover.startGame(Color.Blue);
+    mover.startGame(Color.blue);
 
     dummy = new FirstPawnMover();
-    dummy.startGame(Color.Red);
+    dummy.startGame(Color.red);
   });
 
   beforeEach(() => {

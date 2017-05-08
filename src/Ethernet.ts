@@ -1,4 +1,5 @@
-import * as t from './Translator'
+import * as e from './Encoder'
+import * as d from './Decoder'
 
 import { Board } from './Board'
 import { _Move } from './_Move'
@@ -13,17 +14,17 @@ export class Ethernet {
 
 	getPlayerMoves(board_string: string): string {
 		let board: Board, dice: number[];
-		[board, dice] = t.doMoveXMLToBoardDice(board_string);
-		return t.movesToMovesXML(this.player.doMove(board, dice));
+		[board, dice] = d.doMoveXMLToBoardDice(board_string);
+		return e.movesToMovesXML(this.player.doMove(board, dice));
 	}
 
 	startGameForPlayer(start_game: string): string {
-		return t.nameResponseXML(this.player.startGame(t.startGameXMLToColor(start_game)));
+		return e.nameResponseXML(this.player.startGame(d.startGameXMLToColor(start_game)));
 	}
 
 	// no XML translation needed because no arguments
 	doublesPenaltyToPlayer(): string {
 		this.player.doublesPenalty();
-		return t.doublesPenaltyResponse();
+		return e.doublesPenaltyResponse();
 	}
 }

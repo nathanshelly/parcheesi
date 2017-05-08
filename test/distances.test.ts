@@ -22,7 +22,7 @@ describe('consumeMove tests:', () => {
 	let pawn: Pawn;
 	
 	beforeEach(() => {
-        pawn = new Pawn(0, Color.Blue)
+        pawn = new Pawn(0, Color.blue)
     });
 	
 	it("should successfully consume unique distance in array", () => {

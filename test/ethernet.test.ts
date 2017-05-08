@@ -38,7 +38,7 @@ describe('startGameForPlayer tests', () => {
 	});
 
 	// it('should return void on doublesPenalty', () => {
-	// 	expect(n_player.startGameForPlayer(Color.Blue)).to.equal(c.TEST_NAME);
+	// 	expect(n_player.startGameForPlayer(Color.blue)).to.equal(c.TEST_NAME);
 	// }); 
 });
 
@@ -52,6 +52,6 @@ describe('startGameForPlayer tests', () => {
 	});
 
 	// it('should return void on doublesPenalty', () => {
-	// 	expect(n_player.startGameForPlayer(Color.Blue)).to.equal(c.TEST_NAME);
+	// 	expect(n_player.startGameForPlayer(Color.blue)).to.equal(c.TEST_NAME);
 	// }); 
 });

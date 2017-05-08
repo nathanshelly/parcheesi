@@ -62,7 +62,7 @@ describe('A board with one player', () => {
 
     before(() => {
         let player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Green);
+        player1.startGame(Color.green);
         
         players = [player1];
     });
@@ -126,16 +126,16 @@ describe('A board with four players', () => {
 
     before(() => {
         let player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Green);
+        player1.startGame(Color.green);
 
         let player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Blue);
+        player2.startGame(Color.blue);
 
         let player3 = new PrettyDumbPlayer();
-        player3.startGame(Color.Red);
+        player3.startGame(Color.red);
 
         let player4 = new PrettyDumbPlayer();
-        player4.startGame(Color.Yellow);
+        player4.startGame(Color.yellow);
         
         players = [player1, player2, player3, player4];
     });

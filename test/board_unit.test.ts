@@ -28,10 +28,10 @@ describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -125,7 +125,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         players = [player1];
         board = new Board(players);
@@ -188,7 +188,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         players = [player1];
         
@@ -287,10 +287,10 @@ describe("getPawnsOfColorInBase tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -334,10 +334,10 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -493,7 +493,7 @@ describe('pawnInBase tests:', () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
     
         board = new Board([player1]);
     });
@@ -509,7 +509,7 @@ describe('pawnInBase tests:', () => {
     });
 
     it('should correctly identify that pawn of unregistered player is not in base spot', () => {
-        expect(() => { board.pawnInBase(new Pawn(0, Color.Green)); }).to.throw(Error);
+        expect(() => { board.pawnInBase(new Pawn(0, Color.green)); }).to.throw(Error);
     });
 });
 
@@ -520,10 +520,10 @@ describe("getPawnsOfColor tests (order matters)", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -579,10 +579,10 @@ describe("moveOnePawnBackToBase tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -672,10 +672,10 @@ describe("findPawn tests", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -746,10 +746,10 @@ describe("getHomeRowStarts ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -772,10 +772,10 @@ describe("getHomeSpots ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -798,10 +798,10 @@ describe("landingWillBop ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -890,7 +890,7 @@ describe("earnedHomeBonus ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
         players = [player1];
         
         board = new Board(players);
@@ -928,10 +928,10 @@ describe("earnedBopBonus ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -1022,10 +1022,10 @@ describe("handleSpecialLandings ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -1034,28 +1034,28 @@ describe("handleSpecialLandings ", () => {
 
 	it("should reward home bonus if given home spot", () => {
 		let landing_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_OFFSET, player1.color);
-		let move = new MoveForward(new Pawn(0, Color.Blue), 1);
+		let move = new MoveForward(new Pawn(0, Color.blue), 1);
 		if(landing_spot !== null)
 			expect(board.handleSpecialLandings(move, landing_spot)).to.equal(c.HOME_SPOT_BONUS);
     });
 
 	it("should not reward home bonus if given main ring spot", () => {
 		let landing_spot = board.getSpotAtOffsetFromEntry(c.OFFSET_BETWEEN_ENTRIES, player1.color);
-		let move = new MoveForward(new Pawn(0, Color.Blue), 1);
+		let move = new MoveForward(new Pawn(0, Color.blue), 1);
 		if(landing_spot !== null)
 			expect(board.handleSpecialLandings(move, landing_spot)).to.be.null;
     });
 
 	it("should not reward home bonus if given home row spot", () => {
 		let landing_spot = board.getSpotAtOffsetFromEntry(c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color);
-		let move = new MoveForward(new Pawn(0, Color.Blue), 1);
+		let move = new MoveForward(new Pawn(0, Color.blue), 1);
 		if(landing_spot !== null)
 			expect(board.handleSpecialLandings(move, landing_spot)).to.be.null;
     });
 
 	it("should not reward home bonus if given base spot", () => {
 		let landing_spot = board.getBaseSpot(player1.color)
-		let move = new MoveForward(new Pawn(0, Color.Blue), 1);
+		let move = new MoveForward(new Pawn(0, Color.blue), 1);
 		if(landing_spot !== null)
 			expect(board.handleSpecialLandings(move, landing_spot)).to.be.null;
     });
@@ -1144,10 +1144,10 @@ describe("baseSpots ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Red);
+        player2.startGame(Color.red);
 
         players = [player1, player2];
         
@@ -1168,7 +1168,7 @@ describe("areAllPawnsOut ", () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
         players = [player1];
         
         board = new Board(players);
@@ -1207,10 +1207,10 @@ describe('blockadeOnEntrySpot tests:', () => {
 
     beforeEach(() => {
         player1 = new PrettyDumbPlayer();
-        player1.startGame(Color.Blue);
+        player1.startGame(Color.blue);
 
         player2 = new PrettyDumbPlayer();
-        player2.startGame(Color.Green);
+        player2.startGame(Color.green);
 
         players = [player1, player2];
         

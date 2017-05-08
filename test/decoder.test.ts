@@ -22,10 +22,10 @@ describe('Filename: encoder.test.ts\n\nstartGameXMLToColor tests', () => {
 		let green_text = '<start-game>green</start-game>';
 		let yellow_text = '<start-game>yellow</start-game>';
 
-		expect(d.startGameXMLToColor(red_text)).to.equal(Color.Red);
-		expect(d.startGameXMLToColor(blue_text)).to.equal(Color.Blue);
-		expect(d.startGameXMLToColor(green_text)).to.equal(Color.Green);
-		expect(d.startGameXMLToColor(yellow_text)).to.equal(Color.Yellow);
+		expect(d.startGameXMLToColor(red_text)).to.equal(Color.red);
+		expect(d.startGameXMLToColor(blue_text)).to.equal(Color.blue);
+		expect(d.startGameXMLToColor(green_text)).to.equal(Color.green);
+		expect(d.startGameXMLToColor(yellow_text)).to.equal(Color.yellow);
 	});
 });
 
