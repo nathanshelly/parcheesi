@@ -4,6 +4,11 @@ import { _Move } from './_Move';
 import { Color } from './Color';
 import { Board } from './Board';
 
+import * as enc from './Encoder';
+import * as dec from './Decoder';
+
+import request = require('sync-request');
+
 export class ServerNPlayer implements _Player {
 	url: string | null;
 	private localPlayer: _Player | null;
@@ -25,22 +30,34 @@ export class ServerNPlayer implements _Player {
 		if (this.localPlayer !== null)
 			return this.localPlayer.startGame(color);
 
-		// Translate color to XML
-		// Post off to url
-		// Return the response
+		let xml = enc.colorToStartGameXML(color); // Translate color to XML
 
-		return "dongle"
+		// Post off to url, synchronously
+		let res = request("POST", this.url, {
+			"headers": {
+				"Content-Type": "text/xml"
+			},
+			"body": xml
+		});
+
+		return dec.nameFromXML(res.getBody()); // Return the response
 	}
 
 	doMove(board: Board, distances: number[]): _Move[] {
 		if (this.localPlayer !== null)
 			return this.localPlayer.doMove(board, distances);
 
-		// Translate board and distances to XML
-		// Post off to url
-		// Return the response
+		let xml = enc.boardAndDiceToXML(board, distances); // Translate board and distances to XML
 		
-		return [];
+		// Post off to url, synchronously
+		let res = request("POST", this.url, {
+			"headers": {
+				"Content-Type": "text/xml"
+			},
+			"body": xml
+		});
+		
+		return dec.movesFromXML(res.getBody()); // Return the response
 	}
 
 	doublesPenalty(): void {

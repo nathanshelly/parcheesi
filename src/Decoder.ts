@@ -17,6 +17,15 @@ export function startGameXMLToColor(start_game: string): Color {
 	return Color[color['start-game'] as string];
 }
 
+export function nameFromXML(xml: string): string {
+	let name: object = parser.xml2js(xml);
+	return name["name"];
+}
+
+export function movesFromXML(xml: string): _Move[] {
+	return [];
+}
+
 export function doMoveXMLToBoardDice(board_and_dice_xml: string): [Board, number[]] {
 	// let board_and_dice: object = parser.xml2js(board)
 
@@ -71,3 +80,4 @@ export function pawnXMLToPawn(pawn: string): Pawn {
 export function idXMLToId(id: string): number {
 	return 0;
 }
+

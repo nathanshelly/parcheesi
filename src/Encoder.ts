@@ -12,7 +12,11 @@ import { MoveForward } from './MoveForward'
 
 var parser = new x2js();
 
-// name - request and response translation
+/* Wrap a color to send a start-game */
+export function colorToStartGameXML(color: Color): string {
+	return "<start-game>" + Color[color] + "</start-game>";
+}
+
 export function nameResponseXML(name: string): string {
 	return '<name>' + name + '</name>';
 }
@@ -22,7 +26,6 @@ export function doublesPenaltyResponse() {
 	return '<void></void>';
 }
 
-// response translation
 export function movesToMovesXML(moves: _Move[]): string {
 	return 'damn good moves';
 }
@@ -34,3 +37,9 @@ export function moveToMoveXML(move: _Move): string {
 export function idToIdXML(id: number): string {
 	return '<id>' + id.toString() + '</id>';
 }
+
+/* Boards r hard */
+export function boardAndDiceToXML(board: Board, distances: number[]): string {
+	return "what a lovely board"
+}
+
