@@ -1,6 +1,6 @@
 .PHONY: all clean test tar cover
 
-all:
+all: clean
 	tsc -p .
 
 clean:

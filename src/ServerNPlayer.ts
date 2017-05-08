@@ -20,6 +20,8 @@ export class ServerNPlayer implements _Player {
 	}
 
 	startGame(color: Color): string {
+		this.color = color;
+
 		if (this.localPlayer !== null)
 			return this.localPlayer.startGame(color);
 

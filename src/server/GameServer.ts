@@ -39,7 +39,12 @@ class GameServer extends Server {
 
 	start(port: number) {
 		this.app.listen(port, () => { this.listen_callback(port) });
-		// this.game.players.startGame() -> Start the game for each player
+
+		// Start the game for each player
+		this.game.players.forEach((p, i) => {
+			p.startGame(i);
+		});
+
 		this.game.start();
 	}
 }
