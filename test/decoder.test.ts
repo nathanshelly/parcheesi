@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 import * as e from '../src/Encoder'
-import * as d from '../src/Decoder'
+import * as dec from '../src/Decoder'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -22,10 +22,10 @@ describe('Filename: encoder.test.ts\n\nstartGameXMLToColor tests', () => {
 		let green_text = '<start-game>green</start-game>';
 		let yellow_text = '<start-game>yellow</start-game>';
 
-		expect(d.startGameXMLToColor(red_text)).to.equal(Color.red);
-		expect(d.startGameXMLToColor(blue_text)).to.equal(Color.blue);
-		expect(d.startGameXMLToColor(green_text)).to.equal(Color.green);
-		expect(d.startGameXMLToColor(yellow_text)).to.equal(Color.yellow);
+		expect(dec.startGameXMLToColor(red_text)).to.equal(Color.red);
+		expect(dec.startGameXMLToColor(blue_text)).to.equal(Color.blue);
+		expect(dec.startGameXMLToColor(green_text)).to.equal(Color.green);
+		expect(dec.startGameXMLToColor(yellow_text)).to.equal(Color.yellow);
 	});
 });
 

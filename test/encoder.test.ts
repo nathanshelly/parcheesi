@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
-import * as e from '../src/Encoder'
-import * as d from '../src/Decoder'
+import * as enc from '../src/Encoder'
+import * as dec from '../src/Decoder'
 import * as c from '../src/Constants'
 
 import { Pawn } from '../src/Pawn'
@@ -20,7 +20,7 @@ describe('nameResponseXML tests', () => {
 		let names = ['Sasha', 'Nathan', c.TEST_NAME];
 
 		let res = names.every(name => {
-			return '<name>' + name + '</name>' === e.nameResponseXML(name);
+			return '<name>' + name + '</name>' === enc.nameResponseXML(name);
 		});
 
 		expect(res).to.equal(true);
@@ -29,6 +29,6 @@ describe('nameResponseXML tests', () => {
 
 describe('doublesPenalty test', () => { 
 	it('should return <void></void>', () => {
-		expect(e.doublesPenaltyResponse()).to.equal('<void></void>');
+		expect(enc.doublesPenaltyResponse()).to.equal('<void></void>');
 	});
 });
