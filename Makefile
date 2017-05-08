@@ -14,3 +14,6 @@ cover: clean all
 
 tar:
 	tar -cvf submission.tgz Makefile src/ test/ package.json tsconfig.json
+
+server: clean all
+	ts-node server/server.ts
