@@ -1,15 +1,15 @@
 import express = require('express');
 
-import { NPlayer } from '../NPlayer';
+import { Ethernet } from '../Ethernet';
 import { FirstPawnMover } from '../FirstPawnMover';
 
 export abstract class Server {
 	protected app: express.Application;
-	protected n_player: NPlayer;
+	protected n_player: Ethernet;
 
 	constructor() {
 		this.app = express();
-		this.n_player = new NPlayer(new FirstPawnMover());
+		this.n_player = new Ethernet(new FirstPawnMover());
 	}
 
 	abstract init_routes(): void;

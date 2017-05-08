@@ -26,6 +26,8 @@ export class ServerNPlayer implements _Player {
 		// Translate color to XML
 		// Post off to url
 		// Return the response
+
+		return "dongle"
 	}
 
 	doMove(board: Board, distances: number[]): _Move[] {
@@ -35,6 +37,8 @@ export class ServerNPlayer implements _Player {
 		// Translate board and distances to XML
 		// Post off to url
 		// Return the response
+		
+		return [];
 	}
 
 	doublesPenalty(): void {

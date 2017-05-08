@@ -60,4 +60,3 @@ export const N_COLORS = Object.keys(Color).length / 2;
 export const TEST_BASE_INDEX = -1;
 export const TEST_NAME = "Rǝad";
 
-xml_to_json()
