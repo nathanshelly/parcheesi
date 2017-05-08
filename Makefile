@@ -15,5 +15,8 @@ cover: clean all
 tar:
 	tar -cvf submission.tgz Makefile src/ test/ package.json tsconfig.json
 
-server: clean all
-	ts-node src/server/server.ts
+game_server: clean all
+	ts-node src/server/GameServer.ts
+
+player_server: clean all
+	ts-node src/server/PlayerServer.ts

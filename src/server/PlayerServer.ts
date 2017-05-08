@@ -1,15 +1,18 @@
 import express = require('express');
 import * as config from './player_config';
 
+import { Ethernet } from '../Ethernet';
 import { Server } from './Server';
 
 class PlayerServer extends Server {
+	private n_player: Ethernet;
+
 	constructor() {
 		super();
 	}
 
-	listen_callback(port: number) {
-		console.log(`Listening on port ${port}...`);
+	private listen_callback(port: number) {
+		console.log(`Player server listening on port ${port}...`);
 	}
 
 	init_routes() {
@@ -42,6 +45,11 @@ class PlayerServer extends Server {
 	
 		res.set('Content-Type', 'text/xml');
 		res.send(name);
+	}
+
+	start(port: number) {
+		this.init_routes();
+		this.app.listen(port, () => { this.listen_callback(port) });
 	}
 }
 
