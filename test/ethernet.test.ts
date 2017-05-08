@@ -7,9 +7,9 @@ import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Player } from '../src/_Player'
 import { Ethernet } from '../src/Ethernet'
-import { PrettyDumbPlayer } from '../src/BasicPlayer'
 import { MoveEnter } from '../src/MoveEnter'
 import { MoveForward } from '../src/MoveForward'
+import { PrettyDumbPlayer } from '../src/BasicPlayer'
 
 import { expect } from 'chai';
 import 'mocha';

@@ -26,11 +26,10 @@ export function movesFromXML(xml: string): _Move[] {
 	return [];
 }
 
-export function doMoveXMLToBoardDice(board_and_dice_xml: string): [Board, number[]] {
-	// let board_and_dice: object = parser.xml2js(board)
+export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] {
+	let body: object = parser.xml2js(board_and_dice);
 
-	// placeholder values
-	return [new Board([new PrettyDumbPlayer()]), [1]];
+	return [boardJSONToBoard(body['board']), diceJSONToDice(body['dice'])];
 }
 
 // Board construction
@@ -66,8 +65,6 @@ export function diceJSONToDice(dice: object): number[] {
 export function dieJSONToDie(die: object): number {
 	return 0;
 }
-
-
 
 export function distanceXMLToDistance(distance: string): number {
 	return 0;

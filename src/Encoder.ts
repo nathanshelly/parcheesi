@@ -21,7 +21,7 @@ export function nameResponseXML(name: string): string {
 	return '<name>' + name + '</name>';
 }
 
-// doubles-penalty - encoding
+// only response is void
 export function doublesPenaltyResponse() {
 	return '<void></void>';
 }
