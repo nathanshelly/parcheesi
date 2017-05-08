@@ -1,53 +1,24 @@
 import express = require('express');
-import * as config from './config';
 
-import { Color } from '../Color';
-import { Pawn } from '../Pawn';
+import { NPlayer } from '../NPlayer';
+import { FirstPawnMover } from '../FirstPawnMover';
 
-class PlayerServer {
-	app: express.Application;
+export abstract class Server {
+	protected app: express.Application;
+	protected n_player: NPlayer;
 
 	constructor() {
 		this.app = express();
+		this.n_player = new NPlayer(new FirstPawnMover());
 	}
 
-	start() {
-		this.app.listen(config.PORT, this._listen);
-	}
+	abstract init_routes(): void;
 
-	private _listen() {
-		console.log(`Listening on port ${config.PORT}...`);
-	}
+	abstract listen_callback(port: number): void;
 
-	private init_routes() {
-		
-		this.app.get('/', this.root_route);
-
-		this.app.post('/do_move', this.do_move_route);
-
-		this.app.post('/start_game', this.start_game_route);
-	}
-
-	private root_route(req: express.Request, res: express.Response) {
-		res.send("Hello world!");
-	}
-
-	private do_move_route(req: express.Request, res: express.Response) {
-		const xml: string = req.body;
-		
-		// const moves = nplayer.doMove(xml);
-
-		res.set('Content-Type', 'text/xml');
-		//res.send(moves);
-	}
-
-	private start_game_route(req: express.Request, res: express.Response) {
-		const xml: string = req.body;
-
-		// const name = nplayer.startGame(xml);
-	
-		res.set('Content-Type', 'text/xml');
-		// res.send(name);
+	start(port: number) {
+		this.init_routes();
+		this.app.listen(port, this.listen_callback);
 	}
 }
 
