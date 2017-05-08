@@ -1,11 +1,16 @@
 import express = require('express');
 import * as config from './config';
 
+import { NPlayer } from '../NPlayer';
+import { FirstPawnMover } from '../FirstPawnMover';
+
 class PlayerServer {
 	private app: express.Application;
+	private n_player: NPlayer;
 
 	constructor() {
 		this.app = express();
+		this.n_player = new NPlayer(new FirstPawnMover());
 	}
 
 	start() {
@@ -31,26 +36,22 @@ class PlayerServer {
 	private do_move_route(req: express.Request, res: express.Response) {
 		console.log(`do_move request from ${req.originalUrl}, IP: ${req.ip}`);
 
-		const xml: string = req.body;
+		const xml_string: string = req.body;
 		
-		// const moves = nplayer.doMove(xml);
+		const moves = this.n_player.getPlayerMoves(xml_string);
 
 		res.set('Content-Type', 'text/xml');
-		//res.send(moves);
-		
-		res.send("do_move out to lunch - try again later");
+		res.send(moves);
 	}
 
 	private start_game_route(req: express.Request, res: express.Response) {
 		console.log(`start_game request from ${req.originalUrl}, IP: ${req.ip}`);
-		const xml: string = req.body;
+		const xml_string: string = req.body;
 
-		// const name = nplayer.startGame(xml);
+		const name = this.n_player.startGameForPlayer(xml_string);
 	
 		res.set('Content-Type', 'text/xml');
-		// res.send(name);
-
-		res.send("start_game out to dinner - try again tomorrow");
+		res.send(name);
 	}
 }
 
