@@ -18,12 +18,12 @@ export class Ethernet {
 	}
 
 	startGameForPlayer(start_game: string): string {
-		return t.nameToNameXML(this.player.startGame(t.startGameXMLToColor(start_game)));
+		return t.nameResponseXML(this.player.startGame(t.startGameXMLToColor(start_game)));
 	}
 
 	// no XML translation needed because no arguments
 	doublesPenaltyToPlayer(): string {
 		this.player.doublesPenalty();
-		return '<void></void>'
+		return t.doublesPenaltyResponse();
 	}
 }
