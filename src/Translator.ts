@@ -7,23 +7,34 @@ import { _Move } from './_Move'
 import { MoveForward } from './MoveForward'
 import { PrettyDumbPlayer } from './BasicPlayer'
 
-export function translateXMLToBoard(board: string): [Board, number[]] {
+export function startGameXMLToColor(start_game: string): Color {
+	console.log(xml_to_json.toJson(start_game));
+
+	// placeholder values
+	return Color.Blue;
+}
+
+export function nameToNameXML(name: string): string {
+	return '<name>' + name + '</name>';
+}
+
+export function doMoveXMLToBoardDice(board: string): [Board, number[]] {
 	console.log(xml_to_json.toJson(board));
 
 	// placeholder values
 	return [new Board([new PrettyDumbPlayer()]), [1]];
 }
 
-export function translateMovesToXML(moves: _Move[]): _Move[] {
+export function movesToMovesXML(moves: _Move[]): string {
 	console.log(xml_to_json.toXml(moves));
 
-	// placeholder values
-	return [new MoveForward(new Pawn(2, Color.Blue), 1)];
+	// placeholder return
+	return 'damn good moves';
 }
 
-export function translateStartGameXMLToColor(start_game: string): Color {
-	console.log(xml_to_json.toJson(start_game));
+// currently no doubles penalty translation, handled solely by server paths
+// also no void translation - it's void
 
-	// placeholder values
-	return Color.Blue;
-}
+// export function boardXMLToBoard(board: string): Board {
+	
+// }

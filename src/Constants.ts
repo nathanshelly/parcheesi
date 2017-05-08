@@ -39,9 +39,25 @@ export const COLOR_HOME_AND_ENTRY = {
         "ENTRY_FROM_BASE": 55},
 }
 
+export const COLOR_STRING_TO_ENUM = {
+    'blue': 0,
+    'red': 1,
+    'green': 2,
+    'yellow': 3
+}
+
+export const COLOR_ENUM_TO_STRING = {
+     0: 'blue',
+     1: 'red',
+     2: 'green',
+     3: 'yellow'
+}
 
 // USED ONLY IN TEST METHODS
 
 // divide by two cuz typescript enum
 export const N_COLORS = Object.keys(Color).length / 2;
 export const TEST_BASE_INDEX = -1;
+export const TEST_NAME = "Rǝad";
+
+xml_to_json()

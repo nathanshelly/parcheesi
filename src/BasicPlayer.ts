@@ -1,3 +1,5 @@
+import * as c from './Constants'
+
 import { _Player } from './_Player'
 import { _Move } from './_Move'
 import { Color } from './Color'
@@ -8,7 +10,7 @@ export abstract class BasicPlayer implements _Player {
 
     startGame(color: Color): string {
         this.color = color;
-        return "Pumpkin spice lattes are delicious";
+        return c.TEST_NAME;
     };
 
     doublesPenalty(): void { console.log("Fricking doubles."); };
