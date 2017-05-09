@@ -53,11 +53,7 @@ export function doMoveToXML(board: Board, distances: number/* 1-6 */[]): string 
 }
 
 export function diceToXML(dice: number[]): string {
-	let str_dice = dice.map(d => {
-		return dieToXML(d);
-	});
-
-	return "<dice>" + _.join(str_dice, "") + "</dice>";
+	return "<dice>" + _.join(dice.map(dieToXML), "") + "</dice>";
 }
 
 export function dieToXML(die: number): string {
