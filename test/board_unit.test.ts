@@ -197,7 +197,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get same spot if offset equals 0", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, 0, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, 0, player1.color) as _Spot;
 		
 		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
@@ -207,7 +207,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get main ring spot at random offset (i.e. 7)", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, 7, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, 7, player1.color) as _Spot;
 		
 		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"] + 7;
 		
@@ -217,7 +217,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get last main ring spot before home row", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET - 1, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET - 1, player1.color) as _Spot;
 		
 		let index = c.COLOR_HOME_AND_ENTRY[player1.color]["HOME_ROW_ENTRY"];
 		
@@ -227,7 +227,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get first spot of home row", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color) as _Spot;
 		
 		let index = 0;
 		
@@ -237,7 +237,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get last spot of home row", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_OFFSET - 1, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, c.ENTRY_TO_HOME_OFFSET - 1, player1.color) as _Spot;
 		
 		let index = c.HOME_ROW_SIZE - 1;
 		
@@ -247,7 +247,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
 	it("should correctly get home spot", () => {
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let spot = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
+		let spot = board.spotRunner(start_spot, c.ENTRY_TO_HOME_OFFSET, player1.color) as _Spot;
 		
 		let index = c.HOME_ROW_SIZE;
 		
@@ -262,7 +262,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, 7);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, blockadeOnSpotChecker);
+		let res = board.spotRunner(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET, player1.color, undefined, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });
@@ -274,7 +274,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn_one, pawn_two], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
 		
 		let start_spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let res = board.getSpotAtOffsetFromSpot(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, blockadeOnSpotChecker);
+		let res = board.spotRunner(start_spot, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1, player1.color, undefined, blockadeOnSpotChecker);
 		
 		expect(res).to.be.null;
     });

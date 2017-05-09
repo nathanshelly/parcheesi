@@ -4,6 +4,7 @@ import * as c from './Constants'
 import { Pawn } from './Pawn'
 import { Color } from './Color'
 import { _Player } from './_Player'
+import { _PawnHandler } from './_PawnHandler'
 
 import { _Move } from './_Move'
 import { MoveEnter } from './MoveEnter'
@@ -62,7 +63,7 @@ export class Board {
 		let new_spot: _Spot;
 
 		if(move instanceof MoveForward)
-			new_spot = this.getSpotAtOffsetFromSpot(old_spot, move.distance, move.pawn.color) as _Spot;
+			new_spot = this.spotRunner(old_spot, move.distance, move.pawn.color) as _Spot;
 		// move is MoveEnter
 		else
 			new_spot = old_spot.next(move.pawn.color) as _Spot;
@@ -139,20 +140,28 @@ export class Board {
 		return spot;
 	}
 
-	getSpotAtOffsetFromSpot(spot: _Spot, distance: number, color: Color, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
+	spotRunner(spot: _Spot, distance: number, color: Color, pawnHandler?: _PawnHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
 		// get spot at an offset, checking any passed in predicates at each spot along the way
 		let next_spot: _Spot | null = spot;
+		let counter = 0;
 		
-		while(distance-- > 0) {
+		while(counter < distance) {
 			if(spot instanceof HomeSpot)
 				// still have distance to go but on home spot
 				return null;
+
+			// before getting next spot because
+			// indexing starts at 0 for manipulating pawns
+			if(pawnHandler !== undefined)
+				pawnHandler.manipulatePawns(next_spot, counter);
 			
 			// next_spot must be spot here
 			next_spot = next_spot.next(color) as _Spot;
 
 			if(predicates.some(predicate => { return predicate(next_spot as _Spot); }))
 				return null;
+
+			counter++;
 		}
 
 		return next_spot;
@@ -160,7 +169,7 @@ export class Board {
 
 	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
 		let spot = this.getEntrySpot(color);
-		return this.getSpotAtOffsetFromSpot(spot, distance, color);
+		return this.spotRunner(spot, distance, color);
 	}
 
 	getEntrySpot(color: Color): MainRingSpot {
@@ -232,7 +241,7 @@ export class Board {
 	
 	getHomeSpots(): HomeSpot[] {
 		return this.getHomeRowStarts().map(hrs => {
-			return this.getSpotAtOffsetFromSpot(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
+			return this.spotRunner(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
 		});
 	}
 

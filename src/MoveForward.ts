@@ -33,9 +33,10 @@ export class MoveForward implements _Move {
     // passed in blockadeOnSpotChecker will cause getSpotAtOffsetFromSpot to return null
     // if move attempts to move onto or through blockade
     let blockadeOnSpotChecker = (spot: _Spot) => { return spot.hasBlockade(); };
-    let final_spot: _Spot | null = board.getSpotAtOffsetFromSpot(board.findSpotOfPawn(this.pawn),
+    let final_spot: _Spot | null = board.spotRunner(board.findSpotOfPawn(this.pawn),
                                                     this.distance,
                                                     player.color,
+                                                    undefined,
                                                     blockadeOnSpotChecker);
     if(final_spot === null)
       return false;

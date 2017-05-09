@@ -4,6 +4,7 @@ import * as c from './Constants'
 import { Pawn } from './Pawn'
 import { Board } from './Board'
 import { Color } from './Color'
+import { PawnSetter } from './_PawnHandler'
 import { PrettyDumbPlayer } from './BasicPlayer'
 
 import { _Move } from './_Move'
@@ -24,25 +25,26 @@ export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] 
 }
 
 // Board construction
-export function boardJSONToBoard(board: object): Board {
-	// let board = new Board()
+export function boardJSONToBoard(board_json: object): Board {
+	let board = new Board()
 
-	return new Board();
+	return board;
 }
 
-export function addPawnsInStartJSON(bases: object): void {
+export function addPawnsInStartJSON(bases: object, board: Board): void {
+	
+}
+
+export function addPawnsInMainJSON(main_ring: object, board: Board): void {
+	let pawn_setter = new PawnSetter([[new Pawn(0, 0), 1]], board);
+	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
+}
+
+export function addPawnsInHomeRowJSON(home_rows: object, board: Board): void {
 
 }
 
-export function addPawnsInMainJSON(main_ring: object): void {
-
-}
-
-export function addPawnsInHomeRowJSON(home_rows: object): void {
-
-}
-
-export function addPawnsInHomesJSON(homes: object): void {
+export function addPawnsInHomesJSON(homes: object, board: Board): void {
 
 }
 

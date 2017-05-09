@@ -15,7 +15,7 @@ export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], boar
 	let color: Color = pawns[0].color;
 	
 	let spot: _Spot = board.getEntrySpot(color);
-	let next_spot: _Spot | null = board.getSpotAtOffsetFromSpot(spot, offset, color);
+	let next_spot: _Spot | null = board.spotRunner(spot, offset, color);
 
 	if(next_spot === null)
 		throw new Error('tried to place pawns at invalid offset (ran off board)')

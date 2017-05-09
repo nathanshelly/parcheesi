@@ -27,6 +27,8 @@ export const NUM_DOUBLES_DICE = 2;
 
 export const SAFE_SPOT_INDICES = [4, 11, 16, 21, 28, 33, 38, 45, 50, 55, 62, 67]
 
+export const COLOR_TO_RUN_MAIN_RING = Color.green;
+
 // Because objects suck, please make sure these keys line up correct colors
 export const COLOR_HOME_AND_ENTRY = {
     0: {"HOME_ROW_ENTRY": 33,

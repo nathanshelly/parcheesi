@@ -29,6 +29,8 @@ describe('nameResponseXML tests', () => {
 
 describe('doublesPenalty test', () => { 
 	it('should return <void></void>', () => {
+		dec.boardJSONToBoard({});
+		
 		expect(enc.doublesPenaltyResponse()).to.equal('<void></void>');
 	});
 });
