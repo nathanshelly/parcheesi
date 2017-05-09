@@ -68,6 +68,10 @@ export function startSpotsToXML(board: Board): string {
 	return "<start>" + _.range(c.N_COLORS).map(i => pawnsToXML(board.getPawnsOfColorInBase(i))).join("") + "</start>";
 }
 
+export function homeSpotsToXML(board: Board): string {
+	return "<home>" + board.getHomeSpots().map(home_spot => { return pawnsToXML(home_spot.getLivePawns()); }).join("") + "</home>";
+}
+
 export function pawnsToXML(pawns: Pawn[]): string {
 	return pawns.map(pawnToXML).join("");
 }

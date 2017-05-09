@@ -62,3 +62,10 @@ describe('Base spot encoding', () => {
 		// let board = new Board(); 
 	});
 });
+
+describe('Home spot encoding', () => {
+	it('should encode a board with no pawns in base spots correctly', () => {
+		// Implement this
+		// let board = new Board(); 
+	});
+});
