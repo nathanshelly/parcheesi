@@ -1,4 +1,6 @@
 import * as x2js from 'x2js'
+import _ = require('lodash');
+
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
@@ -44,7 +46,33 @@ export function idToIdXML(id: number): string {
 }
 
 /* Boards r hard */
-export function boardAndDiceToXML(board: Board, distances: number[]): string {
+export function doMoveToXML(board: Board, distances: number/* 1-6 */[]): string {
+
+
 	return "what a lovely board"
+}
+
+export function diceToXML(dice: number[]): string {
+	let str_dice = dice.map(d => {
+		return dieToXML(d);
+	});
+
+	return "<dice>" + _.join(str_dice, "") + "</dice>";
+}
+
+export function dieToXML(die: number): string {
+	return "<die>" + die.toString() + "</die>";
+}
+
+export function startSpotsToXML(board: Board): string {
+	return "<start>" + _.range(c.N_COLORS).map(i => pawnsToXML(board.getPawnsOfColorInBase(i))).join("") + "</start>";
+}
+
+export function pawnsToXML(pawns: Pawn[]): string {
+	return pawns.map(pawnToXML).join("");
+}
+
+export function pawnToXML(pawn: Pawn): string {
+	return "<pawn><color>" + Color[pawn.color] + "</color>" + pawn.id.toString() + "</pawn>";
 }
 

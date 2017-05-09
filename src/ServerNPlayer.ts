@@ -47,7 +47,7 @@ export class ServerNPlayer implements _Player {
 		if (this.localPlayer !== null)
 			return this.localPlayer.doMove(board, distances);
 
-		let xml = enc.boardAndDiceToXML(board, distances); // Translate board and distances to XML
+		let xml = enc.doMoveToXML(board, distances); // Translate board and distances to XML
 		
 		// Post off to url, synchronously
 		let res = request("POST", this.url, {
