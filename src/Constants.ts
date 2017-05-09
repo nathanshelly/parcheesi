@@ -41,6 +41,14 @@ export const COLOR_HOME_AND_ENTRY = {
         "ENTRY_FROM_BASE": 55},
 }
 
+// Encoding
+export const ENTRY_ENCODING_INDICES = {
+	0: 39,
+	1: 22,
+	2: 5,
+	3: 56
+}
+
 // USED ONLY IN TEST METHODS
 
 // divide by two cuz typescript enum

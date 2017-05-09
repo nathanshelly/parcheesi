@@ -34,3 +34,11 @@ describe('doMoveXMLToBoardDice test', () => {
 		// placeholder
 	});
 });
+
+describe('nameFromXML', () => {
+	it('should extract a name correctly', () => {
+		let xml = "<name>sasha</name>";
+		expect(dec.nameFromXML(xml)).to.equal("sasha");
+	});
+});
+

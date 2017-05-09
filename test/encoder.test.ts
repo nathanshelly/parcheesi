@@ -125,3 +125,31 @@ describe("Home spot encoding", () => {
 	});
 });
 
+describe("Main ring encoding", () => {
+	it("should encode a main ring with no pawns in it correctly", () => {
+		let board = new Board();
+
+		expect(enc.mainRingToXML(board)).to.equal("<main></main>");
+	});
+
+	it("should encode a main ring with some pawns in it correctly",  () => {
+		let board = new Board();
+
+		let pawn0 = new Pawn(0, Color.blue)
+		let pawn1 = new Pawn(1, Color.blue)
+		let pawn2 = new Pawn(0, Color.green)
+
+		tm.placePawnsOnGivenColorEntrySpot([pawn0, pawn1], board, Color.blue);
+		tm.placePawnsAtOffsetFromYourEntry([pawn2, null], board, 3);
+
+		let exp =
+			"<main>" +
+			"<piece-loc><pawn><color>blue</color>0</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</piece-loc>" +
+			"<piece-loc><pawn><color>blue</color>1</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</piece-loc>" +
+			"<piece-loc><pawn><color>green</color>0</pawn><loc>" + (c.ENTRY_ENCODING_INDICES[Color.green] + 3).toString() + "</piece-loc>" +
+			"</main>";
+
+		expect(enc.mainRingToXML(board)).to.equal(exp);
+	});
+});
+
