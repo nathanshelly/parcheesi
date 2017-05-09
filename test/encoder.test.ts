@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 import * as enc from '../src/Encoder'
 import * as dec from '../src/Decoder'
 import * as c from '../src/Constants'
+import * as tm from './TestMethods';
 
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
@@ -64,8 +65,41 @@ describe('Base spot encoding', () => {
 });
 
 describe('Home spot encoding', () => {
-	it('should encode a board with no pawns in base spots correctly', () => {
-		// Implement this
-		// let board = new Board(); 
+	it('should encode home spots with no pawns correctly', () => {
+		let board = new Board();
+
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsOnGivenColorEntrySpot([pawns[0], pawns[1]], board, i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], pawns[3]], board, 1);
+		});
+
+		_.range(c.N_COLORS).forEach(i => {
+			expect(board.getPawnsOfColorInBase(i).length).to.equal(0);
+		});
+
+		expect(enc.startSpotsToXML(board)).to.equal("<start></start>");
+	});
+
+	it('should encode base spots with some pawns correctly', () => {
+		let board = new Board();
+
+		_.range(c.N_COLORS - 1).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsOnGivenColorEntrySpot([pawns[0], pawns[1]], board, i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], pawns[3]], board, 1);
+		});
+
+		_.range(c.N_COLORS - 1).forEach(i => {
+			expect(board.getPawnsOfColorInBase(i).length).to.equal(0);
+		});
+
+		// Only yellow should be in the base spots here
+		expect(board.getPawnsOfColorInBase(Color.yellow).length).to.equal(c.MAX_N_PAWNS_BASE);
+
+		let xml = enc.startSpotsToXML(board);
+		let exp = "<start><pawn><color>yellow</color>0</pawn><pawn><color>yellow</color>1</pawn><pawn><color>yellow</color>2</pawn><pawn><color>yellow</color>3</pawn></start>";
+
+		expect(xml).to.equal(exp);
 	});
 });
