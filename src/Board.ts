@@ -39,7 +39,7 @@ export class Board {
 		return null;
 	}
 
-	constructor(players: _Player[]) {
+	constructor() {
 		this.mainRing = _.fill(new Array(c.MAIN_RING_SIZE), null).map((_, i) => {
 			return this.buildMainRingSpot(i);
 		});
@@ -49,10 +49,9 @@ export class Board {
 			sp.index = i; // for debugging purposes
 		});
 
-		for (let i = 0; i < players.length; i++) {
-			let player_color = players[i].color;
-			let entrance_index = this.mainRing[c.COLOR_HOME_AND_ENTRY[player_color]["ENTRY_FROM_BASE"]];
-			this.bases[player_color] = new BaseSpot(entrance_index, player_color);
+		for (let i = 0; i < c.N_COLORS; i++) {
+			let entrance_index = this.mainRing[c.COLOR_HOME_AND_ENTRY[i]["ENTRY_FROM_BASE"]];
+			this.bases[i] = new BaseSpot(entrance_index, i);
 		}
 	}
 

@@ -35,7 +35,7 @@ describe("Filename: board_unit.test.ts\n\ngetBlockadesOfColor tests", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should correctly identify no blockades when no pawns on board", () => {
@@ -128,7 +128,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
         player1.startGame(Color.blue);
 
         players = [player1];
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should correctly get main ring spot outside base", () => {
@@ -192,7 +192,7 @@ describe("getSpotAtOffsetFromSpot tests", () => {
 
         players = [player1];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly get same spot if offset equals 0", () => {
@@ -294,7 +294,7 @@ describe("getPawnsOfColorInBase tests", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
     
 	it("should correctly find all pawns in home", () => {
@@ -341,7 +341,7 @@ describe("getPawnsOfColorOnBoard tests (order matters)", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
     
 	it("should correctly find zero pawns on board", () => {
@@ -495,7 +495,7 @@ describe('pawnInBase tests:', () => {
         player1 = new PrettyDumbPlayer();
         player1.startGame(Color.blue);
     
-        board = new Board([player1]);
+        board = new Board();
     });
     
     it('should correctly identify that blue 0 pawn is in base spot', () => {
@@ -506,10 +506,6 @@ describe('pawnInBase tests:', () => {
 		let pawn = new Pawn(0, player1.color);
 		board.getBaseSpot(player1.color).removePawn(pawn);
         expect(board.pawnInBase(pawn)).to.equal(false);
-    });
-
-    it('should correctly identify that pawn of unregistered player is not in base spot', () => {
-        expect(() => { board.pawnInBase(new Pawn(0, Color.green)); }).to.throw(Error);
     });
 });
 
@@ -527,7 +523,7 @@ describe("getPawnsOfColor tests (order matters)", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
     
 	it("should correctly find all pawns", () => {
@@ -586,7 +582,7 @@ describe("moveOnePawnBackToBase tests", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly move back one of several pawns on main ring spot", () => {
@@ -679,7 +675,7 @@ describe("findPawn tests", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly find a pawn in base spot", () => {
@@ -753,7 +749,7 @@ describe("getHomeRowStarts ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly find c.NUM_PLAYERS home row spots", () => {
@@ -779,7 +775,7 @@ describe("getHomeSpots ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly find c.NUM_PLAYERS home spots", () => {
@@ -805,7 +801,7 @@ describe("landingWillBop ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should correctly report MoveForward that pawn landing on single pawn of other color on non safe spot is a bop", () => {
@@ -893,7 +889,7 @@ describe("earnedHomeBonus ", () => {
         player1.startGame(Color.blue);
         players = [player1];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should reward home bonus if given home spot", () => {
@@ -935,7 +931,7 @@ describe("earnedBopBonus ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should reward and move back pawn for bop of MoveForward pawn landing on single pawn of other color on non safe spot", () => {
@@ -1029,7 +1025,7 @@ describe("handleSpecialLandings ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should reward home bonus if given home spot", () => {
@@ -1151,7 +1147,7 @@ describe("baseSpots ", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should always know they don't have a blockade", () => {
@@ -1171,7 +1167,7 @@ describe("areAllPawnsOut ", () => {
         player1.startGame(Color.blue);
         players = [player1];
         
-        board = new Board(players);
+        board = new Board();
     });
 
 	it("should return true if all pawns are out of the base", () => {
@@ -1214,7 +1210,7 @@ describe('blockadeOnEntrySpot tests:', () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
     
     it('should correctly identify if blockade of same color exists on home spot', () => {

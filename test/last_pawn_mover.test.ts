@@ -23,7 +23,7 @@ describe("Last pawn movers", () => {
   });
 
   beforeEach(() => {
-    board = new Board([mover, dummy]);
+    board = new Board();
   });
 
   it("should conclude on an enter move for a pawn in the base", () => {

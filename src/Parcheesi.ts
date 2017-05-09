@@ -22,7 +22,7 @@ export class Parcheesi implements _Parcheesi {
 
 	// start a game
 	start(): void {
-		this.board = new Board(this.players);
+		this.board = new Board();
 	};
 
 	// start a real game
@@ -30,7 +30,7 @@ export class Parcheesi implements _Parcheesi {
 		if(this.players.length === 0)
 			throw new Error("No players!")
 
-		this.board = new Board(this.players);
+		this.board = new Board();
 
 		let turn: number = 0;
 		// player turns loop

@@ -29,13 +29,12 @@ function checkHomeRows(hr_starts: HomeRowSpot[]) {2
     });
 }
 
+// TODO - no longer such a thing as building a board with variable numbers of players
+
+
 describe('Filename: board_building.test.ts\n\nA board with no players', () => {
-    let board = new Board([]);
-
-    it('should have no bases', () => {
-        expect(Object.keys(board.bases).length).to.equal(0);
-    });
-
+    let board = new Board();
+    
     it('should have the right length main ring', () => {
         expect(board.mainRing.length).to.equal(c.MAIN_RING_SIZE);
     });
@@ -68,11 +67,7 @@ describe('A board with one player', () => {
     });
 
     beforeEach(() => {
-        board = new Board(players);
-    });
-
-    it('should have one base', () => {
-        expect(Object.keys(board.bases).length).to.equal(1);
+        board = new Board();
     });
 
     it('should have a main ring of the right length', () => {
@@ -141,7 +136,7 @@ describe('A board with four players', () => {
     });
 
     beforeEach(() => {
-        board = new Board(players);
+        board = new Board();
     });
 
     it('should have 4 bases', () => {

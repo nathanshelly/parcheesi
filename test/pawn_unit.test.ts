@@ -28,14 +28,13 @@ describe('Filename: pawn_unit.test.ts\n\nUnit tests for verify, isExpectedcolor 
         expect(pawn.hasIdInLegalRange()).to.equal(false);
     });
 
-		// verify tests
-
-		it('should correctly determine that pawn is illegal because of color', () => {
+    // verify tests
+    it('should correctly determine that pawn is illegal because of color', () => {
         let pawn = new Pawn(1, Color.blue);
         expect(pawn.verify(Color.red)).to.equal(false);
     });
 
-		it('should correctly determine that pawn is illegal because of id', () => {
+    it('should correctly determine that pawn is illegal because of id', () => {
         let pawn = new Pawn(5, Color.blue);
         expect(pawn.verify(Color.blue)).to.equal(false);
     });
@@ -45,7 +44,7 @@ describe('Filename: pawn_unit.test.ts\n\nUnit tests for verify, isExpectedcolor 
         expect(pawn.verify(Color.green)).to.equal(false);
     });
 		
-		it('should correctly determine that pawn is legal', () => {
+    it('should correctly determine that pawn is legal', () => {
         let pawn = new Pawn(1, Color.blue);
         expect(pawn.verify(Color.blue)).to.equal(true);
     });

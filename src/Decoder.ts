@@ -25,7 +25,9 @@ export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] 
 
 // Board construction
 export function boardJSONToBoard(board: object): Board {
-	return new Board([new PrettyDumbPlayer()]);
+	// let board = new Board()
+
+	return new Board();
 }
 
 export function addPawnsInStartJSON(bases: object): void {

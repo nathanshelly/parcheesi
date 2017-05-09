@@ -30,7 +30,7 @@ describe("Filename: spot_unit.test.ts\n\ngetLivePawns tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);
@@ -73,7 +73,7 @@ describe("nPawn tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);
@@ -115,7 +115,7 @@ describe("isEmpty tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);
@@ -151,7 +151,7 @@ describe("colorOfPawns tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 	});
 
 	it("should correctly say spot has pawns of color blue", () => {
@@ -172,7 +172,7 @@ describe("pawnExists tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);
@@ -210,7 +210,7 @@ describe("addPawn tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);
@@ -281,7 +281,7 @@ describe("removePawn tests", () => {
 		player1 = new PrettyDumbPlayer();
 		player1.startGame(Color.blue);
 	
-		board = new Board([player1]);
+		board = new Board();
 
 		pawn_one 		= new Pawn(0, player1.color);
 		pawn_two 		= new Pawn(1, player1.color);

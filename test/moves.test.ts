@@ -36,7 +36,7 @@ describe("Filename: moves.test.ts\n\nEnter move cheats", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should not allow entrance of a pawn of illegal ID", () => {
@@ -130,7 +130,7 @@ describe("Legal enter moves:", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should allow an enter move of a pawn in the base, with no blockade, with a five", () => {
@@ -205,7 +205,7 @@ describe("Forward move cheats:", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should not allow movement of a pawn of illegal ID", () => {
@@ -394,7 +394,7 @@ describe("Legal forward moves:", () => {
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
     
     it("should allow movement from entry spot to a valid main ring spot", () => {

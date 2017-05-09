@@ -35,7 +35,7 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
 
         players = [player1, player2];
         
-        board = new Board(players);
+        board = new Board();
     });
 
     it("should perform entrance moves correctly", () => {
