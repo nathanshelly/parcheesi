@@ -25,6 +25,6 @@ export class Ethernet {
 	// no XML translation needed because no arguments
 	doublesPenaltyToPlayer(): string {
 		this.player.doublesPenalty();
-		return enc.doublesPenaltyResponse();
+		return enc.voidXML();
 	}
 }

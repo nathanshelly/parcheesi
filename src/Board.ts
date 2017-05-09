@@ -10,7 +10,7 @@ import { _Move } from './_Move'
 import { MoveEnter } from './MoveEnter'
 import { MoveForward } from './MoveForward'
 
-import { _Spot } from './_Spot'
+import { _Spot } from './_Spot';
 import { BaseSpot } from './BaseSpot'
 import { HomeSpot } from './HomeSpot'
 import { HomeRowSpot } from './HomeRowSpot'

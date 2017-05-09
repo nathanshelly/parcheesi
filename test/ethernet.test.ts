@@ -14,7 +14,7 @@ import { PrettyDumbPlayer } from '../src/BasicPlayer'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: n_player.test.ts\n\ndoublesPenaltyToPlayer tests', () => {
+describe('Filename: ethernet.test.ts\n\ndoublesPenaltyToPlayer tests', () => {
 	let player: _Player;
 	let n_player: Ethernet;
 	
