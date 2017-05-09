@@ -17,13 +17,18 @@ export function colorToStartGameXML(color: Color): string {
 	return "<start-game>" + Color[color] + "</start-game>";
 }
 
-export function nameResponseXML(name: string): string {
-	return '<name>' + name + '</name>';
+/* Doubles penalty */
+export function doublesPenaltyXML(): string {
+	return "<doubles-penalty></doubles-penalty>";
 }
 
-// only response is void
-export function doublesPenaltyResponse() {
+export function voidXML(): string {
 	return '<void></void>';
+}
+
+/* Names */
+export function nameResponseXML(name: string): string {
+	return '<name>' + name + '</name>';
 }
 
 export function movesToMovesXML(moves: _Move[]): string {

@@ -64,9 +64,17 @@ export class ServerNPlayer implements _Player {
 		if (this.localPlayer !== null)
 			this.localPlayer.doublesPenalty();
 
-		// Build the XML message
-		// Post off to url
-		// Return
+		let xml = enc.doublesPenaltyXML(); // Build the XML message
+
+		// Post off to url, synchronously
+		let res = request("POST", this.url, {
+			"headers": {
+				"Content-Type": "text/xml"
+			},
+			"body": xml
+		});
+
+		return;
 	}
 }
 
