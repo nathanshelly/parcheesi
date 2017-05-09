@@ -64,8 +64,8 @@ describe('Base spot encoding', () => {
 	});
 });
 
-describe('Home spot encoding', () => {
-	it('should encode home spots with no pawns correctly', () => {
+describe('Base spot encoding', () => {
+	it('should encode base spots with no pawns correctly', () => {
 		let board = new Board();
 
 		_.range(c.N_COLORS).forEach(i => {
@@ -103,3 +103,25 @@ describe('Home spot encoding', () => {
 		expect(xml).to.equal(exp);
 	});
 });
+
+describe("Home spot encoding", () => {
+	it('should encode home spots with no pawns correctly', () => {
+		let board = new Board();
+		expect(enc.homeSpotsToXML(board)).to.equal("<home></home>");
+	});
+
+	it('should encode home spots with some pawns correctly', () => {
+		let board = new Board();
+
+		let yellows = [new Pawn(0, Color.yellow), new Pawn(1, Color.yellow), new Pawn(2, Color.yellow), new Pawn(3, Color.yellow)];
+
+		tm.placePawnsAtOffsetFromYourEntry([yellows[0], yellows[1]], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([yellows[2], yellows[3]], board, c.ENTRY_TO_HOME_OFFSET);
+
+		let xml = enc.homeSpotsToXML(board);
+		let exp = "<home><pawn><color>yellow</color>0</pawn><pawn><color>yellow</color>1</pawn><pawn><color>yellow</color>2</pawn><pawn><color>yellow</color>3</pawn></home>";
+
+		expect(xml).to.equal(exp);
+	});
+});
+
