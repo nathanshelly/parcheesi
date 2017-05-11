@@ -35,39 +35,44 @@ export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] 
 
 // Board construction
 export function boardJSONToBoard(board_json: object): Board {
-	let board = new Board()
+	let board = new Board();
+
+	// pawns in start automatically added by board constructor
+	addPawnsInMainJSON(board_json['main'], board);
+	addPawnsInHomeRowsJSON(board_json['home-rows'], board);
+	addPawnsInHomesJSON(board_json['home'], board);
 
 	return board;
 }
 
-export function addPawnsInStartJSON(bases: object, board: Board): void {
-	
-}
-
 export function addPawnsInMainJSON(main_ring: object, board: Board): void {
-	let pawn_setter = new PawnSetter([[new Pawn(0, 0), 1]], board);
+	main_ring = arrayIfJSONIsNotArray(main_ring['piece-loc']);
+
+	let pawn_locs: [Pawn, number][] = [];
+	let pawn_setter = new PawnSetter(pawn_locs, board, true);
 	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
 }
 
-export function addPawnsInHomeRowJSON(home_rows: object, board: Board): void {
-
+export function addPawnsInHomeRowsJSON(home_rows: object, board: Board): void {
+	home_rows = arrayIfJSONIsNotArray(home_rows['piece-loc']);
 }
 
 export function addPawnsInHomesJSON(homes: object, board: Board): void {
-
+	homes = arrayIfJSONIsNotArray(homes['pawn']);
 }
 
 export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
 	return [new Pawn(0, 0), 0];
 }
 
-// Dice
-export function diceJSONToDice(dice: object): number[] {
-	return [0];
+
+function arrayIfJSONIsNotArray(json: object | object[]): object[] {
+	return Array.isArray(json) ? json : [json];
 }
 
-export function dieJSONToDie(die: object): number {
-	return 0;
+// Dice
+export function diceJSONToDice(dice: object): number[] {
+	return dice['die'].map(die => { return parseInt(die); });
 }
 
 export function distanceXMLToDistance(distance: string): number {

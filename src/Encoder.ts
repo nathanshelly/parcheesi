@@ -77,7 +77,7 @@ export function mainRingToXML(board: Board): string {
 	let zero = board.mainRing[0];
 	let dist = c.MAIN_RING_SIZE;
 
-	let pg = new PawnGetter();
+	let pg = new PawnGetter(true);
 	board.spotRunner(zero, dist, Color.green, pg);
 
 	return "<main>" + pawnLocsToXML(pg.pawn_locs) + "</main>";
@@ -89,7 +89,7 @@ export function homeRowsToXML(board: Board): string {
 }
 
 export function homeRowToXML(board: Board, hrStart: HomeRowSpot): string {
-	let pg = new PawnGetter();
+	let pg = new PawnGetter(false);
 	board.spotRunner(hrStart, c.HOME_ROW_SIZE, hrStart.color, pg);
 
 	return pawnLocsToXML(pg.pawn_locs);

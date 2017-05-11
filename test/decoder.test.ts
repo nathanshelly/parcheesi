@@ -31,7 +31,8 @@ describe('Filename: encoder.test.ts\n\nstartGameXMLToColor tests', () => {
 
 describe('doMoveXMLToBoardDice test', () => { 
 	it('should return a tuple of a board and array of dice', () => {
-		// placeholder
+		let xml = '<board><start><pawn><color>yellow</color><id>3</id></pawn><pawn><color>yellow</color><id>2</id></pawn><pawn><color>yellow</color><id>1</id></pawn><pawn><color>yellow</color><id>0</id></pawn></start><main><piece-loc><pawn><color>red</color><id>3</id></pawn><loc>67</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>67</loc></piece-loc><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>62</loc></piece-loc><piece-loc><pawn><color>red</color><id>1</id></pawn><loc>16</loc></piece-loc><piece-loc><pawn><color>blue</color><id>2</id></pawn><loc>8</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>5</loc></piece-loc><piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>2</loc></piece-loc><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>0</loc></piece-loc></main><home-rows><piece-loc><pawn><color>green</color><id>2</id></pawn><loc>0</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>2</loc></piece-loc></home-rows><home><pawn><color>green</color><id>3</id></pawn></home></board><dice><die>2</die><die>2</die><die>5</die><die>5</die></dice>'
+		dec.doMoveXMLToBoardDice(xml);
 	});
 });
 
