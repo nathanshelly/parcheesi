@@ -5,8 +5,6 @@ import { Board } from './Board'
 import { _Spot } from './_Spot'
 
 export interface _PawnHandler {
-	pawn_locs: [Pawn, number][];
-
 	manipulatePawns(spot: _Spot, loc: number): void;
 }
 

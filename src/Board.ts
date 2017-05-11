@@ -140,6 +140,7 @@ export class Board {
 		return spot;
 	}
 
+	// Distance can be a function taking number and returning a flag "continue or not"
 	spotRunner(spot: _Spot, distance: number, color: Color, pawnHandler?: _PawnHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
 		// get spot at an offset, checking any passed in predicates at each spot along the way
 		let next_spot: _Spot | null = spot;
