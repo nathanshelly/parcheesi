@@ -13,7 +13,7 @@ export class MoveEnter implements _Move {
     this.pawn = pawn;
   }
 
-  isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
+  isLegal(board: Board, player: _Player, possible_distances: number[]): boolean {
     if(!this.pawn.verify(player.color))
       return false;
 

@@ -1,7 +1,5 @@
 import express = require('express');
 
-import { FirstPawnMover } from '../FirstPawnMover';
-
 export abstract class Server {
 	protected app: express.Application;
 

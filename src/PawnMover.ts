@@ -46,7 +46,7 @@ export abstract class PawnMover extends BasicPlayer {
 		if (board.pawnInBase(pawn)) {
 			move = new MoveEnter(pawn);
 			// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
-			if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
+			if (move.isLegal(board, this, distances))
 				return move;
 		}
 		else {
@@ -54,7 +54,7 @@ export abstract class PawnMover extends BasicPlayer {
 				move = new MoveForward(pawn, distances[i]);
 
 				// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
-				if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
+				if (move.isLegal(board, this, distances))
 					return move;
 			}	
 		}

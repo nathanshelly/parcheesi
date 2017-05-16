@@ -11,7 +11,7 @@ import { MoveEnter } from './MoveEnter'
 import { MoveForward } from './MoveForward'
 
 export class Roll {
-	private starting_blockades: Pawn[][];
+	private starting_blockades: [Pawn[], _Spot][];
 	private is_taken: boolean;
 	board: Board;
 	player: _Player;
@@ -37,7 +37,7 @@ export class Roll {
 			// because we make sure length > 0, moves.shift() must return move
 			let move = this.moves.shift() as _Move;
 
-			if(move.isLegal(this.board, this.player, this.possible_distances, this.starting_blockades)) {
+			if(move.isLegal(this.board, this.player, this.possible_distances)) {
 				let possible_bonus: number | null = this.board.makeMove(move);
 				if(possible_bonus !== null)
 					this.possible_distances.push(possible_bonus)
@@ -45,6 +45,8 @@ export class Roll {
 			else
 				return false;
 		}
+
+		if(this.refo)
 		
 		return true;
 	}
@@ -73,5 +75,19 @@ export class Roll {
 				// TODO - test this
 				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances, this.starting_blockades);
 			});});
+	}
+
+	reformedBlockade(starting_blockades: [Pawn[], _Spot][], board: Board): boolean {
+		
+		
+		if(spot.hasBlockade())
+			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
+		
+		let would_be_pawns: Pawn[] = spot.getLivePawns();
+		would_be_pawns.push(pawn);
+		// sorting for equality check
+		would_be_pawns = would_be_pawns.sort();
+
+		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
 	}
 }

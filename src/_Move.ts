@@ -6,5 +6,5 @@ import { _Player } from './_Player'
 export interface _Move {
 	pawn: Pawn;
 
-	isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean;
+	isLegal(board: Board, player: _Player, possible_distances: number[]): boolean;
 }
