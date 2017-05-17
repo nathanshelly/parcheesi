@@ -14,11 +14,13 @@ export class PawnGetter implements _PawnHandler {
 
 	constructor(running_main_ring: boolean) {
 		this.running_main_ring = running_main_ring;
+		this.pawn_locs = [];
 	}
 
 	manipulatePawns(spot: _Spot, loc: number): void {
 		let pawns = spot.getLivePawns();
-		pawns.forEach(pawn => {this.pawn_locs.push([pawn, (loc + 1) % c.MAIN_RING_SIZE])});
+		let maybe_adjusted_loc = this.running_main_ring ? (loc + 1) % c.MAIN_RING_SIZE : loc;
+		pawns.forEach(pawn => { this.pawn_locs.push([pawn, maybe_adjusted_loc]); });
 	}	
 }
 

@@ -35,12 +35,36 @@ export function nameResponseXML(name: string): string {
 	return '<name>' + name + '</name>';
 }
 
-export function movesToMovesXML(moves: _Move[]): string {
-	return 'damn good moves';
+export function movesToMovesXML(moves: _Move[], board: Board): string {
+	return "<moves>" + _.join(moves.map(move => { return moveToMoveXML(move, board); }), "") + "</moves>";
 }
 
-export function moveToMoveXML(move: _Move): string {
-	return 'one pretty good move';
+// this whole method is pretty horrifying, try and come back to this
+export function moveToMoveXML(move: _Move, board: Board): string {
+	let move_string, opening_tag, closing_tag;
+	if(move instanceof MoveEnter)
+		move_string = "<enter-piece>" + pawnToXML(move.pawn) + "</enter-piece>";
+	else if(move instanceof MoveForward) {
+		// using test indices here instead of spending time 
+		// building custom functionality to support spec natively
+		let spot = board.findSpotOfPawn(move.pawn)
+		let maybe_adjusted_start = spot instanceof HomeRowSpot ? spot.index : (spot.index + 1) % c.MAIN_RING_SIZE;
+		let body_text = pawnToXML(move.pawn) + startToStartXML(maybe_adjusted_start) + distanceToDistanceXML(move.distance);
+		if (board.findSpotOfPawn(move.pawn) instanceof HomeRowSpot)
+			move_string = `<move-piece-home>${body_text}</move-piece-home>`;
+		else
+			move_string = `<move-piece-main>${body_text}</move-piece-main>`;
+	}
+		
+	return move_string;
+}
+
+export function startToStartXML(start: number): string {
+	return `<start>${start}</start>`;
+}
+
+export function distanceToDistanceXML(distance: number): string {
+	return `<distance>${distance}</distance>`;
 }
 
 export function idToIdXML(id: number): string {
@@ -48,9 +72,7 @@ export function idToIdXML(id: number): string {
 }
 
 /* Boards r hard */
-export function doMoveToXML(board: Board, distances: number/* 1-6 */[]): string {
-
-
+export function doMoveToXML(board: Board, distances: number[] /* 1-6 */): string {
 	return "what a lovely board"
 }
 
@@ -78,7 +100,7 @@ export function mainRingToXML(board: Board): string {
 	let dist = c.MAIN_RING_SIZE;
 
 	let pg = new PawnGetter(true);
-	board.spotRunner(zero, dist, Color.green, pg);
+	board.spotRunner(zero, dist, c.COLOR_TO_RUN_MAIN_RING, pg);
 
 	return "<main>" + pawnLocsToXML(pg.pawn_locs) + "</main>";
 }
@@ -111,4 +133,3 @@ export function pawnsToXML(pawns: Pawn[]): string {
 export function pawnToXML(pawn: Pawn): string {
 	return "<pawn><color>" + Color[pawn.color] + "</color>" + pawn.id.toString() + "</pawn>";
 }
-

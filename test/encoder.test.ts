@@ -144,9 +144,9 @@ describe("Main ring encoding", () => {
 
 		let exp =
 			"<main>" +
-			"<piece-loc><pawn><color>blue</color>0</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</piece-loc>" +
-			"<piece-loc><pawn><color>blue</color>1</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</piece-loc>" +
-			"<piece-loc><pawn><color>green</color>0</pawn><loc>" + (c.ENTRY_ENCODING_INDICES[Color.green] + 3).toString() + "</piece-loc>" +
+			"<piece-loc><pawn><color>green</color>0</pawn><loc>" + (c.ENTRY_ENCODING_INDICES[Color.green] + 3).toString() + "</loc></piece-loc>" +
+			"<piece-loc><pawn><color>blue</color>0</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</loc></piece-loc>" +
+			"<piece-loc><pawn><color>blue</color>1</pawn><loc>" + c.ENTRY_ENCODING_INDICES[Color.blue].toString() + "</loc></piece-loc>" +
 			"</main>";
 
 		expect(enc.mainRingToXML(board)).to.equal(exp);
