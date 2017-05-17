@@ -1,58 +1,55 @@
 import express = require('express');
-import * as config from './player_config';
+import http = require('http');
+import socketio = require('socket.io-client');
 
 import { Ethernet } from '../Ethernet';
-import { Server } from './Server';
+import { FirstPawnMover } from '../FirstPawnMover';
 
-class PlayerServer extends Server {
+import * as config from './player_config';
+
+let middleware = require('socketio-wildcard')();
+
+class PlayerServer {
+	private app: express.Application;
+	private server: http.Server;
+	private io: SocketIO.Socket;
+
 	private n_player: Ethernet;
 
 	constructor() {
-		super();
+		this.app = express();
+		this.server = http.createServer(this.app);
+
+		this.n_player = new Ethernet(new FirstPawnMover());
 	}
 
 	private listen_callback(port: number) {
 		console.log(`Player server listening on port ${port}...`);
 	}
 
-	init_routes() {
-		this.app.get('/', this.root_route);
-		this.app.post('/do_move', this.do_move_route);
-		this.app.post('/start_game', this.start_game_route);
-	}
+	private connectSocket() {
+		let url = config.SERVER_URL;
+		
+		console.log(`attempting to connect to ${url}...`);
+		this.io = socketio(url);
 
-	private root_route(req: express.Request, res: express.Response) {
-		console.log(`root request from ${req.originalUrl}, IP: ${req.ip}`);
-		res.send("Hello world!");
-	}
+		// Patch in the "listen to all events" middleware
+		let patch = require('socketio-wildcard')(socketio.Manager);
+		patch(this.io);
 
-	private do_move_route(req: express.Request, res: express.Response) {
-		console.log(`do_move request from ${req.originalUrl}, IP: ${req.ip}`);
-
-		const xml_string: string = req.body;
-	
-		const moves = this.n_player.getPlayerMoves(xml_string);
-
-		res.set('Content-Type', 'text/xml');
-		res.send(moves);
-	}
-
-	private start_game_route(req: express.Request, res: express.Response) {
-		console.log(`start_game request from ${req.originalUrl}, IP: ${req.ip}`);
-		const xml_string: string = req.body;
-
-		const name = this.n_player.startGameForPlayer(xml_string);
-	
-		res.set('Content-Type', 'text/xml');
-		res.send(name);
+		// Prep to listen for commands from the game
+		this.io.on('*', packet => {
+			console.log("Packet came in!!");
+			console.log(packet, "\n");
+		});
 	}
 
 	start(port: number) {
-		this.init_routes();
 		this.app.listen(port, () => { this.listen_callback(port) });
+
+		this.connectSocket();
 	}
 }
 
 const s = new PlayerServer();
 s.start(config.PORT);
-
