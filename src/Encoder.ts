@@ -135,5 +135,5 @@ export function pawnsToXML(pawns: Pawn[]): string {
 }
 
 export function pawnToXML(pawn: Pawn): string {
-	return `<pawn><color>${Color[pawn.color]}</color>${pawn.id}</pawn>`;
+	return `<pawn><color>${Color[pawn.color]}</color>${idToIdXML(pawn.id)}</pawn>`;
 }
