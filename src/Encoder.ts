@@ -72,8 +72,12 @@ export function idToIdXML(id: number): string {
 }
 
 /* Boards r hard */
-export function doMoveToXML(board: Board, distances: number[] /* 1-6 */): string {
-	return `what a lovely board`
+export function doMoveToXML(board: Board, dice: number[] /* 1-6 */): string {
+	return `<do-move>${boardToBoardXML(board)}${diceToXML(dice)}</do-move>`
+}
+
+export function boardToBoardXML(board: Board) {
+	return `<board>${startSpotsToXML(board)}${mainRingToXML(board)}${homeRowsToXML(board)}${homeSpotsToXML(board)}</board>`;
 }
 
 /* Dice */
