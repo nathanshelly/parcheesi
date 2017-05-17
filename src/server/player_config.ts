@@ -1,2 +1,2 @@
-export const PORT = 3001
-
+export const PORT = 8001
+export const SERVER_URL = 'http://localhost:8000'
