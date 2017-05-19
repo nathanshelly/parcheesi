@@ -15,7 +15,7 @@ import { MoveForward } from '../src/MoveForward'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Filename: encoder.test.ts\n\nstartGameXMLToColor tests', () => {
+describe('Filename: decoder.test.ts\n\nstartGameXMLToColor tests', () => {
 	it('should return the correct color when given color XML', () => {
 		let red_text = '<start-game>red</start-game>';
 		let blue_text = '<start-game>blue</start-game>';
@@ -72,4 +72,25 @@ describe('doMoveXMLToBoardDice test', () => {
 						+ `</dice>`;
 		dec.doMoveXMLToBoardDice(xml);
 	});
+
+	describe("Distance parsing", () => {
+		it("should pull out a variety of distances", () => {
+			function wrap(n: number): string { return `<distance>${n}</distance>` }
+
+			expect(dec.distanceXMLToDistance(wrap(0))).to.equal(0);
+			expect(dec.distanceXMLToDistance(wrap(1))).to.equal(1);
+			expect(dec.distanceXMLToDistance(wrap(c.BOP_BONUS))).to.equal(c.BOP_BONUS);
+		});
+	})
+
+	describe("ID parsing", () => {
+		it("should pull out a variety of IDs", () => {
+			function wrap(n: number): string { return `<id>${n}</id>` }
+
+			expect(dec.idXMLToId(wrap(0))).to.equal(0);
+			expect(dec.idXMLToId(wrap(1))).to.equal(1);
+			expect(dec.idXMLToId(wrap(2))).to.equal(2);
+			expect(dec.idXMLToId(wrap(3))).to.equal(3);
+		});
+	})
 });

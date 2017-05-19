@@ -24,11 +24,11 @@ export function nameFromXML(xml: string): string {
 }
 
 export function distanceXMLToDistance(distance: string): number {
-	return 0;
+	return parseInt(parser.xml2js(distance)["distance"]);
 }
 
 export function idXMLToId(id: string): number {
-	return 0;
+	return parseInt(parser.xml2js(id)["id"]);
 }
 
 // Dice
