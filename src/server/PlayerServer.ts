@@ -1,13 +1,11 @@
 import express = require('express');
 import http = require('http');
-import socketio = require('socket.io-client');
+let socketio = require('socket.io-client');
 
 import { Ethernet } from '../Ethernet';
 import { FirstPawnMover } from '../FirstPawnMover';
 
 import * as config from './player_config';
-
-let middleware = require('socketio-wildcard')();
 
 class PlayerServer {
 	private app: express.Application;
@@ -29,18 +27,34 @@ class PlayerServer {
 
 	private connectSocket() {
 		let url = config.SERVER_URL;
-		
 		console.log(`attempting to connect to ${url}...`);
-		this.io = socketio(url);
 
 		// Patch in the "listen to all events" middleware
 		let patch = require('socketio-wildcard')(socketio.Manager);
+		this.io = socketio(url);
 		patch(this.io);
 
+		// Check connection
+		this.io.on('connect', () => {
+			console.log('connected on client')
+		});
+
+		// Log disconnects
+		this.io.on('disconnect', () => {
+			console.log('disconnected on client');
+		});
+
 		// Prep to listen for commands from the game
+		let message: string = ""
 		this.io.on('*', packet => {
-			console.log("Packet came in!!");
-			console.log(packet, "\n");
+
+			let data = packet.data;
+			console.log(`Emit event name: ${data[0]}`);
+
+			let partial = data[1];
+			message += partial;
+
+			console.log(message);
 		});
 	}
 

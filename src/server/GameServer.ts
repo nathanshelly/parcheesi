@@ -1,6 +1,6 @@
 import express = require('express');
 import http = require('http');
-import socketio = require('socket.io');
+let socketio = require('socket.io');
 
 import _ = require('lodash');
 
@@ -39,26 +39,32 @@ class GameServer {
 		console.log(`Game server listening on port ${port}...`);
 	}
 
-	private socketConnected(socket: SocketIO.Server) {
-		console.log("socket is connected!");
+	private socketConnected(client: SocketIO.Server) {
+		console.log("client is connected!");
 
-		socket.on('*', packet => {
-			console.log("Packet came in!!");
-			console.log(packet, "\n");
+		client.on('disconnect', () => {
+			console.log("client disconnected...");
+		})
+
+		let response: string = "";
+		client.on('*', packet => {
+
+			let data = packet.data;
+			console.log(`Response event name: ${data[1]}`);
+
+			let partial = data[1];
+			response += partial;
+		
+			console.log(response);
 		});
 
-		while(true) {
-
-			// Wait for one second
-			let then = new Date().getTime() + 1000;
-			while (new Date().getTime() <= then) {}
-			
-			socket.emit('test_from_server', "patootie");
-		}
+		console.log('emitting...');
+		client.emit('test', "patootie");
+		client.emit('test1', 'DONGLE')
 	}
 
 	start(port: number) {
-		this.app.listen(port, () => { this.listen_callback(port) });
+		this.server.listen(port, () => { this.listen_callback(port) });
 
 		// Start the game for each AI player
 		this.game.players.forEach((p, i) => {
