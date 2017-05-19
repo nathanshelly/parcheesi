@@ -253,12 +253,8 @@ describe("doMove encoding", () => {
 						+ `<die>${dice[1]}</die>`
 						+ `</dice>`
 						+ `</do-move>`;
-		
-		let res = enc.doMoveToXML(board, dice);
 
-		
-
-		expect(res).to.equal(exp);
+		expect(enc.doMoveToXML(board, dice)).to.equal(exp);
 	});
 });
 
