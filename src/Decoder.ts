@@ -37,11 +37,16 @@ export function diceJSONToDice(dice: object): number[] {
 }
 
 export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
-	return [new Pawn(0, 0), 0];
+	let pawn: Pawn = pawnJSONToPawn(piece_loc["pawn"]);
+	let loc: number = piece_loc["loc"];
+	return [pawn, loc];
 }
 
-export function pawnXMLToPawn(pawn: string): Pawn {
-	return new Pawn(0, 0);
+export function pawnJSONToPawn(json: object): Pawn {
+	let id: number = parseInt(json["id"]);
+	let color: Color = parseInt(Color[json["color"]]);
+	
+	return new Pawn(id, color);
 }
 
 export function movesFromXML(xml: string): _Move[] {

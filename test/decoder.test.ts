@@ -72,25 +72,57 @@ describe('doMoveXMLToBoardDice test', () => {
 						+ `</dice>`;
 		dec.doMoveXMLToBoardDice(xml);
 	});
-
-	describe("Distance parsing", () => {
-		it("should pull out a variety of distances", () => {
-			function wrap(n: number): string { return `<distance>${n}</distance>` }
-
-			expect(dec.distanceXMLToDistance(wrap(0))).to.equal(0);
-			expect(dec.distanceXMLToDistance(wrap(1))).to.equal(1);
-			expect(dec.distanceXMLToDistance(wrap(c.BOP_BONUS))).to.equal(c.BOP_BONUS);
-		});
-	})
-
-	describe("ID parsing", () => {
-		it("should pull out a variety of IDs", () => {
-			function wrap(n: number): string { return `<id>${n}</id>` }
-
-			expect(dec.idXMLToId(wrap(0))).to.equal(0);
-			expect(dec.idXMLToId(wrap(1))).to.equal(1);
-			expect(dec.idXMLToId(wrap(2))).to.equal(2);
-			expect(dec.idXMLToId(wrap(3))).to.equal(3);
-		});
-	})
 });
+
+describe("Distance parsing", () => {
+	it("should pull out a variety of distances", () => {
+		function wrap(n: number): string { return `<distance>${n}</distance>` }
+
+		expect(dec.distanceXMLToDistance(wrap(0))).to.equal(0);
+		expect(dec.distanceXMLToDistance(wrap(1))).to.equal(1);
+		expect(dec.distanceXMLToDistance(wrap(c.BOP_BONUS))).to.equal(c.BOP_BONUS);
+	});
+})
+
+describe("ID parsing", () => {
+	it("should pull out a variety of IDs", () => {
+		function wrap(n: number): string { return `<id>${n}</id>` }
+
+		expect(dec.idXMLToId(wrap(0))).to.equal(0);
+		expect(dec.idXMLToId(wrap(1))).to.equal(1);
+		expect(dec.idXMLToId(wrap(2))).to.equal(2);
+		expect(dec.idXMLToId(wrap(3))).to.equal(3);
+	});
+})
+
+describe("Main ring decoding", () => {
+	it("should build a pawn from a pawn object correctly", () => {
+		let pawnObj = {
+			"color": "blue",
+			"id": 0
+		};
+		expect(dec.pawnJSONToPawn(pawnObj)).to.deep.equal(new Pawn(0, Color.blue));
+
+		pawnObj = {
+			"color": "yellow",
+			"id": 3
+		};
+		expect(dec.pawnJSONToPawn(pawnObj)).to.deep.equal(new Pawn(3, Color.yellow));
+	});
+
+	it("should build a pawn and location from a pawn_loc object correctly", () => {
+		let piece_loc = {
+			"pawn": {
+				"color": "blue",
+				"id": 0
+			},
+			"loc": 40
+		};
+
+		expect(dec.getPawnPositionFromPieceLocJSON(piece_loc)).to.deep.equal([
+			new Pawn(0, Color.blue),
+			40
+		]);
+	});
+});
+
