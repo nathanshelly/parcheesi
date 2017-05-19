@@ -200,6 +200,68 @@ describe("moves XML tests", () => {
 	});
 });
 
+describe("doMove encoding", () => {
+	let board: Board;
+
+	beforeEach(() => {
+		board = new Board();
+	});
+	
+	it("should correctly encode a set of dice and a random board", () => {
+		let dice = [1, 2];
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[1], null], board, 1);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[3], null], board, c.ENTRY_TO_HOME_OFFSET);
+		});
+
+		let exp = `<do-move>`
+						+ `<board>`
+
+						+ `<start>`
+							+ `<pawn><color>${Color[0]}</color><id>0</id></pawn>`
+							+ `<pawn><color>${Color[1]}</color><id>0</id></pawn>`
+							+ `<pawn><color>${Color[2]}</color><id>0</id></pawn>`
+							+ `<pawn><color>${Color[3]}</color><id>0</id></pawn>`
+						+ `</start>`
+
+						+ `<main>`
+							+ `<piece-loc><pawn><color>${Color[2]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[2]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[1]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[1]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[0]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[0]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[3]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+						+ `</main>`
+
+						+ `<home-rows>`
+							+ `<piece-loc><pawn><color>${Color[0]}</color><id>2</id></pawn><loc>${0}</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[1]}</color><id>2</id></pawn><loc>${0}</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[2]}</color><id>2</id></pawn><loc>${0}</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[3]}</color><id>2</id></pawn><loc>${0}</loc></piece-loc>`
+						+ `</home-rows>`
+
+						+ `<home>`
+							+ `<pawn><color>${Color[0]}</color><id>3</id></pawn>`
+							+ `<pawn><color>${Color[1]}</color><id>3</id></pawn>`
+							+ `<pawn><color>${Color[2]}</color><id>3</id></pawn>`
+							+ `<pawn><color>${Color[3]}</color><id>3</id></pawn>`
+						+ `</home>`
+
+						+ `</board>`
+						+ `<dice>`
+						+ `<die>${dice[0]}</die>`
+						+ `<die>${dice[1]}</die>`
+						+ `</dice>`
+						+ `</do-move>`;
+		
+		let res = enc.doMoveToXML(board, dice);
+
+		
+
+		expect(res).to.equal(exp);
+	});
+});
+
 describe("Board encoding", () => {
 	let board: Board;
 
@@ -208,17 +270,57 @@ describe("Board encoding", () => {
 	});
 
 	it("should encode a board with no pawns out correctly",  () => {
-		let exp = `<board>`
-						+ `<start>`
-						+ `</start>`
-						+ `<main>`
-						+ `</main>`
-						+ `<home-rows>`
-						+ `</home-rows>`
-						+ `<home>`
-						+ `</home>`
-						+ `</board>`;
+		let exp = `<board>${enc.startSpotsToXML(board)}${enc.mainRingToXML(board)}`
+						+ `${enc.homeRowsToXML(board)}${enc.homeSpotsToXML(board)}</board>`;
+		expect(enc.boardToBoardXML(board)).to.equal(exp);
+	});
 
+	it("should encode a board with all pawns in main ring correctly",  () => {
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[0], pawns[1]], board, 0);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], pawns[3]], board, 1);
+		});
+
+		let exp = `<board>${enc.startSpotsToXML(board)}${enc.mainRingToXML(board)}`
+						+ `${enc.homeRowsToXML(board)}${enc.homeSpotsToXML(board)}</board>`;
+		expect(enc.boardToBoardXML(board)).to.equal(exp);
+	});
+
+	it("should encode a board with all pawns in home row correctly",  () => {
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[0], pawns[1]], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], pawns[3]], board, c.ENTRY_TO_HOME_ROW_START_OFFSET + 1);
+		});
+
+		let exp = `<board>${enc.startSpotsToXML(board)}${enc.mainRingToXML(board)}`
+						+ `${enc.homeRowsToXML(board)}${enc.homeSpotsToXML(board)}</board>`;
+		expect(enc.boardToBoardXML(board)).to.equal(exp);
+	});
+
+	it("should encode a board with all pawns in home spots correctly",  () => {
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[0], pawns[1]], board, c.ENTRY_TO_HOME_OFFSET);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], pawns[3]], board, c.ENTRY_TO_HOME_OFFSET);
+		});
+
+		let exp = `<board>${enc.startSpotsToXML(board)}${enc.mainRingToXML(board)}`
+						+ `${enc.homeRowsToXML(board)}${enc.homeSpotsToXML(board)}</board>`;
+		expect(enc.boardToBoardXML(board)).to.equal(exp);
+	});
+
+	it("should encode a board with a pawn of each color in base spot, main ring, home row, home spot correctly",  () => {
+		_.range(c.N_COLORS).forEach(i => {
+			let pawns = board.getPawnsOfColor(i);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[1], null], board, 1);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[2], null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET);
+			tm.placePawnsAtOffsetFromYourEntry([pawns[3], null], board, c.ENTRY_TO_HOME_OFFSET);
+		});
+
+		let exp = `<board>${enc.startSpotsToXML(board)}${enc.mainRingToXML(board)}`
+						+ `${enc.homeRowsToXML(board)}${enc.homeSpotsToXML(board)}</board>`;
 		expect(enc.boardToBoardXML(board)).to.equal(exp);
 	});
 });
@@ -245,8 +347,6 @@ describe('Base spot encoding', () => {
 	});
 
 	it('should encode base spots correctly when only one color has all their pawns in base', () => {
-		let board = new Board();
-
 		_.range(c.N_COLORS - 1).forEach(i => {
 			let pawns = board.getPawnsOfColor(i);
 			tm.placePawnsOnGivenColorEntrySpot([pawns[0], pawns[1]], board, i);
@@ -272,8 +372,6 @@ describe('Base spot encoding', () => {
 	});
 
 	it('should encode base spots correctly when all colors have some pawns in base', () => {
-		let board = new Board();
-
 		_.range(c.N_COLORS - 1).forEach(i => {
 			let pawns = board.getPawnsOfColor(i);
 			tm.placePawnsOnGivenColorEntrySpot([pawns[0], pawns[1]], board, i);
