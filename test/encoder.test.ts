@@ -16,26 +16,26 @@ import { MoveForward } from '../src/MoveForward'
 import { expect } from 'chai';
 import 'mocha';
 
-describe('colorToStartGameXML test', () => { 
+describe('colorToStartGameXML test', () => {
 	it('should return a start game XML when given a color', () => {
 		let exp = '<start-game>green</start-game>';
 		expect(enc.colorToStartGameXML(Color.green)).to.equal(exp);
 	});
 });
 
-describe('doublesPenaltyXML test', () => { 
+describe('doublesPenaltyXML test', () => {
 	it('should return <doubles-penalty></doubles-penalty>', () => {
 		expect(enc.doublesPenaltyXML()).to.equal('<doubles-penalty></doubles-penalty>');
 	});
 });
 
-describe('voidXML test', () => { 
+describe('voidXML test', () => {
 	it('should return <void></void>', () => {
 		expect(enc.voidXML()).to.equal('<void></void>');
 	});
 });
 
-describe('nameResponseXML test', () => { 
+describe('nameResponseXML test', () => {
 	it('should return a name XML when given a name', () => {
 		let names = ['Sasha', 'Nathan', c.TEST_NAME];
 
@@ -47,35 +47,79 @@ describe('nameResponseXML test', () => {
 	});
 });
 
-describe('idToIDXML test', () => { 
+describe('startToStartXML test', () => { 
+	it('should return a start XML when given a starting index', () => {
+		let start = 12;
+		expect(enc.startToStartXML(start)).to.equal(`<start>${start}</start>`);
+	});
+});
+
+describe('distanceToDistanceXML test', () => { 
+	it('should return a distance XML when given a distance', () => {
+		let dist = c.OFFSET_BETWEEN_ENTRIES;
+		let exp = `<distance>${dist}</distance>`;
+		expect(enc.distanceToDistanceXML(dist)).to.equal(exp);
+	});
+});
+
+describe('idToIDXML test', () => {
 	it('should return id XML when given an ID', () => {
 		let id = 2;
 		expect(enc.idToIdXML(id)).to.equal(`<id>${id}</id>`);
 	});
 });
 
-describe("Board encoding", () => {
-	let board: Board;
-
-	beforeEach(() => {
-		board = new Board();
+describe('Dice encoding', () => {
+	it('should encode a die correctly', () => {
+		let die = 1;
+		expect(enc.dieToXML(die)).to.equal(`<die>${die}</die>`);
 	});
 
-	it("should encode a main ring with some pawns in it correctly",  () => {
-		let pawn0 = new Pawn(0, Color.blue)
-		let pawn1 = new Pawn(1, Color.blue)
-		let pawn2 = new Pawn(0, Color.green)
+	it('should encode two dice correctly', () => {
+		expect(enc.diceToXML([1, 2])).to.equal('<dice><die>1</die><die>2</die></dice>');
+	});
+});
 
-		tm.placePawnsOnGivenColorEntrySpot([pawn0, pawn1], board, Color.blue);
-		tm.placePawnsAtOffsetFromYourEntry([pawn2, null], board, 3);
+describe('Piece-loc encoding', () => {
+	it('should correctly encode a single piece-loc', () => {
+		let pawn_loc: [Pawn, number] = [new Pawn(2, Color.blue), 11];
+		let exp = `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_loc[0].color]}</color><id>${pawn_loc[0].id}</id></pawn>`
+						+ `<loc>${pawn_loc[1]}</loc>`
+						+ `</piece-loc>`
+		expect(enc.pawnLocToPieceLocXML(pawn_loc)).to.equal(exp);
+	});
 
-		let exp = `<main>`
-						+ `<piece-loc><pawn><color>green</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
-						+ `</main>`;
+	it('should correctly encode several piece-locs', () => {
+		let pawn_locs: [Pawn, number][] = [[new Pawn(2, Color.blue), 11], [new Pawn(2, Color.red), c.ENTRY_TO_HOME_OFFSET]];
+		let exp = `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_locs[0][0].color]}</color><id>${pawn_locs[0][0].id}</id></pawn>`
+						+ `<loc>${pawn_locs[0][1]}</loc>`
+						+ `</piece-loc>`
+						+ `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_locs[1][0].color]}</color><id>${pawn_locs[1][0].id}</id></pawn>`
+						+ `<loc>${pawn_locs[1][1]}</loc>`
+						+ `</piece-loc>`
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal(exp);
+	});
 
-		expect(enc.mainRingToXML(board)).to.equal(exp);
+	it('should correctly encode empty piece-locs', () => {
+		let pawn_locs = [];
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal('');
+	});
+});
+
+describe("Pawn encoding", () => {
+	it("should correctly encode a single pawn", () => {
+		let exp = '<pawn><color>blue</color><id>0</id></pawn>';
+		expect(enc.pawnToXML(new Pawn(0, Color.blue))).to.equal(exp);
+	});
+
+	it("should correctly encode two pawns", () => {
+		let pawns = [new Pawn(0, Color.blue), new Pawn(3, Color.red)];
+		let exp = `<pawn><color>blue</color><id>0</id></pawn>`
+						+ `<pawn><color>red</color><id>3</id></pawn>`;
+		expect(enc.pawnsToXML(pawns)).to.equal(exp);
 	});
 });
 
@@ -156,29 +200,33 @@ describe("moves XML tests", () => {
 	});
 });
 
-describe('startToStartXML test', () => { 
-	it('should return a start XML when given a starting index', () => {
-		let start = 12;
-		expect(enc.startToStartXML(start)).to.equal(`<start>${start}</start>`);
-	});
-});
+describe("Board encoding", () => {
+	let board: Board;
 
-describe('distanceToDistanceXML test', () => { 
-	it('should return a distance XML when given a distance', () => {
-		let dist = c.OFFSET_BETWEEN_ENTRIES;
-		let exp = `<distance>${dist}</distance>`;
-		expect(enc.distanceToDistanceXML(dist)).to.equal(exp);
-	});
-});
-
-describe('Dice encoding', () => {
-	it('should encode a die correctly', () => {
-		let die = 1;
-		expect(enc.dieToXML(die)).to.equal(`<die>${die}</die>`);
+	beforeEach(() => {
+		board = new Board();
 	});
 
-	it('should encode two dice correctly', () => {
-		expect(enc.diceToXML([1, 2])).to.equal('<dice><die>1</die><die>2</die></dice>');
+	it("should encode a board with no pawns out correctly",  () => {
+		let pawn0 = new Pawn(0, Color.blue)
+		let pawn1 = new Pawn(1, Color.blue)
+		let pawn2 = new Pawn(0, Color.green)
+
+		tm.placePawnsOnGivenColorEntrySpot([pawn0, pawn1], board, Color.blue);
+		tm.placePawnsAtOffsetFromYourEntry([pawn2, null], board, 3);
+
+		let exp = `<board>`
+						+ `<start>`
+						+ `</start>`
+						+ `<main>`
+						+ `</main>`
+						+ `<home-rows>`
+						+ `</home-rows>`
+						+ `<home>`
+						+ `</home>`
+						+ `</board>`;
+
+		expect(enc.mainRingToXML(board)).to.equal(exp);
 	});
 });
 
@@ -257,57 +305,6 @@ describe('Base spot encoding', () => {
 						+ `</start>`;
 
 		expect(xml).to.equal(exp);
-	});
-});
-
-describe("Home spot encoding", () => {
-	let board: Board;
-
-	beforeEach(() => {
-		board = new Board();
-	})
-
-	it('should encode home spots with no pawns correctly', () => {
-		expect(enc.homeSpotsToXML(board)).to.equal("<home></home>");
-	});
-
-	it('should encode one home spot with all pawns of a color correctly', () => {
-		let yellows = [new Pawn(0, Color.yellow), new Pawn(1, Color.yellow), new Pawn(2, Color.yellow), new Pawn(3, Color.yellow)];
-
-		tm.placePawnsAtOffsetFromYourEntry([yellows[0], yellows[1]], board, c.ENTRY_TO_HOME_OFFSET);
-		tm.placePawnsAtOffsetFromYourEntry([yellows[2], yellows[3]], board, c.ENTRY_TO_HOME_OFFSET);
-
-		let exp = `<home>`
-						+ `<pawn><color>yellow</color><id>0</id></pawn>`
-						+ `<pawn><color>yellow</color><id>1</id></pawn>`
-						+ `<pawn><color>yellow</color><id>2</id></pawn>`
-						+ `<pawn><color>yellow</color><id>3</id></pawn>`
-						+ `</home>`;
-
-		expect(enc.homeSpotsToXML(board)).to.equal(exp);
-	});
-
-	it('should encode all home spots with several pawns of some colors correctly', () => {
-		let blues = [new Pawn(0, Color.blue), new Pawn(1, Color.blue), new Pawn(2, Color.blue)];
-		let reds = [new Pawn(3, Color.red)];
-		let greens = [new Pawn(2, Color.green), new Pawn(3, Color.green)];
-		
-		tm.placePawnsAtOffsetFromYourEntry([blues[0], blues[1]], board, c.ENTRY_TO_HOME_OFFSET);
-		tm.placePawnsAtOffsetFromYourEntry([blues[2], null], board, c.ENTRY_TO_HOME_OFFSET);
-		
-		tm.placePawnsAtOffsetFromYourEntry([reds[0], null], board, c.ENTRY_TO_HOME_OFFSET);
-		tm.placePawnsAtOffsetFromYourEntry([greens[0], greens[1]], board, c.ENTRY_TO_HOME_OFFSET);
-
-		let exp = `<home>`
-						+ `<pawn><color>${Color[0]}</color><id>0</id></pawn>`
-						+ `<pawn><color>${Color[0]}</color><id>1</id></pawn>`
-						+ `<pawn><color>${Color[0]}</color><id>2</id></pawn>`
-						+ `<pawn><color>${Color[1]}</color><id>3</id></pawn>`
-						+ `<pawn><color>${Color[2]}</color><id>2</id></pawn>`
-						+ `<pawn><color>${Color[2]}</color><id>3</id></pawn>`
-						+ `</home>`;
-
-		expect(enc.homeSpotsToXML(board)).to.equal(exp);
 	});
 });
 
@@ -464,45 +461,53 @@ describe('Home row encoding', () => {
 	});
 });
 
-describe('Piece-loc encoding', () => {
-	it('should correctly encode a single piece-loc', () => {
-		let pawn_loc: [Pawn, number] = [new Pawn(2, Color.blue), 11];
-		let exp = `<piece-loc>`
-						+ `<pawn><color>${Color[pawn_loc[0].color]}</color><id>${pawn_loc[0].id}</id></pawn>`
-						+ `<loc>${pawn_loc[1]}</loc>`
-						+ `</piece-loc>`
-		expect(enc.pawnLocToPieceLocXML(pawn_loc)).to.equal(exp);
+describe("Home spot encoding", () => {
+	let board: Board;
+
+	beforeEach(() => {
+		board = new Board();
+	})
+
+	it('should encode home spots with no pawns correctly', () => {
+		expect(enc.homeSpotsToXML(board)).to.equal("<home></home>");
 	});
 
-	it('should correctly encode several piece-locs', () => {
-		let pawn_locs: [Pawn, number][] = [[new Pawn(2, Color.blue), 11], [new Pawn(2, Color.red), c.ENTRY_TO_HOME_OFFSET]];
-		let exp = `<piece-loc>`
-						+ `<pawn><color>${Color[pawn_locs[0][0].color]}</color><id>${pawn_locs[0][0].id}</id></pawn>`
-						+ `<loc>${pawn_locs[0][1]}</loc>`
-						+ `</piece-loc>`
-						+ `<piece-loc>`
-						+ `<pawn><color>${Color[pawn_locs[1][0].color]}</color><id>${pawn_locs[1][0].id}</id></pawn>`
-						+ `<loc>${pawn_locs[1][1]}</loc>`
-						+ `</piece-loc>`
-		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal(exp);
+	it('should encode one home spot with all pawns of a color correctly', () => {
+		let yellows = [new Pawn(0, Color.yellow), new Pawn(1, Color.yellow), new Pawn(2, Color.yellow), new Pawn(3, Color.yellow)];
+
+		tm.placePawnsAtOffsetFromYourEntry([yellows[0], yellows[1]], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([yellows[2], yellows[3]], board, c.ENTRY_TO_HOME_OFFSET);
+
+		let exp = `<home>`
+						+ `<pawn><color>yellow</color><id>0</id></pawn>`
+						+ `<pawn><color>yellow</color><id>1</id></pawn>`
+						+ `<pawn><color>yellow</color><id>2</id></pawn>`
+						+ `<pawn><color>yellow</color><id>3</id></pawn>`
+						+ `</home>`;
+
+		expect(enc.homeSpotsToXML(board)).to.equal(exp);
 	});
 
-	it('should correctly encode empty piece-locs', () => {
-		let pawn_locs = [];
-		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal('');
-	});
-});
+	it('should encode all home spots with several pawns of some colors correctly', () => {
+		let blues = [new Pawn(0, Color.blue), new Pawn(1, Color.blue), new Pawn(2, Color.blue)];
+		let reds = [new Pawn(3, Color.red)];
+		let greens = [new Pawn(2, Color.green), new Pawn(3, Color.green)];
+		
+		tm.placePawnsAtOffsetFromYourEntry([blues[0], blues[1]], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([blues[2], null], board, c.ENTRY_TO_HOME_OFFSET);
+		
+		tm.placePawnsAtOffsetFromYourEntry([reds[0], null], board, c.ENTRY_TO_HOME_OFFSET);
+		tm.placePawnsAtOffsetFromYourEntry([greens[0], greens[1]], board, c.ENTRY_TO_HOME_OFFSET);
 
-describe("Pawn encoding", () => {
-	it("should correctly encode a single pawn", () => {
-		let exp = '<pawn><color>blue</color><id>0</id></pawn>';
-		expect(enc.pawnToXML(new Pawn(0, Color.blue))).to.equal(exp);
-	});
+		let exp = `<home>`
+						+ `<pawn><color>${Color[0]}</color><id>0</id></pawn>`
+						+ `<pawn><color>${Color[0]}</color><id>1</id></pawn>`
+						+ `<pawn><color>${Color[0]}</color><id>2</id></pawn>`
+						+ `<pawn><color>${Color[1]}</color><id>3</id></pawn>`
+						+ `<pawn><color>${Color[2]}</color><id>2</id></pawn>`
+						+ `<pawn><color>${Color[2]}</color><id>3</id></pawn>`
+						+ `</home>`;
 
-	it("should correctly encode two pawns", () => {
-		let pawns = [new Pawn(0, Color.blue), new Pawn(3, Color.red)];
-		let exp = `<pawn><color>blue</color><id>0</id></pawn>`
-						+ `<pawn><color>red</color><id>3</id></pawn>`;
-		expect(enc.pawnsToXML(pawns)).to.equal(exp);
+		expect(enc.homeSpotsToXML(board)).to.equal(exp);
 	});
 });
