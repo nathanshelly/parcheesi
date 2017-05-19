@@ -106,7 +106,7 @@ export function mainRingToXML(board: Board): string {
 	let pg = new PawnGetter(true);
 	board.spotRunner(zero, dist, c.COLOR_TO_RUN_MAIN_RING, pg);
 
-	return `<main>${pawnLocsToXML(pg.pawn_locs)}</main>`;
+	return `<main>${pawnLocsToPieceLocsXML(pg.pawn_locs)}</main>`;
 }
 
 export function homeRowsToXML(board: Board): string {
@@ -118,14 +118,14 @@ export function homeRowToXML(board: Board, hrStart: HomeRowSpot): string {
 	let pg = new PawnGetter(false);
 	board.spotRunner(hrStart, c.HOME_ROW_SIZE, hrStart.color, pg);
 
-	return pawnLocsToXML(pg.pawn_locs);
+	return pawnLocsToPieceLocsXML(pg.pawn_locs);
 }
 
-export function pawnLocsToXML(pawnLocs: [Pawn, number][]): string {
-	return pawnLocs.map(pawnLocToXML).join("");
+export function pawnLocsToPieceLocsXML(pawnLocs: [Pawn, number][]): string {
+	return pawnLocs.map(pawnLocToPieceLocXML).join("");
 }
 
-export function pawnLocToXML(pawnLoc: [Pawn, number]): string {
+export function pawnLocToPieceLocXML(pawnLoc: [Pawn, number]): string {
 	return `<piece-loc>${ pawnToXML(pawnLoc[0]) }<loc>${ pawnLoc[1] }</loc></piece-loc>`;
 }
 

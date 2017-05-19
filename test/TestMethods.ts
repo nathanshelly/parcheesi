@@ -36,3 +36,7 @@ function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 			board.findSpotOfPawn(pawn).removePawn(pawn);
 	});
 }
+
+export function adjustMainRingLoc(loc: number) {
+	return (loc + 1) % c.MAIN_RING_SIZE;
+}
