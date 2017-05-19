@@ -35,6 +35,44 @@ export function nameResponseXML(name: string): string {
 	return `<name>${name}</name>`;
 }
 
+export function startToStartXML(start: number): string {
+	return `<start>${start}</start>`;
+}
+
+export function distanceToDistanceXML(distance: number): string {
+	return `<distance>${distance}</distance>`;
+}
+
+export function idToIdXML(id: number): string {
+	return `<id>${id}</id>`;
+}
+
+/* Dice */
+export function diceToXML(dice: number[]): string {
+	return `<dice>${ _.join(dice.map(dieToXML), "") }</dice>`;
+}
+
+export function dieToXML(die: number): string {
+	return `<die>${die}</die>`;
+}
+
+export function pawnLocsToPieceLocsXML(pawnLocs: [Pawn, number][]): string {
+	return pawnLocs.map(pawnLocToPieceLocXML).join("");
+}
+
+export function pawnLocToPieceLocXML(pawnLoc: [Pawn, number]): string {
+	return `<piece-loc>${ pawnToXML(pawnLoc[0]) }<loc>${ pawnLoc[1] }</loc></piece-loc>`;
+}
+
+/* Pawns */
+export function pawnsToXML(pawns: Pawn[]): string {
+	return pawns.map(pawnToXML).join("");
+}
+
+export function pawnToXML(pawn: Pawn): string {
+	return `<pawn><color>${Color[pawn.color]}</color>${idToIdXML(pawn.id)}</pawn>`;
+}
+
 export function movesToMovesXML(moves: _Move[], board: Board): string {
 	return `<moves>${ _.join(moves.map(move => { return moveToMoveXML(move, board); }), "") }</moves>`;
 }
@@ -59,18 +97,6 @@ export function moveToMoveXML(move: _Move, board: Board): string {
 	return move_string;
 }
 
-export function startToStartXML(start: number): string {
-	return `<start>${start}</start>`;
-}
-
-export function distanceToDistanceXML(distance: number): string {
-	return `<distance>${distance}</distance>`;
-}
-
-export function idToIdXML(id: number): string {
-	return `<id>${id}</id>`;
-}
-
 /* Boards r hard */
 export function doMoveToXML(board: Board, dice: number[] /* 1-6 */): string {
 	return `<do-move>${boardToBoardXML(board)}${diceToXML(dice)}</do-move>`
@@ -80,22 +106,9 @@ export function boardToBoardXML(board: Board) {
 	return `<board>${startSpotsToXML(board)}${mainRingToXML(board)}${homeRowsToXML(board)}${homeSpotsToXML(board)}</board>`;
 }
 
-/* Dice */
-export function diceToXML(dice: number[]): string {
-	return `<dice>${ _.join(dice.map(dieToXML), "") }</dice>`;
-}
-
-export function dieToXML(die: number): string {
-	return `<die>${die}</die>`;
-}
-
 /* Start and home spots */
 export function startSpotsToXML(board: Board): string {
 	return `<start>${ _.range(c.N_COLORS).map(i => pawnsToXML(board.getPawnsOfColorInBase(i))).join("") }</start>`;
-}
-
-export function homeSpotsToXML(board: Board): string {
-	return `<home>${ board.getHomeSpots().map(home_spot => { return pawnsToXML(home_spot.getLivePawns()); }).join("") }</home>`;
 }
 
 /* Main ring and home spots */
@@ -121,19 +134,6 @@ export function homeRowToXML(board: Board, hrStart: HomeRowSpot): string {
 	return pawnLocsToPieceLocsXML(pg.pawn_locs);
 }
 
-export function pawnLocsToPieceLocsXML(pawnLocs: [Pawn, number][]): string {
-	return pawnLocs.map(pawnLocToPieceLocXML).join("");
-}
-
-export function pawnLocToPieceLocXML(pawnLoc: [Pawn, number]): string {
-	return `<piece-loc>${ pawnToXML(pawnLoc[0]) }<loc>${ pawnLoc[1] }</loc></piece-loc>`;
-}
-
-/* Pawns */
-export function pawnsToXML(pawns: Pawn[]): string {
-	return pawns.map(pawnToXML).join("");
-}
-
-export function pawnToXML(pawn: Pawn): string {
-	return `<pawn><color>${Color[pawn.color]}</color>${idToIdXML(pawn.id)}</pawn>`;
+export function homeSpotsToXML(board: Board): string {
+	return `<home>${ board.getHomeSpots().map(home_spot => { return pawnsToXML(home_spot.getLivePawns()); }).join("") }</home>`;
 }

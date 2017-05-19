@@ -23,6 +23,27 @@ export function nameFromXML(xml: string): string {
 	return name["name"];
 }
 
+export function distanceXMLToDistance(distance: string): number {
+	return 0;
+}
+
+export function idXMLToId(id: string): number {
+	return 0;
+}
+
+// Dice
+export function diceJSONToDice(dice: object): number[] {
+	return dice['die'].map(die => { return parseInt(die); });
+}
+
+export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
+	return [new Pawn(0, 0), 0];
+}
+
+export function pawnXMLToPawn(pawn: string): Pawn {
+	return new Pawn(0, 0);
+}
+
 export function movesFromXML(xml: string): _Move[] {
 	return [];
 }
@@ -45,6 +66,8 @@ export function boardJSONToBoard(board_json: object): Board {
 	return board;
 }
 
+// addPawnsInBase unneeded because board constructor does that for us
+
 export function addPawnsInMainJSON(main_ring: object, board: Board): void {
 	main_ring = arrayIfJSONIsNotArray(main_ring['piece-loc']);
 
@@ -61,29 +84,6 @@ export function addPawnsInHomesJSON(homes: object, board: Board): void {
 	homes = arrayIfJSONIsNotArray(homes['pawn']);
 }
 
-export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
-	return [new Pawn(0, 0), 0];
-}
-
-
 function arrayIfJSONIsNotArray(json: object | object[]): object[] {
 	return Array.isArray(json) ? json : [json];
 }
-
-// Dice
-export function diceJSONToDice(dice: object): number[] {
-	return dice['die'].map(die => { return parseInt(die); });
-}
-
-export function distanceXMLToDistance(distance: string): number {
-	return 0;
-}
-
-export function pawnXMLToPawn(pawn: string): Pawn {
-	return new Pawn(0, 0);
-}
-
-export function idXMLToId(id: string): number {
-	return 0;
-}
-

@@ -29,6 +29,13 @@ describe('Filename: encoder.test.ts\n\nstartGameXMLToColor tests', () => {
 	});
 });
 
+describe('nameFromXML', () => {
+	it('should extract a name correctly', () => {
+		let xml = "<name>sasha</name>";
+		expect(dec.nameFromXML(xml)).to.equal("sasha");
+	});
+});
+
 describe('doMoveXMLToBoardDice test', () => { 
 	it('should return a tuple of a board and array of dice', () => {
 		let xml = `<board>`
@@ -66,11 +73,3 @@ describe('doMoveXMLToBoardDice test', () => {
 		dec.doMoveXMLToBoardDice(xml);
 	});
 });
-
-describe('nameFromXML', () => {
-	it('should extract a name correctly', () => {
-		let xml = "<name>sasha</name>";
-		expect(dec.nameFromXML(xml)).to.equal("sasha");
-	});
-});
-
