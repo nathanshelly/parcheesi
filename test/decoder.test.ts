@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as e from '../src/Encoder'
+import * as enc from '../src/Encoder'
 import * as dec from '../src/Decoder'
 import * as c from '../src/Constants'
 
