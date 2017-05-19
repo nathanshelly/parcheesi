@@ -208,13 +208,6 @@ describe("Board encoding", () => {
 	});
 
 	it("should encode a board with no pawns out correctly",  () => {
-		let pawn0 = new Pawn(0, Color.blue)
-		let pawn1 = new Pawn(1, Color.blue)
-		let pawn2 = new Pawn(0, Color.green)
-
-		tm.placePawnsOnGivenColorEntrySpot([pawn0, pawn1], board, Color.blue);
-		tm.placePawnsAtOffsetFromYourEntry([pawn2, null], board, 3);
-
 		let exp = `<board>`
 						+ `<start>`
 						+ `</start>`
@@ -226,7 +219,7 @@ describe("Board encoding", () => {
 						+ `</home>`
 						+ `</board>`;
 
-		expect(enc.mainRingToXML(board)).to.equal(exp);
+		expect(enc.boardToBoardXML(board)).to.equal(exp);
 	});
 });
 
