@@ -15,7 +15,7 @@ export class Ethernet {
 	getPlayerMoves(board_string: string): string {
 		let board: Board, dice: number[];
 		[board, dice] = dec.doMoveXMLToBoardDice(board_string);
-		return enc.movesToMovesXML(this.player.doMove(board, dice));
+		return enc.movesToMovesXML(this.player.doMove(board, dice), board);
 	}
 
 	startGameForPlayer(start_game: string): string {
