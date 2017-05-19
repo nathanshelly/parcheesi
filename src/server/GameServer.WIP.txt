@@ -1,7 +1,3 @@
-import express = require('express');
-import http = require('http');
-let socketio = require('socket.io');
-
 import _ = require('lodash');
 
 import { ServerNPlayer } from '../ServerNPlayer';
@@ -14,19 +10,9 @@ import * as config from './game_config';
 let middleware = require('socketio-wildcard')();
 
 class GameServer {
-	private app: express.Application;
-	private server: http.Server;
-	private io: SocketIO.Server;
-
 	private game: Parcheesi;
 
 	constructor() {
-		this.app = express();
-		this.server = http.createServer(this.app);
-
-		this.io = socketio(this.server);
-		this.io.use(middleware);
-
 		this.game = new Parcheesi();
 
 		let players = _.fill(new Array(c.NUM_PLAYERS - 1), new FirstPawnMover());
@@ -41,26 +27,6 @@ class GameServer {
 
 	private socketConnected(client: SocketIO.Server) {
 		console.log("client is connected!");
-
-		client.on('disconnect', () => {
-			console.log("client disconnected...");
-		})
-
-		let response: string = "";
-		client.on('*', packet => {
-
-			let data = packet.data;
-			console.log(`Response event name: ${data[1]}`);
-
-			let partial = data[1];
-			response += partial;
-		
-			console.log(response);
-		});
-
-		console.log('emitting...');
-		client.emit('test', "patootie");
-		client.emit('test1', 'DONGLE')
 	}
 
 	start(port: number) {

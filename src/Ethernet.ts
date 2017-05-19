@@ -12,6 +12,21 @@ export class Ethernet {
 		this.player = player;
 	}
 
+	interpret(xml: string): string {
+		let tag = xml.substring(1, xml.indexOf('>'));
+
+		switch (tag) {
+			case "start-game":
+				return this.startGameForPlayer(xml);
+			case "do-move":
+				return this.getPlayerMoves(xml);
+			case "doubles-penalty":
+				return this.doublesPenaltyToPlayer();
+			default:
+				throw `Couldn't identify tag: ${tag}`;
+		}
+	}
+
 	getPlayerMoves(board_string: string): string {
 		let board: Board, dice: number[];
 		[board, dice] = dec.doMoveXMLToBoardDice(board_string);

@@ -1,6 +1,6 @@
 import express = require('express');
-import http = require('http');
-let socketio = require('socket.io-client');
+
+import net = require('net');
 
 import { Ethernet } from '../Ethernet';
 import { FirstPawnMover } from '../FirstPawnMover';
@@ -9,14 +9,13 @@ import * as config from './player_config';
 
 class PlayerServer {
 	private app: express.Application;
-	private server: http.Server;
-	private io: SocketIO.Socket;
-
+	private socket; // net socket - I don't think this has typings?
+	
 	private n_player: Ethernet;
 
 	constructor() {
 		this.app = express();
-		this.server = http.createServer(this.app);
+		this.socket = new net.Socket();
 
 		this.n_player = new Ethernet(new FirstPawnMover());
 	}
@@ -27,34 +26,25 @@ class PlayerServer {
 
 	private connectSocket() {
 		let url = config.SERVER_URL;
+		let port = config.SERVER_PORT;
 		console.log(`attempting to connect to ${url}...`);
 
-		// Patch in the "listen to all events" middleware
-		let patch = require('socketio-wildcard')(socketio.Manager);
-		this.io = socketio(url);
-		patch(this.io);
+		this.socket.on('data', data => {
+			console.log(`Received data: ${data}`);
+			let xml: string = data.toString();
 
-		// Check connection
-		this.io.on('connect', () => {
-			console.log('connected on client')
+			let response: string = this.n_player.interpret(xml);
+			console.log(`Responding with: ${response}`);
+
+			this.socket.write(response);
 		});
 
-		// Log disconnects
-		this.io.on('disconnect', () => {
-			console.log('disconnected on client');
+		this.socket.on('close', () => {
+			console.log("Socket closed...");
 		});
 
-		// Prep to listen for commands from the game
-		let message: string = ""
-		this.io.on('*', packet => {
-
-			let data = packet.data;
-			console.log(`Emit event name: ${data[0]}`);
-
-			let partial = data[1];
-			message += partial;
-
-			console.log(message);
+		this.socket.connect(config.SERVER_PORT, config.SERVER_URL, () => {
+			console.log("Socket connected...");
 		});
 	}
 
