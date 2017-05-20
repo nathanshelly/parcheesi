@@ -66,4 +66,37 @@ describe('Filename: pawn_handler.test.ts\n\nPawnGetter main ring tests', () => {
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pg);
 		expect(pg.pawn_locs).to.be.empty;
 	});
+
+	it('should correctly get 1 pawn in main ring if there is one pawn in main ring', () => {
+		let greens = [new Pawn(2, Color.green)];
+		
+		tm.placePawnsAtOffsetFromYourEntry([greens[0], null], board, 2);
+
+		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pg);
+		expect(pg.pawn_locs).to.deep.equal([[greens[0], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 2)]]);
+	});
+
+	it('should correctly get various pawns in various places', () => {
+		let reds = [new Pawn(0, Color.red), new Pawn(2, Color.red), new Pawn(3, Color.red)];
+		let greens = [new Pawn(2, Color.green)];
+		let yellows = [new Pawn(1, Color.yellow), new Pawn(0, Color.yellow)];
+		
+		tm.placePawnsAtOffsetFromYourEntry([reds[0], reds[1]], board, 2);
+		tm.placePawnsAtOffsetFromYourEntry([reds[2], null], board, 41);		
+		tm.placePawnsAtOffsetFromYourEntry([greens[0], null], board, 23);
+		tm.placePawnsAtOffsetFromYourEntry([yellows[0], yellows[1]], board, 11);
+
+		let exp_piece_locs: [Pawn, number][];
+		exp_piece_locs = [[reds[0], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 2)],
+											[reds[1], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 2)],
+											[reds[2], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 41)],
+											[greens[0], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 23)],
+											[yellows[0], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 11)],
+											[yellows[1], tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 11)]]
+		
+		exp_piece_locs = exp_piece_locs.sort((tuple_one, tuple_two) => tuple_one[1] - tuple_two[1]);
+		
+		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pg);
+		expect(pg.pawn_locs).to.deep.equal(exp_piece_locs);
+	});
 });
