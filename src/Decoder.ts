@@ -1,8 +1,12 @@
 import * as x2js from 'x2js'
+import * as _ from 'lodash'
+
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
+import { HomeRowSpot } from './HomeRowSpot'
+import { HomeSpot } from './HomeSpot'
 import { Color } from './Color'
 import { PawnSetter } from './_PawnHandler'
 import { PrettyDumbPlayer } from './BasicPlayer'
@@ -36,9 +40,9 @@ export function diceJSONToDice(dice: object): number[] {
 	return dice['die'].map(die => { return parseInt(die); });
 }
 
-export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
+export function pieceLocJSONToPawnAndLoc(piece_loc: object): [Pawn, number] {
 	let pawn: Pawn = pawnJSONToPawn(piece_loc["pawn"]);
-	let loc: number = piece_loc["loc"];
+	let loc: number = parseInt(piece_loc["loc"]);
 	return [pawn, loc];
 }
 
@@ -74,21 +78,41 @@ export function boardJSONToBoard(board_json: object): Board {
 // addPawnsInBase unneeded because board constructor does that for us
 
 export function addPawnsInMainJSON(main_ring: object, board: Board): void {
-	main_ring = arrayIfJSONIsNotArray(main_ring['piece-loc']);
+	let wrapped = validateBoardSectionJSON(main_ring['piece-loc']);
+	let pawn_locs: [Pawn, number][] = wrapped.map(pieceLocJSONToPawnAndLoc);
 
-	let pawn_locs: [Pawn, number][] = [];
 	let pawn_setter = new PawnSetter(pawn_locs, board, true);
 	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
 }
 
 export function addPawnsInHomeRowsJSON(home_rows: object, board: Board): void {
-	home_rows = arrayIfJSONIsNotArray(home_rows['piece-loc']);
+	let wrapped = validateBoardSectionJSON(home_rows['piece-loc']);
+	let pawn_locs: [Pawn, number][] = wrapped.map(pl => {return pieceLocJSONToPawnAndLoc(pl) });
+	let hr_starts = board.getHomeRowStarts();
+
+	_.range(c.N_COLORS).forEach(i => {
+		let pls_of_color = pawn_locs.filter(pl => { return pl[0].color == i });
+		let pawn_setter = new PawnSetter(pls_of_color, board, true);
+
+		let hrs: HomeRowSpot = hr_starts[i];
+
+		board.spotRunner(hrs, c.HOME_ROW_SIZE, i, pawn_setter);
+	});
 }
 
 export function addPawnsInHomesJSON(homes: object, board: Board): void {
-	homes = arrayIfJSONIsNotArray(homes['pawn']);
+	let wrapped = validateBoardSectionJSON(homes["pawn"]);
+	let home_pawns: Pawn[] = wrapped.map(pawnJSONToPawn);
+
+	let home_spots = board.getHomeSpots();
+	_.range(c.N_COLORS).forEach(i => {
+		let hps_of_color = home_pawns.filter(hp => { return hp.color == i });
+
+		hps_of_color.forEach(hp => { board.findSpotOfPawn(hp).removePawn(hp); });
+		hps_of_color.forEach(hp => { home_spots[i].addPawn(hp) });
+	});
 }
 
-function arrayIfJSONIsNotArray(json: object | object[]): object[] {
-	return Array.isArray(json) ? json : [json];
+function validateBoardSectionJSON(json: string | object | object[]): object[] {
+	return typeof json === "string" ? [] : Array.isArray(json) ? json : [json];
 }

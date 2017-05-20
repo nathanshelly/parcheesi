@@ -93,9 +93,9 @@ describe("ID parsing", () => {
 		expect(dec.idXMLToId(wrap(2))).to.equal(2);
 		expect(dec.idXMLToId(wrap(3))).to.equal(3);
 	});
-})
+});
 
-describe("Main ring decoding", () => {
+describe("Pawn loc decoding", () => {
 	it("should build a pawn from a pawn object correctly", () => {
 		let pawnObj = {
 			"color": "blue",
@@ -119,9 +119,180 @@ describe("Main ring decoding", () => {
 			"loc": 40
 		};
 
-		expect(dec.getPawnPositionFromPieceLocJSON(piece_loc)).to.deep.equal([
+		expect(dec.pieceLocJSONToPawnAndLoc(piece_loc)).to.deep.equal([
 			new Pawn(0, Color.blue),
 			40
+		]);
+	});
+})
+
+describe("Main ring decoding", () => {
+	it("should add a single pawn in a main ring JSON to a board correctly", () => {
+		let main_ring = {
+			"piece-loc": {
+				"pawn": {
+					"color": "blue",
+					"id": 0
+				},
+				"loc": 40
+			}
+		};
+
+		let board = new Board();
+
+		dec.addPawnsInMainJSON(main_ring, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+	});
+
+	it("should add a multiple pawns in a main ring JSON to a board correctly", () => {
+		let main_ring = {
+			"piece-loc": [
+				{
+					"pawn": {
+						"color": "blue",
+						"id": 0
+					},
+					"loc": 40
+				},
+				{
+					"pawn": {
+						"color": "green",
+						"id": 3
+					},
+					"loc": 35
+				}
+			]};
+
+		let board = new Board();
+
+		dec.addPawnsInMainJSON(main_ring, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorInBase(Color.green).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.green).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+		expect(board.getPawnsOfColorOnBoard(Color.green)).to.deep.equal([
+			new Pawn(3, Color.green)
+		]);
+	});
+});
+
+describe("Home row decoding", () => {
+	it("should add a single pawn in a home row JSON to a board correctly", () => {
+		let home_row = {
+			"piece-loc": {
+				"pawn": {
+					"color": "blue",
+					"id": 0
+				},
+				"loc": 40
+			}
+		};
+
+		let board = new Board();
+
+		dec.addPawnsInHomeRowsJSON(home_row, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+	});
+
+	it("should add a multiple pawns in a home row JSON to a board correctly", () => {
+		let home_row = {
+			"piece-loc": [
+				{
+					"pawn": {
+						"color": "blue",
+						"id": 0
+					},
+					"loc": 40
+				},
+				{
+					"pawn": {
+						"color": "green",
+						"id": 3
+					},
+					"loc": 35
+				}
+			]};
+
+		let board = new Board();
+
+		dec.addPawnsInHomeRowsJSON(home_row, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorInBase(Color.green).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.green).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+		expect(board.getPawnsOfColorOnBoard(Color.green)).to.deep.equal([
+			new Pawn(3, Color.green)
+		]);
+	});
+});
+
+describe("Home spot decoding", () => {
+	it("should add a single pawn in a home spot JSON to a board correctly", () => {
+		let home_row = {
+			"pawn": {
+				"color": "blue",
+				"id": 0
+			},
+		};
+
+		let board = new Board();
+
+		dec.addPawnsInHomesJSON(home_row, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+	});
+
+	it("should add a multiple pawns in a home row JSON to a board correctly", () => {
+		let home_row = [
+			{
+				"pawn": {
+					"color": "blue",
+					"id": 0
+				},
+			},
+			{
+				"pawn": {
+					"color": "green",
+					"id": 3
+				}
+			}
+		];
+
+		let board = new Board();
+
+		dec.addPawnsInHomesJSON(home_row, board);
+
+		expect(board.getPawnsOfColorInBase(Color.blue).length).to.equal(3);
+		expect(board.getPawnsOfColorInBase(Color.green).length).to.equal(3);
+		expect(board.getPawnsOfColorOnBoard(Color.blue).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.green).length).to.equal(1);
+		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
+			new Pawn(0, Color.blue)
+		]);
+		expect(board.getPawnsOfColorOnBoard(Color.green)).to.deep.equal([
+			new Pawn(3, Color.green)
 		]);
 	});
 });
