@@ -6,6 +6,7 @@ import * as c from '../src/Constants'
 import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { Board } from '../src/Board'
+import { HomeRowSpot } from '../src/HomeRowSpot'
 import { _Player } from '../src/_Player'
 import { Ethernet } from '../src/Ethernet'
 import { PrettyDumbPlayer } from '../src/BasicPlayer'
@@ -151,6 +152,33 @@ describe("Main ring decoding", () => {
 		]);
 	});
 
+	it("should put pawns at the right locations when there is a pawn with a main-ring location of 0", () => {
+		let main_ring = {
+			"piece-loc": [
+				{
+					"pawn": {
+						"color": "blue",
+						"id": 0
+					},
+					"loc": 2
+				},
+				{
+					"pawn": {
+						"color": "red",
+						"id": 3
+					},
+					"loc": 0
+				}
+			]
+		};
+
+		let board = new Board();
+		dec.addPawnsInMainJSON(main_ring, board);
+		
+		expect(board.findSpotOfPawn(new Pawn(3, Color.red)).index).to.equal(c.MAIN_RING_SIZE - 1);
+		expect(board.findSpotOfPawn(new Pawn(0, Color.blue)).index).to.equal(1);
+	})
+
 	it("should add a multiple pawns in a main ring JSON to a board correctly", () => {
 		let main_ring = {
 			"piece-loc": [
@@ -209,6 +237,26 @@ describe("Home row decoding", () => {
 		expect(board.getPawnsOfColorOnBoard(Color.blue)).to.deep.equal([
 			new Pawn(0, Color.blue)
 		]);
+	});
+
+	it("should put a pawn in the right spot on the home row", () => {
+		let home_row = {
+			"piece-loc": {
+				"pawn": {
+					"color": "blue",
+					"id": 0
+				},
+				"loc": 0
+			}
+		}
+
+		let board = new Board();
+
+		dec.addPawnsInHomeRowsJSON(home_row, board);
+
+		let spot = board.findSpotOfPawn(new Pawn(0, Color.blue));
+		expect(spot instanceof HomeRowSpot).to.be.true;
+		expect((spot as HomeRowSpot).index).to.equal(0);
 	});
 
 	it("should add a multiple pawns in a home row JSON to a board correctly", () => {
