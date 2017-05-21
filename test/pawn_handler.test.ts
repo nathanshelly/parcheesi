@@ -203,7 +203,6 @@ describe('PawnGetter home row tests', () => {
 
 describe('PawnSetter main ring tests', () => {
 	let board: Board;
-	let ps: PawnSetter;
 	let starting_spot: _Spot;
 
 	beforeEach(() => {
@@ -212,7 +211,7 @@ describe('PawnSetter main ring tests', () => {
 	});
 
 	it('should correctly set no pawns in main ring if it has no pawns', () => {
-		ps = new PawnSetter([], board, true);
+		let ps = new PawnSetter([], board, true);
 		let temp = Color.green;
 
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
@@ -228,10 +227,10 @@ describe('PawnSetter main ring tests', () => {
 		let green = new Pawn(2, Color.green);
 		let green_pl: [Pawn, number][] = [[green, 6]];
 		
-		ps.pawn_locs = green_pl;
+		let ps = new PawnSetter(green_pl, board, true);
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
 
-		expect(board.findSpotOfPawn(green).index).to.equal(tm.convertMainRingLocToServerLoc(6));
+		expect(board.findSpotOfPawn(green).index).to.equal(tm.convertServerLocToMainRingLoc(6));
 	});
 	
 	// it('should correctly get no pawns in home rows if there are pawns only in various main ring locations', () => {
