@@ -112,7 +112,7 @@ describe("Pawn loc decoding", () => {
 		expect(dec.pawnJSONToPawn(pawnObj)).to.deep.equal(new Pawn(3, Color.yellow));
 	});
 
-	it("should build a pawn and location from a pawn_loc object correctly", () => {
+	it("should build a pawn and location from a main ring pawn_loc object correctly", () => {
 		let piece_loc = {
 			"pawn": {
 				"color": "blue",
@@ -121,10 +121,21 @@ describe("Pawn loc decoding", () => {
 			"loc": 40
 		};
 
-		expect(dec.pieceLocJSONToPawnAndLoc(piece_loc)).to.deep.equal([
-			new Pawn(0, Color.blue),
-			40
-		]);
+		let exp = [new Pawn(0, Color.blue), 39];
+		expect(dec.pieceLocJSONToPawnAndLoc(piece_loc, true)).to.deep.equal(exp);
+	});
+
+	it("should build a pawn and location from a home row pawn_loc object correctly", () => {
+		let piece_loc = {
+			"pawn": {
+				"color": "blue",
+				"id": 0
+			},
+			"loc": 40
+		};
+
+		let exp = [new Pawn(0, Color.blue), 40];
+		expect(dec.pieceLocJSONToPawnAndLoc(piece_loc, false)).to.deep.equal(exp);
 	});
 })
 
