@@ -37,6 +37,6 @@ function removeOldPawns(pawns: [Pawn | null, Pawn | null], board: Board) {
 	});
 }
 
-export function adjustMainRingLoc(loc: number) {
+export function convertMainRingLocToServerLoc(loc: number) {
 	return (loc + 1) % c.MAIN_RING_SIZE;
 }

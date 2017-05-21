@@ -43,9 +43,9 @@ export class PawnSetter implements _PawnHandler {
 			// casting fine because confirmed that pawn_locs has values
 			[pawn, loc] = this.pawn_locs.shift() as [Pawn, number];
 			
-			// place pawn on correct spot and remove from spot
-			spot.addPawn(pawn);
+			// remove pawn from current spot and then place on new spot
 			this.board.findSpotOfPawn(pawn).removePawn(pawn);
+			spot.addPawn(pawn);
 		}
 	}
 }

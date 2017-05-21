@@ -49,7 +49,7 @@ export class Turn {
         } while(rolled_doubles && this.num_doubles < c.MAX_DOUBLES);
 
         if(this.num_doubles === c.MAX_DOUBLES)
-            console.log("DO SOMETHING HERE");
+            throw new Error("DEFINITELY DO SOMETHING HERE")
             // kick furthest along pawn that isn't in home spot back
             // this.board.moveOnePawnBackToBase()
         

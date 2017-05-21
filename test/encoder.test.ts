@@ -145,7 +145,7 @@ describe("moves XML tests", () => {
 	it("should correctly encode a single MoveForward whose pawn starts in the main ring", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, 1);
 		let move = new MoveForward(pawn, 12);
-		let adjusted_loc = tm.adjustMainRingLoc(board.findSpotOfPawn(move.pawn).index);
+		let adjusted_loc = tm.convertMainRingLocToServerLoc(board.findSpotOfPawn(move.pawn).index);
 		let exp = `<move-piece-main>${enc.pawnToXML(move.pawn)}${enc.startToStartXML(adjusted_loc)}${enc.distanceToDistanceXML(move.distance)}</move-piece-main>`;
 
 		expect(enc.moveToMoveXML(move, board)).to.equal(exp);
@@ -154,7 +154,7 @@ describe("moves XML tests", () => {
 	it("should correctly encode a single MoveForward whose pawn starts in the last main ring spot", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn, null], board, c.ENTRY_TO_HOME_ROW_START_OFFSET - 1);
 		let move = new MoveForward(pawn, 43);
-		let adjusted_loc = tm.adjustMainRingLoc(board.findSpotOfPawn(move.pawn).index);
+		let adjusted_loc = tm.convertMainRingLocToServerLoc(board.findSpotOfPawn(move.pawn).index);
 		let exp = `<move-piece-main>${enc.pawnToXML(move.pawn)}${enc.startToStartXML(adjusted_loc)}${enc.distanceToDistanceXML(move.distance)}</move-piece-main>`;
 
 		expect(enc.moveToMoveXML(move, board)).to.equal(exp);
@@ -185,8 +185,8 @@ describe("moves XML tests", () => {
 		let move_three = new MoveForward(pawn_three, 3);
 		let move_four = new MoveForward(pawn_four, 7);
 
-		let adjusted_loc_move_two = tm.adjustMainRingLoc(board.findSpotOfPawn(move_two.pawn).index);
-		let adjusted_loc_move_three = tm.adjustMainRingLoc(board.findSpotOfPawn(move_three.pawn).index);
+		let adjusted_loc_move_two = tm.convertMainRingLocToServerLoc(board.findSpotOfPawn(move_two.pawn).index);
+		let adjusted_loc_move_three = tm.convertMainRingLocToServerLoc(board.findSpotOfPawn(move_three.pawn).index);
 
 		let exp = `<moves>`
 						+ `<enter-piece>${enc.pawnToXML(move.pawn)}</enter-piece>`
@@ -228,10 +228,10 @@ describe("doMove encoding", () => {
 						+ `</start>`
 
 						+ `<main>`
-							+ `<piece-loc><pawn><color>${Color[2]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[2]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
-							+ `<piece-loc><pawn><color>${Color[1]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[1]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
-							+ `<piece-loc><pawn><color>${Color[0]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[0]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
-							+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[3]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[2]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[2]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[1]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[1]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[0]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[0]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
+							+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[3]["ENTRY_FROM_BASE"] + 1) }</loc></piece-loc>`
 						+ `</main>`
 
 						+ `<home-rows>`
@@ -416,9 +416,9 @@ describe("Main ring encoding", () => {
 		tm.placePawnsAtOffsetFromYourEntry([pawn2, null], board, 3);
 
 		let exp = `<main>`
-						+ `<piece-loc><pawn><color>green</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>green</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.blue]["ENTRY_FROM_BASE"]) }</loc></piece-loc>`
 						+ `</main>`;
 
 		expect(enc.mainRingToXML(board)).to.equal(exp);
@@ -435,12 +435,12 @@ describe("Main ring encoding", () => {
 		tm.placePawnsAtOffsetFromYourEntry([yellows[0], yellows[1]], board, 3);
 
 		let exp = `<main>`
-						+ `<piece-loc><pawn><color>${Color[1]}</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 20) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[1]}</color><id>2</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 20) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[1]}</color><id>3</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 24) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[2]}</color><id>2</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 42) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[3]}</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[1]}</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 20) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[1]}</color><id>2</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 20) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[1]}</color><id>3</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 24) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[2]}</color><id>2</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 42) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[3]}</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 3) }</loc></piece-loc>`
 						+ `</main>`;
 
 		expect(enc.mainRingToXML(board)).to.equal(exp);
@@ -461,11 +461,11 @@ describe("Main ring encoding", () => {
 		tm.placePawnsAtOffsetFromYourEntry([blues[0], blues[1]], board, c.ENTRY_TO_HOME_OFFSET);
 
 		let exp = `<main>`
-						+ `<piece-loc><pawn><color>${Color[1]}</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 51) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[1]}</color><id>2</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 51) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 27) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[3]}</color><id>0</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 27) }</loc></piece-loc>`
-						+ `<piece-loc><pawn><color>${Color[2]}</color><id>2</id></pawn><loc>${ tm.adjustMainRingLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 33) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[1]}</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 51) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[1]}</color><id>2</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.red]["ENTRY_FROM_BASE"] + 51) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[3]}</color><id>1</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 27) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[3]}</color><id>0</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.yellow]["ENTRY_FROM_BASE"] + 27) }</loc></piece-loc>`
+						+ `<piece-loc><pawn><color>${Color[2]}</color><id>2</id></pawn><loc>${ tm.convertMainRingLocToServerLoc(c.COLOR_HOME_AND_ENTRY[Color.green]["ENTRY_FROM_BASE"] + 33) }</loc></piece-loc>`
 						+ `</main>`;
 
 		expect(enc.mainRingToXML(board)).to.equal(exp);
