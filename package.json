@@ -8,7 +8,7 @@
     "source-map-support": "^0.4.15"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha ./out/test",
     "cover": "nyc npm test"
   },
   "dependencies": {
