@@ -147,7 +147,7 @@ export class Board {
 		let counter = 0;
 		
 		while(counter < distance) {
-			if(spot instanceof HomeSpot)
+			if(next_spot instanceof HomeSpot)
 				// still have distance to go but on home spot
 				return null;
 
