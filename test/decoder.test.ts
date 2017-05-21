@@ -194,7 +194,7 @@ describe("Home row decoding", () => {
 					"color": "blue",
 					"id": 0
 				},
-				"loc": 40
+				"loc": 3
 			}
 		};
 
@@ -217,14 +217,14 @@ describe("Home row decoding", () => {
 						"color": "blue",
 						"id": 0
 					},
-					"loc": 40
+					"loc": 3
 				},
 				{
 					"pawn": {
 						"color": "green",
 						"id": 3
 					},
-					"loc": 35
+					"loc": 5
 				}
 			]
 		};
