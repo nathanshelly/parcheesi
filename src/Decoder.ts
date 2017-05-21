@@ -58,7 +58,7 @@ export function movesFromXML(xml: string): _Move[] {
 }
 
 export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] {
-	let body: object = parser.xml2js(board_and_dice);
+	let body: object = parser.xml2js(board_and_dice)['do-move'];
 
 	return [boardJSONToBoard(body['board']), diceJSONToDice(body['dice'])];
 }
@@ -77,7 +77,10 @@ export function boardJSONToBoard(board_json: object): Board {
 
 // addPawnsInBase unneeded because board constructor does that for us
 
-export function addPawnsInMainJSON(main_ring: object, board: Board): void {
+export function addPawnsInMainJSON(main_ring: object | string, board: Board): void {
+	if (typeof main_ring === 'string')
+		return
+
 	let wrapped = validateBoardSectionJSON(main_ring['piece-loc']);
 	let pawn_locs: [Pawn, number][] = wrapped.map(pieceLocJSONToPawnAndLoc);
 
@@ -85,7 +88,10 @@ export function addPawnsInMainJSON(main_ring: object, board: Board): void {
 	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
 }
 
-export function addPawnsInHomeRowsJSON(home_rows: object, board: Board): void {
+export function addPawnsInHomeRowsJSON(home_rows: object | string, board: Board): void {
+	if (typeof home_rows === 'string')
+		return
+
 	let wrapped = validateBoardSectionJSON(home_rows['piece-loc']);
 	let pawn_locs: [Pawn, number][] = wrapped.map(pl => {return pieceLocJSONToPawnAndLoc(pl) });
 	let hr_starts = board.getHomeRowStarts();
@@ -100,7 +106,10 @@ export function addPawnsInHomeRowsJSON(home_rows: object, board: Board): void {
 	});
 }
 
-export function addPawnsInHomesJSON(homes: object, board: Board): void {
+export function addPawnsInHomesJSON(homes: object | string, board: Board): void {
+	if (typeof homes === 'string')
+		return
+
 	let wrapped = validateBoardSectionJSON(homes["pawn"]);
 	let home_pawns: Pawn[] = wrapped.map(pawnJSONToPawn);
 

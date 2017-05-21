@@ -198,6 +198,7 @@ describe("moves XML tests", () => {
 		let moves = [move, move_two, move_three, move_four];
 		expect(enc.movesToMovesXML(moves, board)).to.equal(exp);
 	});
+
 });
 
 describe("doMove encoding", () => {
@@ -598,3 +599,32 @@ describe("Home spot encoding", () => {
 		expect(enc.homeSpotsToXML(board)).to.equal(exp);
 	});
 });
+
+describe("Encoding moves as in practice test tournaments", () => {
+	let board: Board;
+
+	beforeEach(() => {
+		board = new Board();
+	})
+
+	it("should work for a move-enter followed by a move-forward", () => {
+		let pawn = new Pawn(3, Color.green);
+
+		let dice = [5, 3];
+
+		let moveEnter: MoveEnter = new MoveEnter(pawn);
+		let moveForward: MoveForward = new MoveForward(pawn, 3);
+
+		let exp = "<moves>" + 
+			"<enter-piece><pawn><color>green</color><id>3</id></pawn></enter-piece>" +
+			"<move-piece-main>" +
+			"<pawn><color>green</color><id>3</id></pawn>" +
+			"<start>5</start>" +
+			"<distance>3</distance>" +
+			"</move-piece-main>" +
+			"</moves>";
+
+		expect(enc.movesToMovesXML([moveEnter, moveForward], board)).to.equal(exp);
+	});
+});
+

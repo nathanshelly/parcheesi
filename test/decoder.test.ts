@@ -38,7 +38,8 @@ describe('nameFromXML', () => {
 
 describe('doMoveXMLToBoardDice test', () => {
 	it('should return a tuple of a board and array of dice', () => {
-		let xml = `<board>`
+		let xml = "<do-move>"
+			+ `<board>`
 			+ `<start>`
 			+ `<pawn><color>yellow</color><id>3</id></pawn>`
 			+ `<pawn><color>yellow</color><id>2</id></pawn>`
@@ -69,7 +70,8 @@ describe('doMoveXMLToBoardDice test', () => {
 			+ `<die>2</die>`
 			+ `<die>5</die>`
 			+ `<die>5</die>`
-			+ `</dice>`;
+			+ `</dice>`
+			+ "</do-move>";
 		dec.doMoveXMLToBoardDice(xml);
 	});
 });

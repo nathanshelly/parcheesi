@@ -74,7 +74,13 @@ export function pawnToXML(pawn: Pawn): string {
 }
 
 export function movesToMovesXML(moves: _Move[], board: Board): string {
-	return `<moves>${ _.join(moves.map(move => { return moveToMoveXML(move, board); }), "") }</moves>`;
+	return `<moves>${
+		_.join(moves.map(move => {
+			let xml: string = moveToMoveXML(move, board);
+			board.makeMove(move);
+			return xml;
+		}), "")
+	}</moves>`;
 }
 
 // this whole method is pretty horrifying, try and come back to this
@@ -83,11 +89,13 @@ export function moveToMoveXML(move: _Move, board: Board): string {
 	if(move instanceof MoveEnter)
 		move_string = `<enter-piece>${pawnToXML(move.pawn)}</enter-piece>`;
 	else if(move instanceof MoveForward) {
-		// using test indices here instead of spending time 
-		// building custom functionality to support spec natively
+		// Leveraging the indices in spots that we intended just for debugging
 		let spot = board.findSpotOfPawn(move.pawn)
+
 		let maybe_adjusted_start = spot instanceof HomeRowSpot ? spot.index : (spot.index + 1) % c.MAIN_RING_SIZE;
+
 		let body_text = pawnToXML(move.pawn) + startToStartXML(maybe_adjusted_start) + distanceToDistanceXML(move.distance);
+
 		if (board.findSpotOfPawn(move.pawn) instanceof HomeRowSpot)
 			move_string = `<move-piece-home>${body_text}</move-piece-home>`;
 		else

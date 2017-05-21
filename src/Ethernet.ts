@@ -1,6 +1,8 @@
 import * as enc from './Encoder'
 import * as dec from './Decoder'
 
+import * as _ from 'lodash'
+
 import { Board } from './Board'
 import { _Move } from './_Move'
 import { _Player } from './_Player'
@@ -30,7 +32,9 @@ export class Ethernet {
 	getPlayerMoves(board_string: string): string {
 		let board: Board, dice: number[];
 		[board, dice] = dec.doMoveXMLToBoardDice(board_string);
-		return enc.movesToMovesXML(this.player.doMove(board, dice), board);
+		
+		let cache: Board = _.cloneDeep(board);
+		return enc.movesToMovesXML(this.player.doMove(board, dice), cache);
 	}
 
 	startGameForPlayer(start_game: string): string {
