@@ -30,7 +30,7 @@ export class PawnSetter implements _PawnHandler {
 	running_main_ring: boolean;
 
 	constructor(pawn_locs: [Pawn, number][], board: Board, running_main_ring: boolean) {
-		this.pawn_locs = pawn_locs.sort((tuple_one, tuple_two) => tuple_one[1] - tuple_two[1]);
+		this.pawn_locs = pawn_locs.sort((tuple_one, tuple_two) => { return tuple_one[1] - tuple_two[1]; });
 		this.board = board;
 		this.running_main_ring = running_main_ring;
 	}

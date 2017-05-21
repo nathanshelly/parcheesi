@@ -202,6 +202,8 @@ describe('PawnGetter home row tests', () => {
 });
 
 describe('PawnSetter main ring tests', () => {
+	// locations here are not relative to player's entry spots
+	// but rather absolute to the server's implementation of indices
 	let board: Board;
 	let starting_spot: _Spot;
 
@@ -231,6 +233,25 @@ describe('PawnSetter main ring tests', () => {
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
 
 		expect(board.findSpotOfPawn(green).index).to.equal(tm.convertServerLocToMainRingLoc(6));
+	});
+
+	it('should correctly set several pawns of same color in main ring', () => {
+		let greens_pl: [Pawn, number][] =  [[new Pawn(2, Color.green), 6],
+																				[new Pawn(1, Color.green), c.MAIN_RING_SIZE - 3],
+																				[new Pawn(0, Color.green), 24],
+																				[new Pawn(3, Color.green), 46]];
+		
+		let exp_spots = [6, c.MAIN_RING_SIZE - 3, 24, 46].sort((a, b) => {
+			return a - b;
+		}).map(num => {
+			return tm.convertServerLocToMainRingLoc(num);
+		});
+
+		let ps = new PawnSetter(greens_pl, board, true);
+		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
+
+		let green_spots = board.getOccupiedSpotsOfColorOnBoard(Color.green);
+		expect(green_spots.map(spot => { return spot.index; })).to.deep.equal(exp_spots);
 	});
 	
 	// it('should correctly get no pawns in home rows if there are pawns only in various main ring locations', () => {
