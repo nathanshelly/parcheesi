@@ -6,6 +6,7 @@ import { Pawn } from '../src/Pawn'
 import { Color } from '../src/Color'
 import { Board } from '../src/Board'
 import { _Spot } from '../src/_Spot'
+import { HomeRowSpot } from '../src/HomeRowSpot'
 import { _Player } from '../src/_Player'
 
 import { PawnGetter, PawnSetter } from '../src/_PawnHandler'
@@ -212,8 +213,6 @@ describe('PawnGetter home row tests', () => {
 });
 
 describe('PawnSetter main ring tests', () => {
-	// locations here are not relative to player's entry spots
-	// but rather absolute to the server's implementation of indices
 	let board: Board;
 	let starting_spot: _Spot;
 
@@ -224,7 +223,6 @@ describe('PawnSetter main ring tests', () => {
 
 	it('should correctly set no pawns in main ring if it has no pawns', () => {
 		let ps = new PawnSetter([], board);
-		let temp = Color.green;
 
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
 		
@@ -251,9 +249,7 @@ describe('PawnSetter main ring tests', () => {
 																				[new Pawn(0, Color.green), 24],
 																				[new Pawn(3, Color.green), 46]];
 		
-		let exp_spots = [6, c.MAIN_RING_SIZE - 3, 24, 46].sort((a, b) => {
-			return a - b;
-		});
+		let exp_spots = [6, 24, 46, c.MAIN_RING_SIZE - 3];
 
 		let ps = new PawnSetter(greens_pl, board);
 		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
@@ -264,8 +260,8 @@ describe('PawnSetter main ring tests', () => {
 	
 	it('should correctly set one pawn of each color in main ring', () => {
 		let pawn_locs: [Pawn, number][] =  [[new Pawn(2, Color.blue), 6],
-																				[new Pawn(1, Color.green), c.MAIN_RING_SIZE - 3],
 																				[new Pawn(0, Color.red), 24],
+																				[new Pawn(1, Color.green), c.MAIN_RING_SIZE - 3],
 																				[new Pawn(1, Color.yellow), 46]];
 		
 		// getting occupied spots by color so separating expected spots by color
@@ -284,27 +280,135 @@ describe('PawnSetter main ring tests', () => {
 		expect(occupied_spots).to.deep.equal(exp_spots);
 	});
 
-	// it('should correctly set several pawns of each color in main ring', () => {
-	// 	let pawn_locs: [Pawn, number][] =  [[new Pawn(2, Color.blue), 6], [new Pawn(2, Color.blue), 6], [new Pawn(2, Color.blue), 64],
-	// 																			[new Pawn(1, Color.green), 43], [new Pawn(1, Color.green), 41],
-	// 																			[new Pawn(0, Color.red), 1], [new Pawn(0, Color.red), 2], [new Pawn(0, Color.red), 55], [new Pawn(0, Color.red), 56],
-	// 																			[new Pawn(1, Color.yellow), 45], [new Pawn(1, Color.yellow), 42]];
+	it('should correctly set several pawns of each color in main ring', () => {
+		let pawn_locs: [Pawn, number][] = [
+		 [new Pawn(2, Color.blue), 6], [new Pawn(3, Color.blue), 6], [new Pawn(0, Color.blue), 64],
+		 [new Pawn(0, Color.red), 1], [new Pawn(3, Color.red), 2], [new Pawn(2, Color.red), 55], [new Pawn(1, Color.red), 56],
+		 [new Pawn(1, Color.green), 41], [new Pawn(2, Color.green), 43],
+		 [new Pawn(3, Color.yellow), 42], [new Pawn(1, Color.yellow), 45]
+		];
 		
-	// 	// getting occupied spots by color so separating expected spots by color
-	// 	// also getting from board is sorted by color
-	// 	let exp_spots = [[6], [46], [24], [c.MAIN_RING_SIZE - 3]].map(arr => {
-	// 		return [tm.convertServerLocToMainRingLoc(arr[0])];
-	// 	});
+		// getting occupied spots by color so separating expected spots by color
+		let exp_spots = [[64, 6, 6], [55, 56, 1, 2], [41, 43], [42, 45]];
 
-	// 	let ps = new PawnSetter(pawn_locs, board, true);
-	// 	board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
+		let ps = new PawnSetter(pawn_locs, board);
+		board.spotRunner(starting_spot, c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, ps);
 
-	// 	let occupied_spots = Object.keys(c.COLOR_HOME_AND_ENTRY).map(color => {
-	// 		return board.getOccupiedSpotsOfColorOnBoard(parseInt(color)).map(spot => {
-	// 			return spot.index;
-	// 		});
-	// 	});
+		let occupied_spots = Object.keys(c.COLOR_HOME_AND_ENTRY).map(color => {
+			return board.getOccupiedSpotsOfColorOnBoard(parseInt(color)).map(spot => {
+				return spot.index;
+			});
+		});
 
-	// 	expect(occupied_spots).to.deep.equal(exp_spots);
-	// });
+		expect(occupied_spots).to.deep.equal(exp_spots);
+	});
+});
+
+describe('PawnSetter home row tests', () => {
+	let board: Board;
+
+	beforeEach(() => {
+		board = new Board();
+	});
+
+	it('should correctly set no pawns in any home row if pawnsetter has no pawns', () => {
+		board.getHomeRowStarts().forEach(hrs => {
+			let ps = new PawnSetter([], board);
+			board.spotRunner(hrs, c.HOME_ROW_SIZE, hrs.color, ps);
+		});
+
+		board.getHomeRowStarts().forEach(hrs => {
+			let next_spot = hrs.next(hrs.color) as _Spot;
+			do {
+				expect(next_spot.nPawns()).to.equal(0);
+				next_spot = next_spot.next(hrs.color) as _Spot;
+			 } while(next_spot instanceof HomeRowSpot);
+		});
+	});
+	
+	it("should correctly set one pawn in one color's home row", () => {
+		let green = new Pawn(2, Color.green);
+		let green_pl: [Pawn, number][] = [[green, 2]];
+		
+		let hr = board.getHomeRowStarts().filter(hrs => {
+			return hrs.color === green.color;
+		})[0];
+
+		let ps = new PawnSetter(green_pl, board);
+		board.spotRunner(hr, c.HOME_ROW_SIZE, green.color, ps)
+
+		expect(board.findSpotOfPawn(green).index).to.equal(2);
+	});
+
+	it("should correctly set several pawns of same color in that color's home row", () => {
+		let greens_pl: [Pawn, number][] =  [[new Pawn(2, Color.green), 0],
+																				[new Pawn(1, Color.green), c.HOME_ROW_SIZE - 1],
+																				[new Pawn(0, Color.green), 1],
+																				[new Pawn(3, Color.green), 4]];
+		
+		let exp_spots = [0, 1, 4, c.HOME_ROW_SIZE - 1];
+
+		let ps = new PawnSetter(greens_pl, board);
+		let hr = board.getHomeRowStarts().filter(hrs => {
+			return hrs.color === Color.green;
+		})[0];
+		board.spotRunner(hr, c.HOME_ROW_SIZE, Color.green, ps);
+
+		let green_spots = board.getOccupiedSpotsOfColorOnBoard(Color.green);
+		expect(green_spots.map(spot => { return spot.index; })).to.deep.equal(exp_spots);
+	});
+	
+	it('should correctly set one pawn of each color in each home row', () => {
+		let pawn_locs: [Pawn, number][] =  [[new Pawn(2, Color.blue), 1],
+																				[new Pawn(0, Color.red), 0],
+																				[new Pawn(1, Color.green), 4],
+																				[new Pawn(1, Color.yellow), c.HOME_ROW_SIZE - 3]];
+		
+		// getting occupied spots by color so separating expected spots by color
+		let exp_spots = [[1], [0], [4], [c.HOME_ROW_SIZE - 3]];
+
+		board.getHomeRowStarts().forEach(hrs => {
+			let this_colors_pls = pawn_locs.filter(pl => {
+				return pl[0].color === hrs.color;
+			});
+			let ps = new PawnSetter(this_colors_pls, board);
+			board.spotRunner(hrs, c.HOME_ROW_SIZE, Color.green, ps);
+		});
+		
+		let occupied_spots = Object.keys(c.COLOR_HOME_AND_ENTRY).map(color => {
+			return board.getOccupiedSpotsOfColorOnBoard(parseInt(color)).map(spot => {
+				return spot.index;
+			});
+		});
+
+		expect(occupied_spots).to.deep.equal(exp_spots);
+	});
+
+	it('should correctly set several pawns of each color in main ring', () => {
+		let pawn_locs: [Pawn, number][] = [
+		 [new Pawn(2, Color.blue), 0], [new Pawn(3, Color.blue), 0], [new Pawn(0, Color.blue), c.HOME_ROW_SIZE - 1],
+		 [new Pawn(0, Color.red), 2], [new Pawn(3, Color.red), 1], [new Pawn(2, Color.red), 1], [new Pawn(1, Color.red), 4],
+		 [new Pawn(1, Color.green), c.HOME_ROW_SIZE - 1], [new Pawn(2, Color.green), 0],
+		 [new Pawn(3, Color.yellow), 3], [new Pawn(1, Color.yellow), 4]
+		];
+		
+		// getting occupied spots by color so separating expected spots by color
+		let exp_spots = [[0, 0, c.HOME_ROW_SIZE - 1], [1, 1, 2, 4], [0, c.HOME_ROW_SIZE - 1], [3, 4]];
+
+		board.getHomeRowStarts().forEach(hrs => {
+			let this_colors_pls = pawn_locs.filter(pl => {
+				return pl[0].color === hrs.color;
+			});
+			let ps = new PawnSetter(this_colors_pls, board);
+			board.spotRunner(hrs, c.HOME_ROW_SIZE, Color.green, ps);
+		});
+		
+		let occupied_spots = Object.keys(c.COLOR_HOME_AND_ENTRY).map(color => {
+			return board.getOccupiedSpotsOfColorOnBoard(parseInt(color)).map(spot => {
+				return spot.index;
+			});
+		});
+
+		expect(occupied_spots).to.deep.equal(exp_spots);
+	});
 });
