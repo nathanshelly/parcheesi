@@ -56,12 +56,15 @@ export function dieToXML(die: number): string {
 	return `<die>${die}</die>`;
 }
 
-export function pawnLocsToPieceLocsXML(pawnLocs: [Pawn, number][]): string {
-	return pawnLocs.map(pawnLocToPieceLocXML).join("");
+export function pawnLocsToPieceLocsXML(pawnLocs: [Pawn, number][], are_locs_in_main_ring: boolean): string {
+	return pawnLocs.map(pl => {
+		return pawnLocToPieceLocXML(pl, are_locs_in_main_ring);
+	}).join("");
 }
 
-export function pawnLocToPieceLocXML(pawnLoc: [Pawn, number]): string {
-	return `<piece-loc>${ pawnToXML(pawnLoc[0]) }<loc>${ pawnLoc[1] }</loc></piece-loc>`;
+export function pawnLocToPieceLocXML(pawnLoc: [Pawn, number], is_loc_in_main_ring: boolean): string {
+	let loc = is_loc_in_main_ring ? (pawnLoc[1] + 1) % c.MAIN_RING_SIZE : pawnLoc[1];
+	return `<piece-loc>${ pawnToXML(pawnLoc[0]) }<loc>${ loc }</loc></piece-loc>`;
 }
 
 /* Pawns */
@@ -124,10 +127,10 @@ export function mainRingToXML(board: Board): string {
 	let zero = board.mainRing[0];
 	let dist = c.MAIN_RING_SIZE;
 
-	let pg = new PawnGetter(true);
+	let pg = new PawnGetter();
 	board.spotRunner(zero, dist, c.COLOR_TO_RUN_MAIN_RING, pg);
 
-	return `<main>${pawnLocsToPieceLocsXML(pg.pawn_locs)}</main>`;
+	return `<main>${ pawnLocsToPieceLocsXML(pg.pawn_locs, true) }</main>`;
 }
 
 export function homeRowsToXML(board: Board): string {
@@ -136,10 +139,10 @@ export function homeRowsToXML(board: Board): string {
 }
 
 export function homeRowToXML(board: Board, hrStart: HomeRowSpot): string {
-	let pg = new PawnGetter(false);
+	let pg = new PawnGetter();
 	board.spotRunner(hrStart, c.HOME_ROW_SIZE, hrStart.color, pg);
 
-	return pawnLocsToPieceLocsXML(pg.pawn_locs);
+	return pawnLocsToPieceLocsXML(pg.pawn_locs, false);
 }
 
 export function homeSpotsToXML(board: Board): string {

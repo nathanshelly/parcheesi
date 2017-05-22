@@ -40,10 +40,12 @@ export function diceJSONToDice(dice: object): number[] {
 	return dice['die'].map(die => { return parseInt(die); });
 }
 
-export function pieceLocJSONToPawnAndLoc(piece_loc: object, is_main_ring: boolean): [Pawn, number] {
+export function pieceLocJSONToPawnAndLoc(piece_loc: object, is_loc_in_main_ring: boolean): [Pawn, number] {
 	let pawn: Pawn = pawnJSONToPawn(piece_loc["pawn"]);
 	let loc: number = parseInt(piece_loc["loc"]);
-	if(is_main_ring)
+	// adjust loc if in main ring due to indexing differences
+	// between Robby's board and ours
+	if(is_loc_in_main_ring)
 		loc = loc === 0 ? c.MAIN_RING_SIZE - 1 : loc - 1;
 	return [pawn, loc];
 }
@@ -86,7 +88,7 @@ export function addPawnsInMainJSON(main_ring: object | string, board: Board): vo
 	let wrapped = validateBoardSectionJSON(main_ring['piece-loc']);
 	let pawn_locs: [Pawn, number][] = wrapped.map(pawn_loc => pieceLocJSONToPawnAndLoc(pawn_loc, true));
 
-	let pawn_setter = new PawnSetter(pawn_locs, board, true);
+	let pawn_setter = new PawnSetter(pawn_locs, board);
 	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
 }
 
@@ -100,7 +102,7 @@ export function addPawnsInHomeRowsJSON(home_rows: object | string, board: Board)
 
 	_.range(c.N_COLORS).forEach(i => {
 		let pls_of_color = pawn_locs.filter(pl => { return pl[0].color == i });
-		let pawn_setter = new PawnSetter(pls_of_color, board, true);
+		let pawn_setter = new PawnSetter(pls_of_color, board);
 
 		let hrs: HomeRowSpot = hr_starts[i];
 

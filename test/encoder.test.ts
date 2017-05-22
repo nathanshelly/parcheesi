@@ -81,16 +81,38 @@ describe('Dice encoding', () => {
 });
 
 describe('Piece-loc encoding', () => {
-	it('should correctly encode a single piece-loc', () => {
+	it('should correctly encode a single main ring piece-loc', () => {
+		let pawn_loc: [Pawn, number] = [new Pawn(2, Color.blue), 11];
+		let exp = `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_loc[0].color]}</color><id>${pawn_loc[0].id}</id></pawn>`
+						+ `<loc>${ (pawn_loc[1] + 1) % c.MAIN_RING_SIZE }</loc>`
+						+ `</piece-loc>`
+		expect(enc.pawnLocToPieceLocXML(pawn_loc, true)).to.equal(exp);
+	});
+
+	it('should correctly encode a single home row piece-loc', () => {
 		let pawn_loc: [Pawn, number] = [new Pawn(2, Color.blue), 11];
 		let exp = `<piece-loc>`
 						+ `<pawn><color>${Color[pawn_loc[0].color]}</color><id>${pawn_loc[0].id}</id></pawn>`
 						+ `<loc>${pawn_loc[1]}</loc>`
 						+ `</piece-loc>`
-		expect(enc.pawnLocToPieceLocXML(pawn_loc)).to.equal(exp);
+		expect(enc.pawnLocToPieceLocXML(pawn_loc, false)).to.equal(exp);
 	});
 
-	it('should correctly encode several piece-locs', () => {
+	it('should correctly encode several main ring piece-locs', () => {
+		let pawn_locs: [Pawn, number][] = [[new Pawn(2, Color.blue), 11], [new Pawn(2, Color.red), c.ENTRY_TO_HOME_OFFSET]];
+		let exp = `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_locs[0][0].color]}</color><id>${pawn_locs[0][0].id}</id></pawn>`
+						+ `<loc>${ (pawn_locs[0][1] + 1) % c.MAIN_RING_SIZE }</loc>`
+						+ `</piece-loc>`
+						+ `<piece-loc>`
+						+ `<pawn><color>${Color[pawn_locs[1][0].color]}</color><id>${pawn_locs[1][0].id}</id></pawn>`
+						+ `<loc>${ (pawn_locs[1][1] + 1) % c.MAIN_RING_SIZE }</loc>`
+						+ `</piece-loc>`
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs, true)).to.equal(exp);
+	});
+
+	it('should correctly encode several home row piece-locs', () => {
 		let pawn_locs: [Pawn, number][] = [[new Pawn(2, Color.blue), 11], [new Pawn(2, Color.red), c.ENTRY_TO_HOME_OFFSET]];
 		let exp = `<piece-loc>`
 						+ `<pawn><color>${Color[pawn_locs[0][0].color]}</color><id>${pawn_locs[0][0].id}</id></pawn>`
@@ -100,12 +122,14 @@ describe('Piece-loc encoding', () => {
 						+ `<pawn><color>${Color[pawn_locs[1][0].color]}</color><id>${pawn_locs[1][0].id}</id></pawn>`
 						+ `<loc>${pawn_locs[1][1]}</loc>`
 						+ `</piece-loc>`
-		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal(exp);
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs, false)).to.equal(exp);
 	});
 
 	it('should correctly encode empty piece-locs', () => {
 		let pawn_locs = [];
-		expect(enc.pawnLocsToPieceLocsXML(pawn_locs)).to.equal('');
+		// true or false flag should make no difference here
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs, true)).to.equal('');
+		expect(enc.pawnLocsToPieceLocsXML(pawn_locs, false)).to.equal('');
 	});
 });
 
