@@ -34,7 +34,7 @@ class PlayerServer {
 			let xml: string = data.toString();
 
 			let response: string = this.n_player.interpret(xml);
-			console.log(`Responding with: ${response}`);
+			console.log(`Responding with: ${response}\n`);
 
 			this.socket.write(response);
 		});
