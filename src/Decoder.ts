@@ -103,7 +103,6 @@ export function addPawnsInHomeRowsJSON(home_rows: object | string, board: Board)
 	_.range(c.N_COLORS).forEach(i => {
 		let pls_of_color = pawn_locs.filter(pl => { return pl[0].color == i });
 		let pawn_setter = new PawnSetter(pls_of_color, board);
-
 		let hrs: HomeRowSpot = hr_starts[i];
 
 		board.spotRunner(hrs, c.HOME_ROW_SIZE, i, pawn_setter);
