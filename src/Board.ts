@@ -198,15 +198,9 @@ export class Board {
 		
 		// get tuples of pawns (sorted for later equality) and spot for spots that have blockades
 		let currently_blockaded_pawns = unique_blockaded_spots.map(spot => {
-			// need to split this in to two lines, for some reason Typescript
-			// is struggling to parse the types correctly. When specifying the type
-			// in the definition of blockade_tuple Typescript understands that
-			// the specified type is correct. When that explicit type declaration is removed
-			// as in the commented line below, Typescript thinks the exact same code produces
-			// the following type: (_Spot | Pawn[])[]
-			// return [spot.getLivePawns().sort(), spot];
-			let blockade_tuple: [Pawn[], _Spot] = [spot.getLivePawns().sort(), spot];
-			return blockade_tuple;
+			// need to cast because otherwise Typescript will think this is a
+			// heterogenous array
+			return [spot.getLivePawns().sort(), spot] as [Pawn[], _Spot];
 		});
 		
 		return currently_blockaded_pawns;
@@ -234,14 +228,16 @@ export class Board {
 	}
 
 	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
-		let live_pawns: Pawn[] = spot.getLivePawns();
-		let append_pawns: Pawn[] = (live_pawns.length > 0 && live_pawns[0].color === color) ? live_pawns : [];
+		let live_pawns: Pawn[], append_pawns: Pawn[];
+		live_pawns = spot.getLivePawns();
+		append_pawns = (live_pawns.length > 0 && live_pawns[0].color === color)
+										? live_pawns
+										: [];
 		
 		if(spot instanceof HomeSpot)
 			return append_pawns
 		
-		// can't return null because if spot was home spot we would have
-		// already returned
+		// can cast as _Spot here if spot was home spot we would have returned
 		let next_spot: _Spot = spot.next(color) as _Spot;
 		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, next_spot));
 	}

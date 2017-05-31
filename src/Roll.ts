@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
@@ -24,7 +25,7 @@ export class Roll {
 		this.player = player;
 		this.possible_distances = possible_distances;
 		
-		this.starting_blockades = board.getBlockadesOfColor(player.color);	
+		this.starting_blockades = board.getBlockadesOfColor(player.color);
 	}
 
 	take(): boolean {
@@ -46,7 +47,8 @@ export class Roll {
 				return false;
 		}
 
-		if(this.refo)
+		if(this.reformedBlockade())
+			return false;
 		
 		return true;
 	}
@@ -62,7 +64,7 @@ export class Roll {
 
 		return base_pawns.some(pawn => {
 			// TODO - test this
-			return new MoveEnter(pawn).isLegal(this.board, this.player, this.possible_distances, this.starting_blockades);
+			return new MoveEnter(pawn).isLegal(this.board, this.player, this.possible_distances);
 		});
 	}
 
@@ -73,21 +75,14 @@ export class Roll {
 		return main_ring_pawns.some(pawn => {
 			return this.possible_distances.some(distance => {
 				// TODO - test this
-				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances, this.starting_blockades);
+				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances);
 			});});
 	}
 
-	reformedBlockade(starting_blockades: [Pawn[], _Spot][], board: Board): boolean {
-		
-		
-		if(spot.hasBlockade())
-			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
-		
-		let would_be_pawns: Pawn[] = spot.getLivePawns();
-		would_be_pawns.push(pawn);
-		// sorting for equality check
-		would_be_pawns = would_be_pawns.sort();
+	reformedBlockade(): boolean {
+		let ending_blockades = this.board.getBlockadesOfColor(this.player.color);
 
-		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
+
+		return this.starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
 	}
 }
