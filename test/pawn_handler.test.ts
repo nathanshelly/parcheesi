@@ -9,7 +9,7 @@ import { _Spot } from '../src/_Spot'
 import { HomeRowSpot } from '../src/HomeRowSpot'
 import { _Player } from '../src/_Player'
 
-import { PawnGetter, PawnSetter } from '../src/_PawnHandler'
+import { PawnGetter, PawnSetter } from '../src/_SpotHandler'
 
 import { expect } from 'chai';
 import 'mocha';

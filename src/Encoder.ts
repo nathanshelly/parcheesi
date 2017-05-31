@@ -7,7 +7,7 @@ import { Pawn } from './Pawn'
 import { Board } from './Board'
 import { Color } from './Color'
 import { PrettyDumbPlayer } from './BasicPlayer'
-import { PawnGetter } from './_PawnHandler';
+import { PawnGetter } from './_SpotHandler';
 
 import { _Move } from './_Move'
 import { MoveEnter } from './MoveEnter'

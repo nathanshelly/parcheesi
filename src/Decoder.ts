@@ -8,7 +8,7 @@ import { Board } from './Board'
 import { HomeRowSpot } from './HomeRowSpot'
 import { HomeSpot } from './HomeSpot'
 import { Color } from './Color'
-import { PawnSetter } from './_PawnHandler'
+import { PawnSetter } from './_SpotHandler'
 import { PrettyDumbPlayer } from './BasicPlayer'
 
 import { _Move } from './_Move'
