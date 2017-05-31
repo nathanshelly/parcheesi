@@ -81,8 +81,10 @@ export class Roll {
 
 	reformedBlockade(): boolean {
 		let ending_blockades = this.board.getBlockadesOfColor(this.player.color);
-
-
-		return this.starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
+		return this.starting_blockades.some(sb => {
+			return ending_blockades.some(eb => {
+				return _.isEqual(sb[0], eb[0]) && !_.isEqual(sb[1], eb[1]);
+			});
+		});
 	}
 }
