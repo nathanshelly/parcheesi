@@ -140,11 +140,10 @@ export class Board {
 		return spot;
 	}
 
-	// Distance can be a function taking number and returning a flag "continue or not"
-	spotRunner(spot: _Spot, distance: number, color: Color, pawnHandler?: _SpotHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
-		// get spot at an offset, checking any passed in predicates at each spot along the way
-		let next_spot: _Spot | null = spot;
-		let counter = 0;
+	// get spot at an offset, checking any passed in predicates at
+	// each spot along the way, and passing spot to optional spotHandler
+	spotRunner(spot: _Spot, distance: number, color: Color, spotHandler?: _SpotHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {	
+		let next_spot: _Spot | null = spot, counter: number = 0;
 		
 		while(counter < distance) {
 			if(next_spot instanceof HomeSpot)
@@ -153,12 +152,11 @@ export class Board {
 
 			// before getting next spot because
 			// indexing starts at 0 for manipulating pawns
-			if(pawnHandler !== undefined)
-				pawnHandler.manipulateSpot(next_spot, counter);
+			if(spotHandler !== undefined)
+				spotHandler.manipulateSpot(next_spot, counter);
 			
 			// next_spot must be spot here
 			next_spot = next_spot.next(color) as _Spot;
-
 			if(predicates.some(predicate => { return predicate(next_spot as _Spot); }))
 				return null;
 
