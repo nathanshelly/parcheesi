@@ -1,8 +1,12 @@
 import * as x2js from 'x2js'
+import * as _ from 'lodash'
+
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
+import { HomeRowSpot } from './HomeRowSpot'
+import { HomeSpot } from './HomeSpot'
 import { Color } from './Color'
 import { PawnSetter } from './_PawnHandler'
 import { PrettyDumbPlayer } from './BasicPlayer'
@@ -23,12 +27,42 @@ export function nameFromXML(xml: string): string {
 	return name["name"];
 }
 
+export function distanceXMLToDistance(distance: string): number {
+	return parseInt(parser.xml2js(distance)["distance"]);
+}
+
+export function idXMLToId(id: string): number {
+	return parseInt(parser.xml2js(id)["id"]);
+}
+
+// Dice
+export function diceJSONToDice(dice: object): number[] {
+	return dice['die'].map(die => { return parseInt(die); });
+}
+
+export function pieceLocJSONToPawnAndLoc(piece_loc: object, is_loc_in_main_ring: boolean): [Pawn, number] {
+	let pawn: Pawn = pawnJSONToPawn(piece_loc["pawn"]);
+	let loc: number = parseInt(piece_loc["loc"]);
+	// adjust loc if in main ring due to indexing differences
+	// between Robby's board and ours
+	if(is_loc_in_main_ring)
+		loc = loc === 0 ? c.MAIN_RING_SIZE - 1 : loc - 1;
+	return [pawn, loc];
+}
+
+export function pawnJSONToPawn(json: object): Pawn {
+	let id: number = parseInt(json["id"]);
+	let color: Color = parseInt(Color[json["color"]]);
+	
+	return new Pawn(id, color);
+}
+
 export function movesFromXML(xml: string): _Move[] {
 	return [];
 }
 
 export function doMoveXMLToBoardDice(board_and_dice: string): [Board, number[]] {
-	let body: object = parser.xml2js(board_and_dice);
+	let body: object = parser.xml2js(board_and_dice)['do-move'];
 
 	return [boardJSONToBoard(body['board']), diceJSONToDice(body['dice'])];
 }
@@ -45,45 +79,52 @@ export function boardJSONToBoard(board_json: object): Board {
 	return board;
 }
 
-export function addPawnsInMainJSON(main_ring: object, board: Board): void {
-	main_ring = arrayIfJSONIsNotArray(main_ring['piece-loc']);
+// addPawnsInBase unneeded because board constructor does that for us
 
-	let pawn_locs: [Pawn, number][] = [];
-	let pawn_setter = new PawnSetter(pawn_locs, board, true);
+export function addPawnsInMainJSON(main_ring: object | string, board: Board): void {
+	if (typeof main_ring === 'string')
+		return
+
+	let wrapped = validateBoardSectionJSON(main_ring['piece-loc']);
+	let pawn_locs: [Pawn, number][] = wrapped.map(pawn_loc => pieceLocJSONToPawnAndLoc(pawn_loc, true));
+
+	let pawn_setter = new PawnSetter(pawn_locs, board);
 	board.spotRunner(board.mainRing[0], c.MAIN_RING_SIZE, c.COLOR_TO_RUN_MAIN_RING, pawn_setter);
 }
 
-export function addPawnsInHomeRowsJSON(home_rows: object, board: Board): void {
-	home_rows = arrayIfJSONIsNotArray(home_rows['piece-loc']);
+export function addPawnsInHomeRowsJSON(home_rows: object | string, board: Board): void {
+	if (typeof home_rows === 'string')
+		return
+
+	let wrapped = validateBoardSectionJSON(home_rows['piece-loc']);
+	let pawn_locs: [Pawn, number][] = wrapped.map(pawn_loc => pieceLocJSONToPawnAndLoc(pawn_loc, false));
+	let hr_starts = board.getHomeRowStarts();
+
+	_.range(c.N_COLORS).forEach(i => {
+		let pls_of_color = pawn_locs.filter(pl => { return pl[0].color == i });
+		let pawn_setter = new PawnSetter(pls_of_color, board);
+		let hrs: HomeRowSpot = hr_starts[i];
+
+		board.spotRunner(hrs, c.HOME_ROW_SIZE, i, pawn_setter);
+	});
 }
 
-export function addPawnsInHomesJSON(homes: object, board: Board): void {
-	homes = arrayIfJSONIsNotArray(homes['pawn']);
+export function addPawnsInHomesJSON(homes: object | string, board: Board): void {
+	if (typeof homes === 'string')
+		return
+
+	let wrapped = validateBoardSectionJSON(homes["pawn"]);
+	let home_pawns: Pawn[] = wrapped.map(pawnJSONToPawn);
+
+	let home_spots = board.getHomeSpots();
+	_.range(c.N_COLORS).forEach(i => {
+		let hps_of_color = home_pawns.filter(hp => { return hp.color == i });
+
+		hps_of_color.forEach(hp => { board.findSpotOfPawn(hp).removePawn(hp); });
+		hps_of_color.forEach(hp => { home_spots[i].addPawn(hp) });
+	});
 }
 
-export function getPawnPositionFromPieceLocJSON(piece_loc: object): [Pawn, number] {
-	return [new Pawn(0, 0), 0];
+function validateBoardSectionJSON(json: string | object | object[]): object[] {
+	return typeof json === "string" ? [] : Array.isArray(json) ? json : [json];
 }
-
-
-function arrayIfJSONIsNotArray(json: object | object[]): object[] {
-	return Array.isArray(json) ? json : [json];
-}
-
-// Dice
-export function diceJSONToDice(dice: object): number[] {
-	return dice['die'].map(die => { return parseInt(die); });
-}
-
-export function distanceXMLToDistance(distance: string): number {
-	return 0;
-}
-
-export function pawnXMLToPawn(pawn: string): Pawn {
-	return new Pawn(0, 0);
-}
-
-export function idXMLToId(id: string): number {
-	return 0;
-}
-

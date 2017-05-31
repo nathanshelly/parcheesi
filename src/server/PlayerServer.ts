@@ -1,58 +1,59 @@
 import express = require('express');
-import * as config from './player_config';
+
+import net = require('net');
 
 import { Ethernet } from '../Ethernet';
-import { Server } from './Server';
+import { FirstPawnMover } from '../FirstPawnMover';
 
-class PlayerServer extends Server {
+import * as config from './player_config';
+
+class PlayerServer {
+	private app: express.Application;
+	private socket; // net socket - I don't think this has typings?
+	
 	private n_player: Ethernet;
 
 	constructor() {
-		super();
+		this.app = express();
+		this.socket = new net.Socket();
+
+		this.n_player = new Ethernet(new FirstPawnMover());
 	}
 
 	private listen_callback(port: number) {
 		console.log(`Player server listening on port ${port}...`);
 	}
 
-	init_routes() {
-		this.app.get('/', this.root_route);
-		this.app.post('/do_move', this.do_move_route);
-		this.app.post('/start_game', this.start_game_route);
-	}
+	private connectSocket() {
+		let url = config.SERVER_URL;
+		let port = config.SERVER_PORT;
+		console.log(`attempting to connect to ${url}...`);
 
-	private root_route(req: express.Request, res: express.Response) {
-		console.log(`root request from ${req.originalUrl}, IP: ${req.ip}`);
-		res.send("Hello world!");
-	}
+		this.socket.on('data', data => {
+			console.log(`Received data: ${data}`);
+			let xml: string = data.toString();
 
-	private do_move_route(req: express.Request, res: express.Response) {
-		console.log(`do_move request from ${req.originalUrl}, IP: ${req.ip}`);
+			let response: string = this.n_player.interpret(xml);
+			console.log(`Responding with: ${response}\n`);
 
-		const xml_string: string = req.body;
-	
-		const moves = this.n_player.getPlayerMoves(xml_string);
+			this.socket.write(response);
+		});
 
-		res.set('Content-Type', 'text/xml');
-		res.send(moves);
-	}
+		this.socket.on('close', () => {
+			console.log("Socket closed...");
+		});
 
-	private start_game_route(req: express.Request, res: express.Response) {
-		console.log(`start_game request from ${req.originalUrl}, IP: ${req.ip}`);
-		const xml_string: string = req.body;
-
-		const name = this.n_player.startGameForPlayer(xml_string);
-	
-		res.set('Content-Type', 'text/xml');
-		res.send(name);
+		this.socket.connect(config.SERVER_PORT, config.SERVER_URL, () => {
+			console.log("Socket connected...");
+		});
 	}
 
 	start(port: number) {
-		this.init_routes();
 		this.app.listen(port, () => { this.listen_callback(port) });
+
+		this.connectSocket();
 	}
 }
 
 const s = new PlayerServer();
 s.start(config.PORT);
-

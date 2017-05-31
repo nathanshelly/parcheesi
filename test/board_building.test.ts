@@ -30,11 +30,15 @@ function checkHomeRows(hr_starts: HomeRowSpot[]) {2
 }
 
 // TODO - no longer such a thing as building a board with variable numbers of players
-
-
 describe('Filename: board_building.test.ts\n\nA board with no players', () => {
     let board = new Board();
     
+    it('should have c.NUM_PLAYERS base spots', () => {
+        _.range(c.NUM_PLAYERS).forEach(i => {
+            expect(board.getBaseSpot(i)).to.be.instanceof(BaseSpot);
+        });
+    });
+
     it('should have the right length main ring', () => {
         expect(board.mainRing.length).to.equal(c.MAIN_RING_SIZE);
     });
@@ -68,6 +72,12 @@ describe('A board with one player', () => {
 
     beforeEach(() => {
         board = new Board();
+    });
+
+    it('should have c.NUM_PLAYERS base spots', () => {
+        _.range(c.NUM_PLAYERS).forEach(i => {
+            expect(board.getBaseSpot(i)).to.be.instanceof(BaseSpot);
+        });
     });
 
     it('should have a main ring of the right length', () => {
@@ -139,8 +149,10 @@ describe('A board with four players', () => {
         board = new Board();
     });
 
-    it('should have 4 bases', () => {
-        expect(Object.keys(board.bases).length).to.equal(4);
+    it('should have c.NUM_PLAYERS base spots', () => {
+        _.range(c.NUM_PLAYERS).forEach(i => {
+            expect(board.getBaseSpot(i)).to.be.instanceof(BaseSpot);
+        });
     });
 
     it('should have a main ring of the right length', () => {

@@ -10,42 +10,37 @@ export interface _PawnHandler {
 
 export class PawnGetter implements _PawnHandler {
 	pawn_locs: [Pawn, number][];
-	running_main_ring: boolean;
 
-	constructor(running_main_ring: boolean) {
-		this.running_main_ring = running_main_ring;
+	constructor() {
+		this.pawn_locs = [];
 	}
 
 	manipulatePawns(spot: _Spot, loc: number): void {
 		let pawns = spot.getLivePawns();
-		pawns.forEach(pawn => {this.pawn_locs.push([pawn, (loc + 1) % c.MAIN_RING_SIZE])});
+		pawns.forEach(pawn => { this.pawn_locs.push([pawn, loc]); });
 	}	
 }
 
 export class PawnSetter implements _PawnHandler {
 	pawn_locs: [Pawn, number][];
 	board: Board;
-	running_main_ring: boolean;
 
-	constructor(pawn_locs: [Pawn, number][], board: Board, running_main_ring: boolean) {
-		this.pawn_locs = pawn_locs.sort((tuple_one, tuple_two) => tuple_one[1] - tuple_two[1]);
+	constructor(pawn_locs: [Pawn, number][], board: Board) {
 		this.board = board;
-		this.running_main_ring = running_main_ring;
+		this.pawn_locs = pawn_locs.sort((tuple_one, tuple_two) => { return tuple_one[1] - tuple_two[1]; });
 	}
 
 	manipulatePawns(spot: _Spot, curr_loc: number): void {
 		let pawn: Pawn, loc: number;
-
-
 		// TODO : do while?
-		// (curr_loc + 1) % main_ring_size to accoutn for differences between board indexing
-		while(this.pawn_locs.length > 0 && this.pawn_locs[0][1] === (this.running_main_ring ? (curr_loc + 1) % c.MAIN_RING_SIZE : curr_loc) ) {
+		// (curr_loc + 1) % main_ring_size to account for differences between board indexing
+		while(this.pawn_locs.length > 0 && this.pawn_locs[0][1] === curr_loc) {
 			// casting fine because confirmed that pawn_locs has values
 			[pawn, loc] = this.pawn_locs.shift() as [Pawn, number];
 			
-			// place pawn on correct spot and remove from spot
-			spot.addPawn(pawn);
+			// remove pawn from current spot and then place on new spot
 			this.board.findSpotOfPawn(pawn).removePawn(pawn);
+			spot.addPawn(pawn);
 		}
 	}
 }
