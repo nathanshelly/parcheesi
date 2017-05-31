@@ -4,7 +4,7 @@ import * as c from './Constants'
 import { Pawn } from './Pawn'
 import { Color } from './Color'
 import { _Player } from './_Player'
-import { _PawnHandler } from './_PawnHandler'
+import { _SpotHandler } from './_SpotHandler'
 
 import { _Move } from './_Move'
 import { MoveEnter } from './MoveEnter'
@@ -141,7 +141,7 @@ export class Board {
 	}
 
 	// Distance can be a function taking number and returning a flag "continue or not"
-	spotRunner(spot: _Spot, distance: number, color: Color, pawnHandler?: _PawnHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
+	spotRunner(spot: _Spot, distance: number, color: Color, pawnHandler?: _SpotHandler, ...predicates: ((spot: _Spot) => boolean)[]): _Spot | null {
 		// get spot at an offset, checking any passed in predicates at each spot along the way
 		let next_spot: _Spot | null = spot;
 		let counter = 0;
@@ -154,7 +154,7 @@ export class Board {
 			// before getting next spot because
 			// indexing starts at 0 for manipulating pawns
 			if(pawnHandler !== undefined)
-				pawnHandler.manipulatePawns(next_spot, counter);
+				pawnHandler.manipulateSpot(next_spot, counter);
 			
 			// next_spot must be spot here
 			next_spot = next_spot.next(color) as _Spot;
