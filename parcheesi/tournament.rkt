@@ -12,10 +12,17 @@
          racket/gui/base)
 
 (define max-players 20)
-  
+
+#;
 (define port (if (equal? (current-command-line-arguments) #())
                  8000
                  (string->number (vector-ref (current-command-line-arguments) 0))))
+
+(define port 8000)
+(define n-games (if (equal? (current-command-line-arguments) #())
+                 50
+                 (string->number (vector-ref (current-command-line-arguments) 0))))
+
 (unless port
   (error 'tournament "expected a port number on the command line, found ~a" 
          (vector-ref (current-command-line-arguments) 0)))
@@ -182,7 +189,7 @@
     (define game-result (sync (play-game/thread players #:gui? #f)))
     (define-values (winner cheaters) (apply values game-result))
     (cond
-			[(= 10 games-played)
+			[(= n-games games-played)
 			 (pretty-write (sort (hash-map results list) > #:key cadr))
 			 (exit)]
       [(null? cheaters)
