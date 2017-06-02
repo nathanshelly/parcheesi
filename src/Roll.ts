@@ -76,7 +76,8 @@ export class Roll {
 			return this.possible_distances.some(distance => {
 				// TODO - test this
 				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances);
-			});});
+			});
+		});
 	}
 
 	reformedBlockade(): boolean {
