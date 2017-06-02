@@ -42,7 +42,7 @@ export const COLOR_HOME_AND_ENTRY = {
 
 // USED ONLY IN TEST METHODS
 
-export const TEST_NAME = 'Rǝad';
+export const TEST_NAME = 'Rocky';
 export const TEST_BASE_INDEX = -1;
 
 // divide by two cuz typescript enum
