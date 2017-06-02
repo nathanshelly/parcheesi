@@ -106,6 +106,9 @@
                     (queue-callback
                      (lambda ()
                        (add-player player)))
+
+										(run-lots-of-games (cons player connections))
+
                     (loop (cons player connections)))]
                  [else (loop connections)]))]
             [else
