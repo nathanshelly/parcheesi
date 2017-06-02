@@ -1,12 +1,14 @@
 #lang racket/base
 (require games/parcheesi/play-game
          games/parcheesi/best-players
+         games/parcheesi/admin
          "remote-player.rkt"
          "parse.rkt"
          racket/tcp
          racket/match
          racket/class
          racket/list
+         racket/pretty
          racket/gui/base)
 
 (define max-players 20)
@@ -17,8 +19,6 @@
 (unless port
   (error 'tournament "expected a port number on the command line, found ~a" 
          (vector-ref (current-command-line-arguments) 0)))
-
-(define orig-eventspace (current-eventspace))
   
 ;; name : string
 ;; games : number  -- number of games played
@@ -41,17 +41,35 @@
                           (parent player-frame)
                           (callback
                            (lambda (x y)
+                             (disable-gui)
                              (channel-put start-tournament-chan (void))))))
-  
+(define lots-button (new button%
+                         [label "Run Many Games"]
+                         [parent player-frame]
+                         [callback
+                          (λ (x y)
+                            (disable-gui)
+                            (channel-put lots-games-chan (void)))]))
+
+(define (disable-gui)
+  (send start-button enable #f)
+  (send lots-button enable #f))
+(define (enable-gui)
+  (send start-button enable #t)
+  (send lots-button enable #t))
+
 (define (add-player player)
   (send list-box append (player-name player) player))
   
 ;; connections-chan : (channel (cons input-port output-port))
 (define connections-chan (make-channel))
   
-;; start-tournament-chan (channel (void))
+;; start-tournament-chan : (channel (void))
 (define start-tournament-chan (make-channel))
-  
+
+;; lots-games-chan : (channel (void))
+(define lots-games-chan (make-channel))
+
 (void
  (let ([listener (tcp-listen port 12 #t)])
    (thread
@@ -97,7 +115,16 @@
         start-tournament-chan
         (lambda (_)
           (printf "starting tournament\n")
-          (start-tournament connections))))))))
+          (start-tournament connections)
+          (queue-callback (λ () (enable-gui)))
+          (loop connections)))
+       (handle-evt
+        lots-games-chan
+        (lambda (_)
+          (printf "running lots of games\n")
+
+           ;; doesn't return
+          (run-lots-of-games connections))))))))
     
 (define names-table (make-hash))
 (define (get-name in out)
@@ -124,16 +151,11 @@
 (define (start-tournament players)
   (let loop ([winners '()]
              [good-players players])
-    (print-struct #t)
     (cond
       [(= (length winners) 4)
        (printf "winner ~s\n" (channel-get (play-game/thread winners)))]
       [(<= (length good-players) (- 4 (length winners)))
-       (loop (append winners 
-                     good-players
-                     (make-standin-players (- 4 
-                                              (length winners) 
-                                              (length good-players))))
+       (loop (pad-to-4-players (append winners good-players))
              '())]
       [else
        (let* ([chans (start-many-games good-players (- 4 (length winners)))]
@@ -145,7 +167,30 @@
                              (apply append (map cadr local-winners/cheaters)))])
          (loop (append local-winners winners)
                (remove-many local-winners (remove-many cheaters good-players))))])))
-  
+
+(define (run-lots-of-games _players)
+  (define players (cond
+                    [(<= (length _players) 4)
+                     (pad-to-4-players _players)]
+                    [else _players]))
+  (define results (make-hash))
+  (let loop ([games-played 0])
+    (define to-player-players (take (shuffle players) 4))
+    (define game-result (sync (play-game/thread players #:gui? #f)))
+    (define-values (winner cheaters) (apply values game-result))
+    (cond
+      [(null? cheaters)
+       (hash-set! results winner (+ (hash-ref results winner 0) 1))
+       (when (zero? (modulo games-played 10))
+         (pretty-write (sort (hash-map results list) > #:key cadr)))
+       (loop (+ games-played 1))]
+      [else
+       (printf "~s cheated, aborting\n" cheaters)
+       (void)])))
+
+(define (pad-to-4-players players)
+  (append players (make-standin-players (- 4 (length players)))))
+    
 (define (make-standin-players n)
   (let loop ([n n])
     (cond
@@ -212,14 +257,22 @@
      (let ([selected (list-ref lst (random (length lst)))])
        (cons selected (randomly-select (- n 1) (remove selected lst))))]))
   
-(define (play-game/thread players)
+(define (play-game/thread players #:gui? [gui? #t])
   (define c (make-channel))
   (thread
    (lambda ()
+     (define player-objs (map player-obj players))
      (channel-put 
       c
-      (play-game (map player-obj players)))))
+      (cond
+        [gui? (play-game player-objs)]
+        [else (play-game/no-gui player-objs)]))))
   c)
+
+(define (play-game/no-gui players)
+  (define game (new game%))
+  (for-each (lambda (player) (send game register player)) players)
+  (send game start))
   
 (module+ test
   (require rackunit)
