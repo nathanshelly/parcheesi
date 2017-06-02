@@ -80,7 +80,7 @@
           (loop)))))))
   
 ;; show frame after starting listener
-(send player-frame show #t)
+;(send player-frame show #t)
 
 (void
  (thread
@@ -339,3 +339,12 @@
   (check-false (pick-four-players (list (make-player "a" 0 #f)
                                         (make-player "b" 0 #f)
                                         (make-player "c" 0 #f)))))
+
+
+
+(define (forever)
+ (sleep 5)
+ (forever))
+
+(forever)
+
