@@ -1,5 +1,17 @@
 # Board State Evaluation
 
+## Heuristics architecture
+
+- Heuristics module - calculates various heuristics
+- Scout class - initialized with board and heuristics to use,
+								can evaluates moves and rolls (maybe turns?)
+- Rocky class - initialized with set of heuristics and weighting factors
+								creates scouts to scout his moves,
+								determines and performs final moves/roll
+- Coach class - runs genetic algorithm,
+								creates Rocky clones and evaluates their performance,
+								then mutates heuristics and weighting factors
+
 ## Generating board score
 
 Delta based, delta on score from each move, that way not recalcuting mini
