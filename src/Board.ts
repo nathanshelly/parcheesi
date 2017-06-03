@@ -59,7 +59,6 @@ export class Board {
 	// invariant at this point move is legal
 	makeMove(move: _Move): number | null {
 		let old_spot: _Spot = this.findSpotOfPawn(move.pawn);
-		
 		let new_spot: _Spot;
 
 		if(move instanceof MoveForward)
@@ -70,7 +69,6 @@ export class Board {
 		
 		old_spot.removePawn(move.pawn);
 		let possible_bonus: number | null = this.handleSpecialLandings(move, new_spot);
-		
 		new_spot.addPawn(move.pawn);
 		
 		return possible_bonus;
@@ -172,9 +170,11 @@ export class Board {
 	}
 
 	getEntrySpot(color: Color): MainRingSpot {
-		// no need to check if entry spot exists as it will exist even
-		// if passed in color isn't actually playing
 		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY_FROM_BASE"]];
+	}
+
+	blockadeOnEntrySpot(color: Color): boolean {
+		return this.getEntrySpot(color).hasBlockade();
 	}
 
 	getBaseSpot(color: Color): BaseSpot {
@@ -186,7 +186,9 @@ export class Board {
 		return base;
 	}
 
-	getBlockadesOfColor(color: Color): Pawn[][] {
+	// returns array of tuples of blockades and their spot
+	// used for checking if player reformed blockade
+	getBlockadesOfColor(color: Color): [Pawn[], _Spot][] {
 		let pawn_spots: _Spot[] = this.getOccupiedSpotsOfColorOnBoard(color);
 		
 		// filter to unique spots (keeps first of duplicate items)
@@ -194,8 +196,13 @@ export class Board {
 		// filter spots to only spots with blockades
 		let unique_blockaded_spots = unique_spots.filter(spot => {return spot.hasBlockade()});
 		
-		// get tuples of pawns (sorted for later equality) from spots that have blockades
-		let currently_blockaded_pawns: Pawn[][] = unique_blockaded_spots.map(spot => { return spot.getLivePawns().sort(); });
+		// get tuples of pawns (sorted for later equality) and spot for spots that have blockades
+		let currently_blockaded_pawns = unique_blockaded_spots.map(spot => {
+			// need to cast because otherwise Typescript will think this is a
+			// heterogenous array
+			return [spot.getLivePawns().sort(), spot] as [Pawn[], _Spot];
+		});
+		
 		return currently_blockaded_pawns;
 	}
 
@@ -210,7 +217,6 @@ export class Board {
 
 	getPawnsOfColor(color: Color): Pawn[] {
 		let entry_spot: MainRingSpot = this.getEntrySpot(color);
-
 		let base_pawns = this.getPawnsOfColorInBase(color)
 
 		return base_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, entry_spot));
@@ -222,20 +228,26 @@ export class Board {
 	}
 
 	private getPawnsOfColorOnBoardHelper(color: Color, spot: _Spot): Pawn[] {
-		let live_pawns: Pawn[] = spot.getLivePawns();
-		let append_pawns: Pawn[] = (live_pawns.length > 0 && live_pawns[0].color === color) ? live_pawns : [];
+		let live_pawns: Pawn[], append_pawns: Pawn[];
+		live_pawns = spot.getLivePawns();
+		append_pawns = (live_pawns.length > 0 && live_pawns[0].color === color)
+										? live_pawns
+										: [];
 		
 		if(spot instanceof HomeSpot)
 			return append_pawns
 		
-		// can't return null because if spot was home spot we would have
-		// already returned
+		// can cast as _Spot here if spot was home spot we would have returned
 		let next_spot: _Spot = spot.next(color) as _Spot;
 		return append_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, next_spot));
 	}
 	
 	getPawnsOfColorInBase(color: Color): Pawn[] {
 		return this.bases[color].getLivePawns();
+	}
+
+	areAllPawnsOut(color: Color): boolean {
+		return this.getPawnsOfColorInBase(color).length === 0;
 	}
 	
 	getHomeSpots(): HomeSpot[] {
@@ -249,27 +261,4 @@ export class Board {
 			let home_color: Color = parseInt(key) as Color;
 			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"]].next(home_color) as HomeRowSpot;
 		})};
-
-	areAllPawnsOut(color: Color): boolean {
-		return this.getPawnsOfColorInBase(color).length === 0;
-	}
-
-	blockadeOnEntrySpot(color: Color): boolean {
-		return this.getEntrySpot(color).hasBlockade();
-	}
-
-	// confirm Findler's saying that blockades should only be checked at end of a roll
-	// if so move this into roll object
-	//  better location for this?
-	reformsBlockade(pawn: Pawn, spot: _Spot, starting_blockades: Pawn[][]): boolean {
-		if(spot.hasBlockade())
-			throw new Error("Checking to see if move reforms blockade, spot already has blockade on it.")
-		
-		let would_be_pawns: Pawn[] = spot.getLivePawns();
-		would_be_pawns.push(pawn);
-		// sorting for equality check
-		would_be_pawns = would_be_pawns.sort();
-
-		return starting_blockades.some(blockade => { return _.isEqual(would_be_pawns, blockade); });
-	}
 }

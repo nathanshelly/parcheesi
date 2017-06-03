@@ -9,10 +9,10 @@ export interface _Player {
   // and what color the player is.
 	startGame(color: Color): string;
 
-  // ask the player what move they want to make
-	doMove(brd: Board, distances: number[]): _Move[];
-
   // inform the player that they have suffered
   // a doubles penalty
 	doublesPenalty(): void;
+
+	// ask the player what move they want to make
+	doMove(brd: Board, distances: number[]): _Move[];
 }

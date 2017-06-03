@@ -22,7 +22,7 @@ export class MoveForward implements _Move {
     this.distance = distance;
   }
 
-  isLegal(board: Board, player: _Player, possible_distances: number[], starting_blockades: Pawn[][]): boolean {
+  isLegal(board: Board, player: _Player, possible_distances: number[]): boolean {
     if  (!d.distanceInDistances(this.distance, possible_distances)
 			   || board.pawnInBase(this.pawn)
          || !this.pawn.verify(player.color))
@@ -41,18 +41,10 @@ export class MoveForward implements _Move {
     if(final_spot === null)
       return false;
     
-    // reached home, no further ways to cheat
-    if(final_spot instanceof HomeSpot)
+    // reached HomeRow, no further ways to cheat
+    if(!(final_spot instanceof MainRingSpot))
       return true;
-
-    // can't reform blockade on same roll
-    if(board.reformsBlockade(this.pawn, final_spot, starting_blockades))
-      return false;
-
-    // reached homeRowSpot and didn't reform blockade, no further ways to cheat
-    if(final_spot instanceof HomeRowSpot)
-      return true;
-    
+      
     // last way to cheat:
     // bopping pawn on safety spot
     if(final_spot instanceof MainRingSpot)

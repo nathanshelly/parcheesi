@@ -10,10 +10,8 @@ import { BasicPlayer } from './BasicPlayer';
 
 export abstract class PawnMover extends BasicPlayer {
 	movesForPawns(brd: Board, distances: number[], reverse_pawns: boolean): _Move[] {
-		let moves: _Move[] = [];
-		
-		let found: boolean;
-		let pawns: Pawn[];
+		let moves: _Move[] = [], found: boolean, pawns: Pawn[];
+	
 		do {
 			found = false;
 			pawns = reverse_pawns ? brd.getPawnsOfColor(this.color).reverse() : brd.getPawnsOfColor(this.color);
@@ -45,22 +43,18 @@ export abstract class PawnMover extends BasicPlayer {
 		
 		if (board.pawnInBase(pawn)) {
 			move = new MoveEnter(pawn);
-			// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
-			if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
+			if (move.isLegal(board, this, distances))
 				return move;
 		}
 		else {
 			for (let i = 0; i < distances.length; i++) {
 				move = new MoveForward(pawn, distances[i]);
-
-				// TODO - getBlockadesOfColor wrong here? will it always be starting blockades?
-				if (move.isLegal(board, this, distances, board.getBlockadesOfColor(this.color)))
+				if (move.isLegal(board, this, distances))
 					return move;
 			}	
 		}
 
 		return null;
 	}
-
 }
 

@@ -1,5 +1,3 @@
-import * as d from './Distances';
-
 import { Board } from './Board';
 import { _Move } from './_Move';
 import { PawnMover } from './PawnMover';
