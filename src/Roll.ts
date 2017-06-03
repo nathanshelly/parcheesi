@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import * as c from './Constants'
 
 import { Pawn } from './Pawn'
@@ -11,7 +12,7 @@ import { MoveEnter } from './MoveEnter'
 import { MoveForward } from './MoveForward'
 
 export class Roll {
-	private starting_blockades: Pawn[][];
+	private starting_blockades: [Pawn[], _Spot][];
 	private is_taken: boolean;
 	board: Board;
 	player: _Player;
@@ -24,7 +25,7 @@ export class Roll {
 		this.player = player;
 		this.possible_distances = possible_distances;
 		
-		this.starting_blockades = board.getBlockadesOfColor(player.color);	
+		this.starting_blockades = board.getBlockadesOfColor(player.color);
 	}
 
 	take(): boolean {
@@ -37,7 +38,7 @@ export class Roll {
 			// because we make sure length > 0, moves.shift() must return move
 			let move = this.moves.shift() as _Move;
 
-			if(move.isLegal(this.board, this.player, this.possible_distances, this.starting_blockades)) {
+			if(move.isLegal(this.board, this.player, this.possible_distances)) {
 				let possible_bonus: number | null = this.board.makeMove(move);
 				if(possible_bonus !== null)
 					this.possible_distances.push(possible_bonus)
@@ -45,6 +46,9 @@ export class Roll {
 			else
 				return false;
 		}
+
+		if(this.reformedBlockade())
+			return false;
 		
 		return true;
 	}
@@ -60,7 +64,7 @@ export class Roll {
 
 		return base_pawns.some(pawn => {
 			// TODO - test this
-			return new MoveEnter(pawn).isLegal(this.board, this.player, this.possible_distances, this.starting_blockades);
+			return new MoveEnter(pawn).isLegal(this.board, this.player, this.possible_distances);
 		});
 	}
 
@@ -71,7 +75,17 @@ export class Roll {
 		return main_ring_pawns.some(pawn => {
 			return this.possible_distances.some(distance => {
 				// TODO - test this
-				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances, this.starting_blockades);
-			});});
+				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances);
+			});
+		});
+	}
+
+	reformedBlockade(): boolean {
+		let ending_blockades = this.board.getBlockadesOfColor(this.player.color);
+		return this.starting_blockades.some(sb => {
+			return ending_blockades.some(eb => {
+				return _.isEqual(sb[0], eb[0]) && !_.isEqual(sb[1], eb[1]);
+			});
+		});
 	}
 }
