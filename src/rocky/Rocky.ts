@@ -2,6 +2,7 @@
 // Rockys, running genetic algorithm to find best combinations of
 // weighting factors on our heuristic
 import * as _ from 'lodash'
+import * as util from 'util'
 import * as d from '../Distances'
 
 import { Board } from '../Board'
@@ -101,7 +102,7 @@ export class Rocky extends SelfNamingPlayer {
 		console.log(distances);
 		let allMoves = this.allMoves(brd, distances);
 
-		console.log(allMoves);
+	console.log(allMoves.map((m) => util.inspect(m, false, undefined)));
 
 		let ret = _.maxBy(allMoves, goodness);
 

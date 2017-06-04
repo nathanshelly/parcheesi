@@ -1,9 +1,13 @@
 import * as processes from 'child_process';
 import * as http from 'http';
 
+import { Board } from '../Board'
+import { Color } from '../Color'
+
 import { PlayerServer } from '../server/PlayerServer';
 import { SelfNamingPlayer } from '../SelfNamingPlayer'
 import { FirstPawnMover } from '../FirstPawnMover';
+import { Rocky } from './Rocky'
 
 import * as config from '../server/player_config';
 
@@ -79,7 +83,7 @@ export function training_session(player: SelfNamingPlayer, num_games: number, co
 }
 
 if (require.main == module) {
-	let player = new FirstPawnMover();
+	let player = new Rocky((brd: Board, col: Color) => 1);
 	let n_games = 20;
 	let verbose = true;
 
