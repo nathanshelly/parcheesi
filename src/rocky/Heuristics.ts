@@ -6,6 +6,9 @@ import { _Spot } from '../_Spot'
 import { MainRingSpot } from '../MainRingSpot'
 import { PawnLocGetterForColor, GeneralGetterTester } from '../_SpotHandler'
 
+import { _Move } from '../_Move'
+export type Heuristic = (brd: Board, col: Color, moves: _Move[]) => number;
+
 export function pawnsInHome(brd: Board, col: Color): number {
 	return brd.getHomeSpots().filter(hs => {
 		return hs.color === col;
