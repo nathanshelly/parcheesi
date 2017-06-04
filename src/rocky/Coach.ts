@@ -44,24 +44,43 @@ class Coach {
 
 		let rocky = this.build_rocky();
 
-		let n_heuristic = 0;
+		let n_heuristic = -1;
 		let n_session = 0;
 		let old_n_wins = -Infinity;
-
+		let still_training = false;
 		let completionCallback = (n_wins: number) => {
 			if (verbose)
 				console.log(`${rocky.name} won ${n_wins} games in round ${n_session}!`);
 
-			if (n_wins <= old_n_wins) { // Tweak didn't help
+			/* If we are at the beginning of a round of tweaks */
+			if (n_heuristic == 0)
+				still_training = false;
+
+			/* Tweak the next heuristic weight */
+			n_heuristic = (n_heuristic + 1) % this.components.length;
+			up(n_heuristic);
+
+			if (n_wins <= old_n_wins) // Tweak didn't help
 				down(n_heuristic);
+			else
+				still_training = true;
+
+			/* If we are at the end of the components and haven't changed any, don't recur */
+			let cont = true;
+			if (n_heuristic == this.components.length - 1 && !still_training)
+				cont = false;
+
+			if (cont) {
+				rocky = this.build_rocky();
+				training_session(rocky, n_games, completionCallback, verbose);
 			}
-
-			up(n_heuristic++);
-
-			rocky = this.build_rocky();
-			training_session(rocky, n_games, completionCallback, verbose);
 		}
 
 		training_session(rocky, n_games, completionCallback, verbose);
 	}
 }
+
+if (require.main == module) {
+	new Coach().train_rocky();
+}
+
