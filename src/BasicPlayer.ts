@@ -1,17 +1,15 @@
 import * as c from './Constants'
 
-import { _Player } from './_Player'
+import { SelfNamingPlayer } from './SelfNamingPlayer'
 import { _Move } from './_Move'
 import { Color } from './Color'
 import { Board } from './Board'
 
-export abstract class BasicPlayer implements _Player {
-    color: Color;
+export abstract class BasicPlayer extends SelfNamingPlayer {
 
-    startGame(color: Color): string {
-        this.color = color;
-        return c.TEST_NAME;
-    };
+	constructor() {
+		super(c.TEST_NAME);
+	}
 
 	doublesPenalty(): void {
 		// console.log("Fricking doubles.");
