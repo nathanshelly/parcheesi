@@ -2,6 +2,7 @@ import * as c from './Constants'
 
 import { Pawn } from './Pawn'
 import { Board } from './Board'
+import { Color } from './Color'
 import { _Spot } from './_Spot'
 
 export interface _SpotHandler {
@@ -16,6 +17,38 @@ export class PawnGetter implements _SpotHandler {
 	manipulateSpot(spot: _Spot, loc: number): void {
 		spot.getLivePawns().forEach(pawn => { this.pawn_locs.push([pawn, loc]); });
 	}	
+}
+
+export class PawnLocGetterForColor implements _SpotHandler {
+	color: Color;
+	locs: number[];
+
+	constructor(color: Color) { 
+		this.locs = [];
+		this.color = color;
+	}
+
+	manipulateSpot(spot: _Spot, loc: number): void {
+		spot.getLivePawns().forEach(pawn => {
+			if(spot.colorOfPawnsOnSpot() === this.color)
+				this.locs.push(loc);
+		});
+	}
+}
+
+export class GeneralGetterTester implements _SpotHandler {
+	color: Color;
+	spot_locs: [_Spot, number][];
+
+	constructor(color: Color, manipulate_spot_lambda: (spot: _Spot, loc: number) => void) {
+		this.spot_locs = [];
+		this.color = color;
+		this.manipulateSpot = manipulate_spot_lambda;
+	}
+
+	manipulateSpot(spot: _Spot, loc: number): void {
+		throw new Error("GeneralGetterTester ran with unset manipulateSpot method.");
+	}
 }
 
 export class PawnSetter implements _SpotHandler {

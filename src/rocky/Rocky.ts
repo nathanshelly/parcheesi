@@ -19,6 +19,6 @@ export class Rocky extends SelfNamingPlayer {
 	}
 
 	doMove(brd: Board, distances: number[]): _Move[] {
-			
+		return [];		
 	}
 }
