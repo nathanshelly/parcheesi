@@ -1,5 +1,6 @@
 
 
+import { Pawn }  from '../src/Pawn'
 import { Board } from '../src/Board'
 import { Color } from '../src/Color'
 
@@ -34,12 +35,36 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 	it('should correctly find one enter move when given 2 dice making a 5', () => {
 		let move_sets: _Move[][] = rocky.allMoves(board, [2, 3]);
 		
-		expect(move_sets[0][0]).to.deep.equal(new MoveEnter(board.getPawnsOfColorInBase(rocky.color)[0]));
+		expect(move_sets.length).to.equal(4);
+
+		let id = 0;
+		move_sets.forEach(move_set => {
+			expect(move_set.length).to.equal(1);
+			expect(move_set[0]).to.deep.equal(new MoveEnter(new Pawn(id++, rocky.color)));
+		});
 	});
 
 	it('should correctly find one enter move when given one 5', () => {
 		let move_sets: _Move[][] = rocky.allMoves(board, [5]);
+
+		expect(move_sets.length).to.equal(4);
+
+		let id = 0;
+		move_sets.forEach(move_set => {
+			expect(move_set.length).to.equal(1);
+			expect(move_set[0]).to.deep.equal(new MoveEnter(new Pawn(id++, rocky.color)));
+		});
+	});
+
+	it('should correctly find one enter move and one moveForward when given one 5', () => {
+		let move_sets: _Move[][] = rocky.allMoves(board, [5, 1]);
 		
-		expect(move_sets[0][0]).to.deep.equal(new MoveEnter(board.getPawnsOfColorInBase(rocky.color)[0]));
+		expect(move_sets.length).to.equal(4);
+
+		let id = 0;
+		// move_sets.forEach(move_set => {
+		// 	expect(move_set.length).to.equal(1);
+		// 	expect(move_set[0]).to.deep.equal(new MoveEnter(new Pawn(id++, rocky.color)));
+		// });
 	});
 });

@@ -50,7 +50,7 @@ export class Rocky extends SelfNamingPlayer {
 				if(maybe_bonus !== null)
 					new_distances.push(maybe_bonus);
 				
-				new_distances = d.consumeMove(distances, move);
+				new_distances = d.consumeMove(new_distances, move);
 
 				final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
 			}
@@ -73,7 +73,7 @@ export class Rocky extends SelfNamingPlayer {
 					if(maybe_bonus !== null)
 						new_distances.push(maybe_bonus);
 					
-					new_distances = d.consumeMove(distances, move);
+					new_distances = d.consumeMove(new_distances, move);
 					
 					// recursively search for more moves
 					final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
