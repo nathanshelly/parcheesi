@@ -2,12 +2,12 @@ import * as processes from 'child_process';
 import * as http from 'http';
 
 import { PlayerServer } from '../server/PlayerServer';
-import { _Player } from '../_Player'
+import { SelfNamingPlayer } from '../SelfNamingPlayer'
 import { FirstPawnMover } from '../FirstPawnMover';
 
 import * as config from '../server/player_config';
 
-function startPlayerServer(player: _Player, verbose: boolean): http.Server {
+function startPlayerServer(player: SelfNamingPlayer, verbose: boolean): http.Server {
   const s = new PlayerServer(player);
 
 	return s.start(config.PORT, verbose, () => {
@@ -37,7 +37,7 @@ function extract_wins(racket_stdout: string, player_name: string): number {
 	return parseInt(n_wins);
 }
 
-export function training_session(player: _Player, num_games: number, completionCallback: (number) => void, verbose: boolean = false) {
+export function training_session(player: SelfNamingPlayer, num_games: number, completionCallback: (number) => void, verbose: boolean = false) {
   let playerServer: http.Server;
 
 	if (verbose)
@@ -52,8 +52,9 @@ export function training_session(player: _Player, num_games: number, completionC
 			console.log('Shutting down player server...');
 		}
 
-		completionCallback(extract_wins(player.))
     playerServer.close();
+
+		completionCallback(extract_wins(stdout, player.name));
   });
 
   racket.stdout.on('data', chunk => {
@@ -75,9 +76,22 @@ export function training_session(player: _Player, num_games: number, completionC
 	playerServer = startPlayerServer(player, verbose);
 }
 
-export function count_wins(num_games: number, name: string, verbose: boolean = false): string {
+if (require.main == module) {
+	let player = new FirstPawnMover();
+	let n_games = 20;
+	let verbose = false;
 
+	let counter = 0;
+	let completionCallback = (n_wins: number) => {
+		console.log(`In training session #${counter}, ${player.name} won ${n_wins} games.`);
+
+		let threshold = 5;
+		if (n_wins < threshold) {
+			console.log("Starting another session...");
+			training_session(player, n_games, completionCallback, verbose);
+		}
+	}
+
+	training_session(player, n_games, completionCallback, verbose);
 }
-
-training_session(20, false);
 
