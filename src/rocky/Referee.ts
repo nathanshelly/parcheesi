@@ -42,6 +42,7 @@ export function training_session(player: SelfNamingPlayer, num_games: number, co
 
 	if (verbose)
 		console.log('Starting racket server...');
+
   let racket = startRacketServer(num_games, verbose);
 
   let stdout: string = '';
@@ -60,6 +61,7 @@ export function training_session(player: SelfNamingPlayer, num_games: number, co
   racket.stdout.on('data', chunk => {
 		if (verbose)
 			console.log(`Data received: ${chunk.toString()}`);
+
     stdout += chunk.toString();
   });
 
@@ -83,7 +85,7 @@ if (require.main == module) {
 
 	let counter = 0;
 	let completionCallback = (n_wins: number) => {
-		console.log(`In training session #${counter}, ${player.name} won ${n_wins} games.`);
+		console.log(`In training session #${counter++}, ${player.name} won ${n_wins} games.`);
 
 		let threshold = 5;
 		if (n_wins < threshold) {
