@@ -26,13 +26,11 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 	});
 	
 	it('should correctly find zero legal moves if dice are empty', () => {
-		rocky.allMoves(board, []).forEach(move_set => {
-			expect(move_set).to.be.empty;
-		});
+		rocky.allMoves(board, []).forEach(move_set => { expect(move_set).to.be.empty; });
 	});
 
 	it('should correctly find zero legal moves if all pawns in base and no 5s in dice', () => {
-		expect(rocky.allMoves(board, [1, 3])).to.be.empty;
+		rocky.allMoves(board, [1, 3]).forEach(move_set => { expect(move_set).to.be.empty; });
 	});
 
 	it('should correctly find one enter move when given 2 dice making a 5', () => {

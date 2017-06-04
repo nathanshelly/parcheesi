@@ -27,19 +27,26 @@ export class Rocky extends SelfNamingPlayer {
 	}
 
 	allMoves(board: Board, distances: number[]): _Move[][] {
-		return this.allMovesHelper(board, distances, []);
+		let final_moves: _Move[][] = [];
+		this.allMovesHelper(board, distances, [], final_moves);
+
+		return final_moves;
 	}
 
-	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[]): _Move[][] {
-		if(distances.length === 0)
-			return [current_moves];
-
+	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][]): void {
+		if(distances.length === 0) {
+			final_moves.push(current_moves);
+			return;
+		}
+			
 		let new_board: Board, new_distances: number[], new_current_moves: _Move[],
-				maybe_bonus: number | null, final_moves: _Move[][] = [];
+				maybe_bonus: number | null, no_legal_moves: boolean = true;
 
 		board.getPawnsOfColorInBase(this.color).forEach(pawn => {
 			let move: MoveEnter = new MoveEnter(pawn);
 			if (move.isLegal(board, this, distances)) {
+				no_legal_moves = false;
+
 				new_board = _.cloneDeep(board);
 				new_distances = _.cloneDeep(distances);
 				new_current_moves = _.cloneDeep(current_moves);
@@ -51,7 +58,7 @@ export class Rocky extends SelfNamingPlayer {
 				
 				new_distances = d.consumeMove(new_distances, move);
 
-				final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
+				this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves);
 			}
 		});
 
@@ -60,6 +67,8 @@ export class Rocky extends SelfNamingPlayer {
 				let move: MoveForward = new MoveForward(pawn, dist);
 
 				if(move.isLegal(board, this, distances)) {
+					no_legal_moves = false;
+
 					new_board = _.cloneDeep(board);
 					new_distances = _.cloneDeep(distances);
 					new_current_moves = _.cloneDeep(current_moves);
@@ -75,12 +84,13 @@ export class Rocky extends SelfNamingPlayer {
 					new_distances = d.consumeMove(new_distances, move);
 					
 					// recursively search for more moves
-					final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
+					this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves);
 				}
 			});
 		});
 
-		return final_moves;
+		if(no_legal_moves)
+			final_moves.push(current_moves);
 	}
 	
 
