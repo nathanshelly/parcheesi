@@ -88,11 +88,14 @@ class Coach {
 			);
 		}
 
+		if (verbose)
+			console.log("Starting training...")
+
 		training_session(rocky, n_games, completionCallback, verbose);
 	}
 }
 
 if (require.main == module) {
-	new Coach().train_rocky();
+	new Coach().train_rocky(1, 300, true);
 }
 

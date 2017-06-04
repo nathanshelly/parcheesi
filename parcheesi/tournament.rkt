@@ -204,6 +204,7 @@
        (loop (+ games-played 1))]
       [else
        (printf "~s cheated, aborting\n" cheaters)
+			 (exit)
        (void)])))
 
 (define (pad-to-4-players players)

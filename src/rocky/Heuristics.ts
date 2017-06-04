@@ -28,58 +28,61 @@ export function pawnsInHome(brd: Board, col: Color): number {
 }
 
  export function pawnsInHomeRow(brd: Board, col: Color): number[] {
-	let spot_manipulator = (spot: _Spot, loc: number): void => {
+	 let sm_factory = (thisArg: GeneralLocGetterForColor) => (spot: _Spot, loc: number): void => {
 		spot.getLivePawns().forEach(pawn => {
 			if(spot.colorOfPawnsOnSpot() === col)
-				this.locs.push(loc);
+				thisArg.locs.push(loc);
 		});
 	};
 	
 	let home_row_start: HomeRowSpot = brd.getHomeRowStart(col);
-	let ggfc = new GeneralLocGetterForColor(col, spot_manipulator);
+	let ggfc = new GeneralLocGetterForColor(col, sm_factory);
 	brd.spotRunner(home_row_start, c.HOME_ROW_SIZE, col, ggfc);
 
 	return ggfc.locs;
 }
 
 export function pawnsInMainRing(brd: Board, col: Color): number[] {
-	let spot_manipulator = (spot: _Spot, loc: number): void => {
-		spot.getLivePawns().forEach(pawn => {
-			if(spot.colorOfPawnsOnSpot() === col)
-				this.locs.push(loc);
-		});
-	};
+
+	let sm_factory = (thisArg: GeneralLocGetterForColor) => {
+		return (spot: _Spot, loc: number): void => {
+			spot.getLivePawns().forEach(pawn => {
+				if(spot.colorOfPawnsOnSpot() === col)
+					thisArg.locs.push(loc);
+			});
+		}
+	}
 	
 	let entry_spot: MainRingSpot = brd.getMainRingEntry(col);
-	let ggfc = new GeneralLocGetterForColor(col, spot_manipulator);
+	let ggfc = new GeneralLocGetterForColor(col, sm_factory);
 	brd.spotRunner(entry_spot, c.ENTRY_TO_HOME_OFFSET, col, ggfc);
 
 	return ggfc.locs;
 }
 
 export function pawnsOnSafety(brd: Board, col: Color): number[] {
-	let spot_manipulator = (spot: _Spot, loc: number): void => {
+	let sm_factory = (thisArg: GeneralLocGetterForColor) => (spot: _Spot, loc: number): void => {
 		spot.getLivePawns().forEach(pawn => {
 			if(spot.colorOfPawnsOnSpot() === col && spot instanceof MainRingSpot && spot.sanctuary)
-				this.locs.push(loc);
-		});
+				thisArg.locs.push(loc);
+		}, thisArg);
 	};
 
 	let entry_spot: MainRingSpot = brd.getMainRingEntry(col);
-	let ggfc = new GeneralLocGetterForColor(col, spot_manipulator);
+	let ggfc = new GeneralLocGetterForColor(col, sm_factory);
 	brd.spotRunner(entry_spot, c.ENTRY_TO_HOME_OFFSET, col, ggfc);
 
 	return ggfc.locs;
 }
 
 export function blockadesInMainRing(brd: Board, col: Color): number[] {
-	let spot_manipulator = (spot: _Spot, loc: number): void => {
+	let sm_factory = (thisArg: GeneralLocGetterForColor) => (spot: _Spot, loc: number): void => {
 		if(spot.colorOfPawnsOnSpot() === col && spot instanceof MainRingSpot && spot.hasBlockade())
-				this.locs.push(loc);
+				thisArg.locs.push(loc);
 	};
 
 	let entry_spot: MainRingSpot = brd.getMainRingEntry(col);
-	let ggfc = new GeneralLocGetterForColor(col, spot_manipulator);
+	let ggfc = new GeneralLocGetterForColor(col, sm_factory);
 	brd.spotRunner(entry_spot, c.ENTRY_TO_HOME_OFFSET, col, ggfc);
 
 	return ggfc.locs;

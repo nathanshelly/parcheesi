@@ -1,9 +1,13 @@
 import * as processes from 'child_process';
 import * as http from 'http';
 
+import { Board } from '../Board'
+import { Color } from '../Color'
+
 import { PlayerServer } from '../server/PlayerServer';
 import { SelfNamingPlayer } from '../SelfNamingPlayer'
 import { FirstPawnMover } from '../FirstPawnMover';
+import { Rocky } from './Rocky'
 
 import * as config from '../server/player_config';
 
@@ -79,15 +83,15 @@ export function training_session(player: SelfNamingPlayer, num_games: number, co
 }
 
 if (require.main == module) {
-	let player = new FirstPawnMover();
+	let player = new Rocky((brd: Board, col: Color) => 1);
 	let n_games = 20;
-	let verbose = false;
+	let verbose = true;
 
 	let counter = 0;
 	let completionCallback = (n_wins: number) => {
 		console.log(`In training session #${counter++}, ${player.name} won ${n_wins} games.`);
 
-		let threshold = 5;
+		let threshold = 7;
 		if (n_wins < threshold) {
 			console.log("Starting another session...");
 			training_session(player, n_games, completionCallback, verbose);
