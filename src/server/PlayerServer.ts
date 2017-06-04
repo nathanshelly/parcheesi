@@ -1,9 +1,10 @@
-import express = require('express');
-import http = require('http');
+import * as express from 'express'
+import * as http from 'http'
 
-import net = require('net');
+import * as net from 'net'
 
 import { Ethernet } from '../Ethernet';
+import { FirstPawnMover } from '../FirstPawnMover'
 import { _Player } from '../_Player';
 
 import * as config from './player_config';
@@ -31,11 +32,11 @@ export class PlayerServer {
 		console.log(`attempting to connect to ${url}...`);
 
 		this.socket.on('data', data => {
-			console.log(`Received data: ${data}`);
+			// console.log(`Received data: ${data}`);
 			let xml: string = data.toString();
 
 			let response: string = this.n_player.interpret(xml);
-			console.log(`Responding with: ${response}\n`);
+			// console.log(`Responding with: ${response}\n`);
 
 			this.socket.write(response);
 		});
@@ -54,5 +55,10 @@ export class PlayerServer {
 
 		return this.app.listen(port, () => { this.listen_callback(port) });
 	}
+}
+
+if (require.main == module) {
+	let s = new PlayerServer(new FirstPawnMover());
+	s.start(config.PORT, () => { console.log("Player socket connected...") });
 }
 

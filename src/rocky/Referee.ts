@@ -1,5 +1,4 @@
 import * as processes from 'child_process';
-import * as sleep from 'sleep';
 import * as http from 'http';
 
 import { PlayerServer } from '../server/PlayerServer';
@@ -19,7 +18,7 @@ function startRacketServer(num_games: number): any {
   let racketArgs = ['parcheesi/tournament.rkt', num_games.toString()];
 
   let spawn = processes.spawn;
-  return spawn(racketCmd, racketArgs, { cwd: '.' });
+  return spawn(racketCmd, racketArgs);
 }
 
 export function run_games(num: number) {
@@ -43,10 +42,13 @@ export function run_games(num: number) {
 
   console.log('Racket server started, starting player server in 5s...');
 
-  setTimeout(() => {
-    console.log('Starting player server...');
-    playerServer = startPlayerServer();
-  }, 5000);
+	let now = new Date().getTime();
+
+	while (new Date().getTime() < now + 5000) {};
+
+	console.log('Starting player server...');
+	playerServer = startPlayerServer();
 }
 
 run_games(10);
+
