@@ -2,22 +2,24 @@ import * as c from '../Constants'
 
 import { Color } from '../Color'
 import { Board } from '../Board'
+import { _Move } from '../_Move'
+
 import { _Spot } from '../_Spot'
 import { HomeRowSpot } from '../HomeRowSpot'
 import { MainRingSpot } from '../MainRingSpot'
+
 import { GeneralLocGetterForColor } from '../_SpotHandler'
 
-export function pawnsInBase(brd: Board, col: Color): number {
-	return brd.getBaseSpot(col).nPawns();
-}
-
 /* Types for working with Heuristics */
-import { _Move } from '../_Move'
 export type Heuristic = (brd: Board, col: Color) => number;
 export type HeuristicComponent = {
 	heuristic: Heuristic,
 	weight: number,
 	multiplier: number
+}
+
+export function pawnsInBase(brd: Board, col: Color): number {
+	return brd.getBaseSpot(col).nPawns();
 }
 
 export function pawnsInHome(brd: Board, col: Color): number {

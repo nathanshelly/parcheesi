@@ -271,4 +271,4 @@ export class Board {
 	areAllPawnsOut(color: Color): boolean {
 		return this.getPawnsOfColorInBase(color).length === 0;
 	}
-	}
+}

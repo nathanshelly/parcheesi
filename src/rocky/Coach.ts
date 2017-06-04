@@ -1,11 +1,11 @@
 /** Adjusts Rocky formulation based on results using genetic algorithm */
 
 import { Board } from '../Board'
-import { _Move } from '../_Move'
 import { Color } from '../Color'
+import { _Move } from '../_Move'
 
-import { training_session } from './Referee'
 import { Rocky } from './Rocky'
+import { training_session } from './Referee'
 
 import * as heur from './Heuristics'
 import { components } from './coach_config'
