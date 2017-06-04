@@ -32,12 +32,11 @@ Order of moves can matter
 
 #### Pawns
 
+- pawns in base						- number
 - pawns in home 					- number
 - pawns in home row				- [array of offsets from home row start]
 - pawns in main ring			- [array of offsets from main ring entry]
-- pawns in base						- number
 - pawns on safety 				- [array of offsets from home row start]
-- blockades in home row		- [array of offsets from home row start]
 - blockades in main ring	- [array of offsets from main ring entry]
 
 #### Miscellaneous
@@ -75,3 +74,5 @@ Order of moves can matter
 - enters home (overlaps with number of pawns in home)
 - earns bonus (overlaps with above two scenarios)
 - differentiate between pure safeties/opponent entries, array of each of pure and unpure safeties
+- indicate in some way that being on home row is similar to safety spot (but better)?
+- blockades in home row	- [array of offsets from home row start]
