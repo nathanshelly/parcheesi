@@ -10,8 +10,14 @@ import { MainRingSpot } from '../MainRingSpot'
 
 import { GeneralLocGetterForColor } from '../_SpotHandler'
 
-
-export type Heuristic = (brd: Board, col: Color, moves: _Move[]) => number;
+/* Types for working with Heuristics */
+export type Heuristic = (brd: Board, col: Color) => number;
+export type HeuristicComponent = {
+	heuristic: Heuristic,
+	weight: number,
+	multiplier: number,
+	description: string
+}
 
 export function pawnsInBase(brd: Board, col: Color): number {
 	return brd.getBaseSpot(col).nPawns();
@@ -21,7 +27,7 @@ export function pawnsInHome(brd: Board, col: Color): number {
 	return brd.getHomeSpot(col).nPawns();
 }
 
-export function pawnsInHomeRow(brd: Board, col: Color): number[] {
+ export function pawnsInHomeRow(brd: Board, col: Color): number[] {
 	let spot_manipulator = (spot: _Spot, loc: number): void => {
 		spot.getLivePawns().forEach(pawn => {
 			if(spot.colorOfPawnsOnSpot() === col)

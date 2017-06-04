@@ -1,7 +1,6 @@
 // Player, has functions to run game, Coach class will make multiple
 // Rockys, running genetic algorithm to find best combinations of
 // weighting factors on our heuristic
-
 import * as _ from 'lodash'
 import * as d from '../Distances'
 
@@ -91,7 +90,12 @@ export class Rocky extends SelfNamingPlayer {
 	// }
 
 	doMove(brd: Board, distances: number[]): _Move[] {
-		let goodness = (moves: _Move[]) => { return this.heuristic(brd, this.color, moves) };
+		let goodness = (moves: _Move[]) => {
+			let _brd = _.cloneDeep(brd);
+			moves.forEach(_brd.makeMove)
+
+			return this.heuristic(_brd, this.color)
+		};
 
 		return [];		
 	}
