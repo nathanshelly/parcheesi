@@ -330,10 +330,8 @@ describe('PawnSetter home row tests', () => {
 		let green = new Pawn(2, Color.green);
 		let green_pl: [Pawn, number][] = [[green, 2]];
 		
-		let hr = board.getHomeRowStarts().filter(hrs => {
-			return hrs.color === green.color;
-		})[0];
-
+		let hr = board.getHomeRowStart(green.color)
+		
 		let ps = new PawnSetter(green_pl, board);
 		board.spotRunner(hr, c.HOME_ROW_SIZE, green.color, ps)
 
@@ -349,10 +347,8 @@ describe('PawnSetter home row tests', () => {
 		let exp_spots = [0, 1, 4, c.HOME_ROW_SIZE - 1];
 
 		let ps = new PawnSetter(greens_pl, board);
-		let hr = board.getHomeRowStarts().filter(hrs => {
-			return hrs.color === Color.green;
-		})[0];
-		board.spotRunner(hr, c.HOME_ROW_SIZE, Color.green, ps);
+		let hr = board.getHomeRowStart(Color.green);
+		board.spotRunner(hr, c.HOME_ROW_SIZE, hr.color, ps);
 
 		let green_spots = board.getOccupiedSpotsOfColorOnBoard(Color.green);
 		expect(green_spots.map(spot => { return spot.index; })).to.deep.equal(exp_spots);

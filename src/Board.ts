@@ -173,10 +173,26 @@ export class Board {
 		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY_FROM_BASE"]];
 	}
 
-	getHomeRowEntry(color: Color): HomeRowSpot {
+	getHomeRowStart(color: Color): HomeRowSpot {
 		// spot after color's home row entry is guaranteed to be home row spot
 		// when next is passed color
 		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["HOME_ROW_ENTRY"]].next(color) as HomeRowSpot;
+	}
+
+	getHomeRowStarts(): HomeRowSpot[] {
+		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
+			return this.getHomeRowStart(parseInt(key));
+		});
+	};
+
+	getHomeSpot(color: Color): HomeSpot {
+		return this.spotRunner(this.getHomeRowStart(color), c.HOME_ROW_SIZE, color) as HomeSpot;
+	}
+	
+	getHomeSpots(): HomeSpot[] {
+		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
+			return this.getHomeSpot(parseInt(key));
+		});
 	}
 
 	blockadeOnEntrySpot(color: Color): boolean {
@@ -255,16 +271,4 @@ export class Board {
 	areAllPawnsOut(color: Color): boolean {
 		return this.getPawnsOfColorInBase(color).length === 0;
 	}
-	
-	getHomeSpots(): HomeSpot[] {
-		return this.getHomeRowStarts().map(hrs => {
-			return this.spotRunner(hrs, c.HOME_ROW_SIZE, hrs.color) as HomeSpot;
-		});
 	}
-
-	getHomeRowStarts(): HomeRowSpot[] {
-		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
-			return this.getHomeRowEntry(parseInt(key));
-		})
-	};
-}

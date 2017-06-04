@@ -36,9 +36,7 @@ Order of moves can matter
 - pawns in home row				- [array of offsets from home row start]
 - pawns in main ring			- [array of offsets from main ring entry]
 - pawns in base						- number
-- pawns on safety (less value on opponent entries) - tuple:
-			([array of offsets from home row start for pure safeties],
-			 [array of offsets from home row start for opponent entry spots])
+- pawns on safety 				- [array of offsets from home row start]
 - blockades in home row		- [array of offsets from home row start]
 - blockades in main ring	- [array of offsets from main ring entry]
 
@@ -71,8 +69,9 @@ Order of moves can matter
 - treat distances out of base as risk to minimize? (hand in hand with
 	prioritizing getting pawns into home row/home spot)
 
-#### Maybe, probably doable, but helpful?
+#### Maybe, probably doable, but helpful (or enough to be worth it)?
 
 - bops (overlaps with opponent pawns on board)
 - enters home (overlaps with number of pawns in home)
 - earns bonus (overlaps with above two scenarios)
+- differentiate between pure safeties/opponent entries, array of each of pure and unpure safeties

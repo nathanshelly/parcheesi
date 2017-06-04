@@ -4,6 +4,7 @@ import { Pawn } from './Pawn'
 import { Board } from './Board'
 import { Color } from './Color'
 import { _Spot } from './_Spot'
+import { MainRingSpot } from './MainRingSpot'
 
 export interface _SpotHandler {
 	manipulateSpot(spot: _Spot, loc: number): void;
@@ -36,12 +37,12 @@ export class PawnLocGetterForColor implements _SpotHandler {
 	}
 }
 
-export class GeneralGetterTester implements _SpotHandler {
+export class GeneralGetterForColor implements _SpotHandler {
 	color: Color;
-	spot_locs: [_Spot, number][];
+	locs: number[];
 
 	constructor(color: Color, manipulate_spot_lambda: (spot: _Spot, loc: number) => void) {
-		this.spot_locs = [];
+		this.locs = [];
 		this.color = color;
 		this.manipulateSpot = manipulate_spot_lambda;
 	}
