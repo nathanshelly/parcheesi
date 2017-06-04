@@ -92,11 +92,19 @@ export class Rocky extends SelfNamingPlayer {
 	doMove(brd: Board, distances: number[]): _Move[] {
 		let goodness = (moves: _Move[]) => {
 			let _brd = _.cloneDeep(brd);
-			moves.forEach(_brd.makeMove)
+			moves.forEach(_brd.makeMove, _brd)
 
 			return this.heuristic(_brd, this.color)
 		};
 
-		return [];		
+		console.log(brd);
+		console.log(distances);
+		let allMoves = this.allMoves(brd, distances);
+
+		console.log(allMoves);
+
+		let ret = _.maxBy(allMoves, goodness);
+
+		return ret ? ret : [];
 	}
 }

@@ -48,10 +48,10 @@ export class GeneralLocGetterForColor implements _SpotHandler {
 	color: Color;
 	locs: number[];
 
-	constructor(color: Color, manipulate_spot_lambda: (spot: _Spot, loc: number) => void) {
+	constructor(color: Color, manipulate_spot_lambda_factory: (GeneralLocGetterForColor) => (spot: _Spot, loc: number) => void) {
 		this.locs = [];
 		this.color = color;
-		this.manipulateSpot = manipulate_spot_lambda;
+		this.manipulateSpot = manipulate_spot_lambda_factory(this);
 	}
 
 	manipulateSpot(spot: _Spot, loc: number): void {
