@@ -1,4 +1,5 @@
 /** Adjusts Rocky formulation based on results using genetic algorithm */
+import * as fs from 'fs'
 
 import { Board } from '../Board'
 import { Color } from '../Color'
@@ -74,6 +75,17 @@ class Coach {
 				rocky = this.build_rocky();
 				training_session(rocky, n_games, completionCallback, verbose);
 			}
+
+			/* Log training progress */
+			fs.appendFileSync(
+				"./training_output.log",
+				`Training session #${n_session}
+				${rocky.name} won ${n_wins} games
+				Heuristics:
+				${this.components}
+				`,
+				(err) => console.log(err)
+			);
 		}
 
 		training_session(rocky, n_games, completionCallback, verbose);

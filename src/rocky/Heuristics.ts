@@ -15,7 +15,8 @@ export type Heuristic = (brd: Board, col: Color) => number;
 export type HeuristicComponent = {
 	heuristic: Heuristic,
 	weight: number,
-	multiplier: number
+	multiplier: number,
+	description: string
 }
 
 export function pawnsInBase(brd: Board, col: Color): number {
