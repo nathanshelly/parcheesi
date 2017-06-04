@@ -18,7 +18,7 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 	
 	beforeEach(() => {
 		board = new Board();
-		rocky = new Rocky((brd: Board, col: Color, moves: _Move[]) => { return 1; });
+		rocky = new Rocky((brd: Board, col: Color) => { return 1; });
 		rocky.startGame(Color.blue);
 	});
 	
