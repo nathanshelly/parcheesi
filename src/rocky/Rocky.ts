@@ -5,15 +5,13 @@
 import { Board } from '../Board'
 import { Color } from '../Color'
 import { _Move } from '../_Move'
-import { _Player } from '../_Player'
+import { SelfNamingPlayer } from '../SelfNamingPlayer'
 
 
-export class Rocky implements _Player {
-	color: Color;
+export class Rocky extends SelfNamingPlayer {
 
-	startGame(color: Color): string {
-		this.color = color;
-		return "Rocky";
+	constructor() {
+		super("Rocky");
 	}
 
 	doublesPenalty(): void {
