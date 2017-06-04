@@ -51,7 +51,7 @@ export class Board {
 		});
 
 		for (let i = 0; i < c.N_COLORS; i++) {
-			let entrance_index = this.mainRing[c.COLOR_HOME_AND_ENTRY[i]["ENTRY_FROM_BASE"]];
+			let entrance_index = this.getMainRingEntry(i);
 			this.bases[i] = new BaseSpot(entrance_index, i);
 		}
 	}
@@ -103,7 +103,7 @@ export class Board {
 	}
 
 	landingWillBop(move: _Move, landing_spot: MainRingSpot): boolean {
-		return (move instanceof MoveEnter ? _.isEqual(landing_spot, this.getEntrySpot(move.pawn.color)) : !landing_spot.sanctuary)
+		return (move instanceof MoveEnter ? _.isEqual(landing_spot, this.getMainRingEntry(move.pawn.color)) : !landing_spot.sanctuary)
 					 && landing_spot.nPawns() === (c.NUM_PAWNS_IN_BLOCKADE - 1)
 					 && landing_spot.getLivePawns().some(pawn => { return pawn.color !== move.pawn.color; });
 	}
@@ -129,7 +129,7 @@ export class Board {
 		if(base_spot.pawnExists(pawn))
 			return base_spot
 
-		let spot: _Spot = this.getEntrySpot(pawn.color);
+		let spot: _Spot = this.getMainRingEntry(pawn.color);
 		// spot cannot be null here as we have verified that pawn is
 		// valid and must exist on board, write into contract?
 		while(!spot.pawnExists(pawn))
@@ -165,16 +165,22 @@ export class Board {
 	};
 
 	getSpotAtOffsetFromEntry(distance: number, color: Color): _Spot | null {
-		let spot = this.getEntrySpot(color);
+		let spot = this.getMainRingEntry(color);
 		return this.spotRunner(spot, distance, color);
 	}
 
-	getEntrySpot(color: Color): MainRingSpot {
+	getMainRingEntry(color: Color): MainRingSpot {
 		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["ENTRY_FROM_BASE"]];
 	}
 
+	getHomeRowEntry(color: Color): HomeRowSpot {
+		// spot after color's home row entry is guaranteed to be home row spot
+		// when next is passed color
+		return this.mainRing[c.COLOR_HOME_AND_ENTRY[color]["HOME_ROW_ENTRY"]].next(color) as HomeRowSpot;
+	}
+
 	blockadeOnEntrySpot(color: Color): boolean {
-		return this.getEntrySpot(color).hasBlockade();
+		return this.getMainRingEntry(color).hasBlockade();
 	}
 
 	getBaseSpot(color: Color): BaseSpot {
@@ -216,14 +222,14 @@ export class Board {
 	}
 
 	getPawnsOfColor(color: Color): Pawn[] {
-		let entry_spot: MainRingSpot = this.getEntrySpot(color);
+		let entry_spot: MainRingSpot = this.getMainRingEntry(color);
 		let base_pawns = this.getPawnsOfColorInBase(color)
 
 		return base_pawns.concat(this.getPawnsOfColorOnBoardHelper(color, entry_spot));
 	}
 
 	getPawnsOfColorOnBoard(color: Color): Pawn[] {
-		let entry_spot: MainRingSpot = this.getEntrySpot(color);
+		let entry_spot: MainRingSpot = this.getMainRingEntry(color);
 		return this.getPawnsOfColorOnBoardHelper(color, entry_spot);
 	}
 
@@ -258,7 +264,7 @@ export class Board {
 
 	getHomeRowStarts(): HomeRowSpot[] {
 		return Object.keys(c.COLOR_HOME_AND_ENTRY).map(key => {
-			let home_color: Color = parseInt(key) as Color;
-			return this.mainRing[c.COLOR_HOME_AND_ENTRY[key]["HOME_ROW_ENTRY"]].next(home_color) as HomeRowSpot;
-		})};
+			return this.getHomeRowEntry(parseInt(key));
+		})
+	};
 }

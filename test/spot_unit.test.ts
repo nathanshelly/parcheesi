@@ -159,7 +159,7 @@ describe("colorOfPawns tests", () => {
 	});
 
 	it("should correctly return null for spot with no pawns", () => {
-		expect(board.getEntrySpot(player1.color).colorOfPawnsOnSpot()).to.equal(null);
+		expect(board.getMainRingEntry(player1.color).colorOfPawnsOnSpot()).to.equal(null);
 	});
 });
 

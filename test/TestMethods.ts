@@ -8,13 +8,13 @@ import { _Spot } from '../src/_Spot'
 
 export function placePawnsOnGivenColorEntrySpot(pawns: [Pawn, Pawn | null], board: Board, color: Color): void {
 	removeOldPawns(pawns, board);
-	board.getEntrySpot(color).pawns = pawns;
+	board.getMainRingEntry(color).pawns = pawns;
 }
 
 export function placePawnsAtOffsetFromYourEntry(pawns: [Pawn, Pawn | null], board: Board, offset: number): void {
 	let color: Color = pawns[0].color;
 	
-	let spot: _Spot = board.getEntrySpot(color);
+	let spot: _Spot = board.getMainRingEntry(color);
 	let next_spot: _Spot | null = board.spotRunner(spot, offset, color);
 
 	if(next_spot === null)

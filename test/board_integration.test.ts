@@ -42,7 +42,7 @@ describe("Filename: board_integration.test.ts\n\nThe board's move-making functio
         let pawn = new Pawn(0, player1.color);
         let move = new MoveEnter(pawn);
 
-        let entry = board.getEntrySpot(player1.color);
+        let entry = board.getMainRingEntry(player1.color);
 
         expect(entry.nPawns()).to.equal(0);
 

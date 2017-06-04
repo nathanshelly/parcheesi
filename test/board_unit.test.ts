@@ -133,7 +133,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 
     it("should correctly get main ring spot outside base", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(0, player1.color) as _Spot;
-		let index = board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index;
+		let index = board.getMainRingEntry(player1.color).index;
 		
 		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
@@ -141,7 +141,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 
 	it("should correctly get main ring spot 7 spots after base", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(7, player1.color) as _Spot;
-		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 7) % c.MAIN_RING_SIZE
+		let index = (board.getMainRingEntry(player1.color).index + 7) % c.MAIN_RING_SIZE
 		
 		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
@@ -149,7 +149,7 @@ describe("getSpotAtOffsetFromEntry tests", () => {
 
 	it("should correctly get main ring spot at distance that wraps around end of board (40 spots after base)", () => {
 		let spot: _Spot = board.getSpotAtOffsetFromEntry(40, player1.color) as _Spot;
-		let index = (board.mainRing[c.COLOR_HOME_AND_ENTRY[player1.color]["ENTRY_FROM_BASE"]].index + 40) % c.MAIN_RING_SIZE;
+		let index = (board.getMainRingEntry(player1.color).index + 40) % c.MAIN_RING_SIZE;
 		
 		expect(spot).to.be.instanceof(MainRingSpot);
 		expect(spot.index).to.equal(index);
