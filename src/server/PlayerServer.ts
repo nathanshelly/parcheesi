@@ -22,27 +22,27 @@ export class PlayerServer {
 		this.n_player = new Ethernet(player);
 	}
 
-	private listen_callback(port: number) {
-		console.log(`Player server listening on port ${port}...`);
-	}
-
-	private connectSocket(connectCallback?: () => void) {
+	private connectSocket(verbose: boolean, connectCallback?: () => void) {
 		let url = config.SERVER_URL;
 		let port = config.SERVER_PORT;
-		console.log(`attempting to connect to ${url}...`);
+		if (verbose)
+			console.log(`attempting to connect to ${url}...`);
 
 		this.socket.on('data', data => {
-			// console.log(`Received data: ${data}`);
+			if (verbose)
+				console.log(`Received data: ${data}`);
 			let xml: string = data.toString();
 
 			let response: string = this.n_player.interpret(xml);
-			// console.log(`Responding with: ${response}\n`);
+			if (verbose)
+				console.log(`Responding with: ${response}\n`);
 
 			this.socket.write(response);
 		});
 
 		this.socket.on('close', () => {
-			console.log("Socket closed...");
+			if (verbose)
+				console.log("Socket closed...");
 		});
 
 		this.socket.connect(config.SERVER_PORT, config.SERVER_URL, () => {
@@ -50,15 +50,19 @@ export class PlayerServer {
 		});
 	}
 
-	start(port: number, connectCallback?: () => void): http.Server {
-		this.connectSocket(connectCallback);
+	start(port: number, verbose: boolean = false, listenCallback?: () => void, connectCallback?: () => void): http.Server {
+		this.connectSocket(verbose, connectCallback);
 
-		return this.app.listen(port, () => { this.listen_callback(port) });
+		return this.app.listen(port, listenCallback);
 	}
 }
 
 if (require.main == module) {
 	let s = new PlayerServer(new FirstPawnMover());
-	s.start(config.PORT, () => { console.log("Player socket connected...") });
+	s.start(
+		config.PORT,
+		false,
+		() => { console.log(`Player server listening on port ${config.PORT}`) },
+		() => { console.log("Player socket connected...") });
 }
 

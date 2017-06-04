@@ -194,8 +194,8 @@
 			 (exit)]
       [(null? cheaters)
        (hash-set! results winner (+ (hash-ref results winner 0) 1))
-       ;(when (zero? (modulo games-played 10))
-         ;(pretty-write (sort (hash-map results list) > #:key cadr)))
+       (when (zero? (modulo games-played 10))
+         (pretty-write (sort (hash-map results list) > #:key cadr)))
        (loop (+ games-played 1))]
       [else
        (printf "~s cheated, aborting\n" cheaters)

@@ -13,7 +13,9 @@ export abstract class BasicPlayer implements _Player {
         return c.TEST_NAME;
     };
 
-    doublesPenalty(): void { console.log("Fricking doubles."); };
+	doublesPenalty(): void {
+		// console.log("Fricking doubles.");
+	};
     
     abstract doMove(brd: Board, distances: number[]): _Move[];
 }
