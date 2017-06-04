@@ -27,11 +27,11 @@ export class Rocky extends SelfNamingPlayer {
 		console.log("C'mon, champ, hit me in the face! My mom hits harder than you!");
 	}
 
-	private allMoves(board: Board, distances: number[]): _Move[][] {
+	allMoves(board: Board, distances: number[]): _Move[][] {
 		return this.allMovesHelper(board, distances, []);
 	}
 
-	allMovesHelper(board: Board, distances: number[], current_moves: _Move[]): _Move[][] {
+	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[]): _Move[][] {
 		if(distances.length === 0)
 			return [current_moves];
 
@@ -52,7 +52,7 @@ export class Rocky extends SelfNamingPlayer {
 				
 				new_distances = d.consumeMove(distances, move);
 
-				final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
+				final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
 			}
 		});
 
@@ -76,7 +76,7 @@ export class Rocky extends SelfNamingPlayer {
 					new_distances = d.consumeMove(distances, move);
 					
 					// recursively search for more moves
-					final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
+					final_moves = final_moves.concat(this.allMovesHelper(new_board, new_distances, new_current_moves));
 				}
 			});
 		});

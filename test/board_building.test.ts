@@ -18,8 +18,8 @@ import { HomeSpot } from '../src/HomeSpot'
 import { HomeRowSpot } from '../src/HomeRowSpot'
 import { MainRingSpot } from '../src/MainRingSpot'
 
-import { expect } from 'chai';
 import 'mocha';
+import { expect } from 'chai';
 
 function checkHomeRows(hr_starts: HomeRowSpot[]) {2
     hr_starts.forEach(hrs => {
