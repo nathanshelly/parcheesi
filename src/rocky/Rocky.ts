@@ -21,6 +21,6 @@ export class Rocky implements _Player {
 	}
 
 	doMove(brd: Board, distances: number[]): _Move[] {
-			
+		return [];		
 	}
 }
