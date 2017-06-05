@@ -1,5 +1,6 @@
 /** Adjusts Rocky formulation based on results using genetic algorithm */
 import * as fs from 'fs'
+import * as util from 'util'
 
 import { Board } from '../Board'
 import { Color } from '../Color'
@@ -46,8 +47,8 @@ class Coach {
 		let rocky = this.build_rocky();
 
 		let n_heuristic = -1;
-		let n_session = 0;
-		let old_n_wins = -Infinity;
+		let n_session = 0.0;
+		let old_n_wins_av = -Infinity;
 		let still_training = false;
 		let completionCallback = (n_wins: number) => {
 			if (verbose)
@@ -61,10 +62,11 @@ class Coach {
 			n_heuristic = (n_heuristic + 1) % this.components.length;
 			up(n_heuristic);
 
-			if (n_wins <= old_n_wins) // Tweak didn't help
+			if (n_wins <= old_n_wins_av) // Tweak didn't help
 				down(n_heuristic);
 			else
 				still_training = true;
+
 
 			/* If we are at the end of the components and haven't changed any, don't recur */
 			let cont = true;
@@ -77,13 +79,14 @@ class Coach {
 			}
 
 			/* Log training progress */
-			fs.appendFileSync(
-				"./training_output.log",
-				`Training session #${n_session}
-				${rocky.name} won ${n_wins} games
-				Heuristics:
-				${this.components}
-				`);
+			let message = `Training session #${n_session}\n${rocky.name} won ${n_wins} games, with running average ${old_n_wins_av}\nHeuristics:\n${this.components.map(c => util.inspect(c, false, undefined) + "\n")}\n`;
+
+			console.log(message);
+			fs.appendFileSync("./training_output.log", message);
+
+			/* Cache the previous wins */
+			n_session++;
+			old_n_wins_av = ((old_n_wins_av * n_session) + n_wins) / (n_session + 1);
 		}
 
 		if (verbose)
@@ -94,6 +97,6 @@ class Coach {
 }
 
 if (require.main == module) {
-	new Coach().train_rocky(1, 5, false);
+	new Coach().train_rocky(1, 10, false);
 }
 

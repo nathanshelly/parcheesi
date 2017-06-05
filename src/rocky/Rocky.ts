@@ -26,7 +26,7 @@ export class Rocky extends SelfNamingPlayer {
 	}
 
 	doublesPenalty(): void {
-		console.log("C'mon, champ, hit me in the face! My mom hits harder than you!");
+		// console.log("C'mon, champ, hit me in the face! My mom hits harder than you!");
 	}
 
 	allMoves(board: Board, distances: number[]): _Move[][] {

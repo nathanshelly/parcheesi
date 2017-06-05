@@ -34,7 +34,7 @@ function extract_wins(racket_stdout: string, player_name: string): number {
 	let match = racket_stdout.match(pat);
 
 	if (match == null)
-		throw Error("Couldn't match racket_stdout!");
+		throw Error(`Couldn't match racket_stdout: ${racket_stdout}`);
 
 	let n_wins = match[1];
 
