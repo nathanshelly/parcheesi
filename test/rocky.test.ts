@@ -170,4 +170,39 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 
 		expect(move_sets).to.deep.equal(expected_move_sets);
 	})
+
+	it('should find a MoveForward with distance 4 for each of two pawns in the home row in this instance we cheated on', () => {
+		let xml = "<do-move><board><start><pawn><color>yellow</color><id>3</id></pawn><pawn><color>yellow</color><id>0</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>green</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn></start><main><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>52</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>39</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>38</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>31</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>2</loc></piece-loc></main><home-rows><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>4</loc></piece-loc></home-rows><home><pawn><color>red</color><id>3</id></pawn><pawn><color>green</color><id>2</id></pawn></home></board><dice><die>4</die><die>4</die></dice></do-move>";
+
+		let [board, dice] = dec.doMoveXMLToBoardDice(xml);
+
+		let green_rocky = new Coach().build_rocky();
+		green_rocky.startGame(Color.green);
+
+		let move_sets = green_rocky.allMoves(board, dice);
+
+		expect(move_sets.length).to.equal(4);
+
+		let expected_move_sets = [
+			[new MoveForward(new Pawn(1, Color.green), 4)],
+			[new MoveForward(new Pawn(1, Color.green), 4)],
+			[new MoveForward(new Pawn(0, Color.green), 4)],
+			[new MoveForward(new Pawn(0, Color.green), 4)]
+		];
+
+		expect(move_sets).to.deep.equal(expected_move_sets);
+	})
+
+	it('should find more than 3 things to do in this specific instance', () => {
+		let xml = "<do-move><board><start><pawn><color>yellow</color><id>0</id></pawn><pawn><color>red</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>0</id></pawn></start><main><piece-loc><pawn><color>yellow</color><id>3</id></pawn><loc>64</loc></piece-loc><piece-loc><pawn><color>red</color><id>1</id></pawn><loc>45</loc></piece-loc><piece-loc><pawn><color>blue</color><id>1</id></pawn><loc>41</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>39</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>34</loc></piece-loc><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>29</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>29</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>21</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>15</loc></piece-loc><piece-loc><pawn><color>green</color><id>2</id></pawn><loc>13</loc></piece-loc><piece-loc><pawn><color>green</color><id>3</id></pawn><loc>12</loc></piece-loc><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>4</loc></piece-loc></main><home-rows></home-rows><home></home></board><dice><die>2</die><die>2</die><die>5</die><die>5</die></dice></do-move>";
+
+		let [board, dice] = dec.doMoveXMLToBoardDice(xml);
+
+		let green_rocky = new Coach().build_rocky();
+		green_rocky.startGame(Color.green);
+
+		let moves = green_rocky.doMove(board, dice);
+
+		expect(moves.length).to.be.greaterThan(3);
+	})
 });

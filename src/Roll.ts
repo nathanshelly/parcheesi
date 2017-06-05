@@ -97,7 +97,10 @@ export class Roll {
 		let ending_blockades = ending_board.getBlockadesOfColor(this.player.color);
 		return this.starting_blockades.some(sb => {
 			return ending_blockades.some(eb => {
-				return _.isEqual(sb[0], eb[0]) && !_.isEqual(sb[1], eb[1]);
+				let pawns_equal = _.isEqual(sb[0], eb[0]);
+				// let spot_equal = _.isEqual(sb[1], eb[1]);
+				let spot_equal = sb[1].index === eb[1].index; // Comparison of spots failing sometimes?
+				return pawns_equal && !spot_equal;
 			});
 		});
 	}
