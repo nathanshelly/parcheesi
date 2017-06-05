@@ -31,12 +31,12 @@ export class Rocky extends SelfNamingPlayer {
 
 	allMoves(board: Board, distances: number[]): _Move[][] {
 		let final_moves: _Move[][] = [];
-		this.allMovesHelper(board, distances, [], final_moves, board);
+		this.allMovesHelper(board, distances, [], final_moves, distances, board);
 
 		return final_moves;
 	}
 
-	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][], starting_board: Board): void {
+	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][], starting_dice: number[], starting_board: Board): void {
 
 		if (final_moves.length > MAX_MOVES_TO_CONSIDER) {
 			return;
@@ -48,30 +48,30 @@ export class Rocky extends SelfNamingPlayer {
 		board.getPawnsOfColorInBase(this.color).forEach(pawn => {
 			let move: MoveEnter = new MoveEnter(pawn);
 			if (move.isLegal(board, this, distances)) {
-
+				// Isolate from usage in other branches
+				new_current_moves = _.cloneDeep(current_moves);
+				new_current_moves.push(move); // Add current move
 				new_board = _.cloneDeep(board);
 				new_distances = _.cloneDeep(distances);
-				new_current_moves = _.cloneDeep(current_moves);
-				new_current_moves.push(move);
-
-				let roll = new Roll(new_board, this, new_current_moves, new_distances);
+				
+				let cloned_new_current_moves = _.cloneDeep(new_current_moves);
+				let cloned_starting_board = _.cloneDeep(starting_board);
+				let cloned_starting_dice = _.cloneDeep(starting_dice);
+				let roll = new Roll(cloned_starting_board, this, cloned_new_current_moves, cloned_starting_dice);
 				if (roll.take()) {
 					final_moves.push(new_current_moves);
 					return;
 				}
 
-				new_board = _.cloneDeep(board);
-				new_distances = _.cloneDeep(distances);
-				new_current_moves = _.cloneDeep(current_moves);
-				new_current_moves.push(move);
-
+				// Apply move, add bonues as appropriate
 				maybe_bonus = new_board.makeMove(move);
 				if (maybe_bonus !== null)
 					new_distances.push(maybe_bonus);
 
 				new_distances = d.consumeMove(new_distances, move);
 
-				this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_board);
+				// Pass altered board down the chain to build set
+				this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_dice, starting_board);
 			}
 		});
 
@@ -80,34 +80,30 @@ export class Rocky extends SelfNamingPlayer {
 				let move: MoveForward = new MoveForward(pawn, dist);
 
 				if (move.isLegal(board, this, distances)) {
-
+					// Isolate from usage in other branches
+					new_current_moves = _.cloneDeep(current_moves);
+					new_current_moves.push(move); // Add current move
 					new_board = _.cloneDeep(board);
 					new_distances = _.cloneDeep(distances);
-					new_current_moves = _.cloneDeep(current_moves);
-
-					// add legal move to current move set
-					new_current_moves.push(move);
-
-					let roll = new Roll(new_board, this, new_current_moves, new_distances);
+					
+					let cloned_new_current_moves = _.cloneDeep(new_current_moves);
+					let cloned_starting_board = _.cloneDeep(starting_board);
+					let cloned_starting_dice = _.cloneDeep(starting_dice);
+					let roll = new Roll(cloned_starting_board, this, cloned_new_current_moves, cloned_starting_dice);
 					if (roll.take()) {
 						final_moves.push(new_current_moves);
 						return;
 					}
 
-					new_board = _.cloneDeep(board);
-					new_distances = _.cloneDeep(distances);
-					new_current_moves = _.cloneDeep(current_moves);
-					new_current_moves.push(move);
-					
-					// make move and adjust distances accordingly
+					// Apply move, add bonues as appropriate
 					maybe_bonus = new_board.makeMove(move);
 					if (maybe_bonus !== null)
 						new_distances.push(maybe_bonus);
 
 					new_distances = d.consumeMove(new_distances, move);
 
-					// recursively search for more moves
-					this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_board);
+					// Pass altered board down the chain to build set
+					this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_dice, starting_board);
 				}
 			});
 		});
