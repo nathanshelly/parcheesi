@@ -9,7 +9,7 @@ function justLength(h: (Board, Color) => number[]): heur.Heuristic {
 }
 
 function prioritizeProgress(h: (Board, Color) => number[]): heur.Heuristic {
-  return (brd: Board, col: Color) => h(brd, col).reduce((acc, offset) => acc + Math.pow(offset, 1.5));
+  return (brd: Board, col: Color) => h(brd, col).reduce((acc, offset) => acc + Math.pow(offset, 1.5), 0);
 }
 
 export const params = {
