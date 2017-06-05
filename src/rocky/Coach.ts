@@ -86,7 +86,7 @@ class Coach {
 
 			/* Cache the previous wins */
 			n_session++;
-			old_n_wins_av = ((old_n_wins_av * n_session) + n_wins) / (n_session + 1);
+			old_n_wins_av = old_n_wins_av == -Infinity ? n_wins : ((old_n_wins_av * n_session) + n_wins) / (n_session + 1);
 		}
 
 		if (verbose)
