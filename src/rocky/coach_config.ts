@@ -8,6 +8,10 @@ function justLength(h: (Board, Color) => number[]): heur.Heuristic {
   return (brd: Board, col: Color) => h(brd, col).length;
 }
 
+function prioritizeProgress(h: (Board, Color) => number[]): heur.Heuristic {
+  return (brd: Board, col: Color) => h(brd, col).reduce((acc, offset) => acc + Math.pow(offset, 1.5));
+}
+
 export const components: heur.HeuristicComponent[] = [
   {
     heuristic: heur.pawnsInHome,
@@ -22,8 +26,8 @@ export const components: heur.HeuristicComponent[] = [
 		description: "Pawns in home row"
   },
   {
-    heuristic: justLength(heur.pawnsInMainRing),
-    weight: 75,
+    heuristic: prioritizeProgress(heur.pawnsInMainRing),
+    weight: 20,
     multiplier: 1,
 		description: "Pawns in main ring"
   },
