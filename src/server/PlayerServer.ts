@@ -30,16 +30,25 @@ export class PlayerServer {
 		if (verbose)
 			console.log(`attempting to connect to ${url}...`);
 
+		let xml: string = '';
 		this.socket.on('data', data => {
 			if (verbose)
 				console.log(`Received data: ${data}`);
-			let xml: string = data.toString();
 
-			let response: string = this.n_player.interpret(xml);
-			if (verbose)
-				console.log(`Responding with: ${response}\n`);
+			xml += data.toString();
 
-			this.socket.write(response);
+			let newline_ind = xml.indexOf("\n");
+
+			if (newline_ind != -1) {
+				let command = xml.slice(0, newline_ind);
+				xml = "";
+
+				let response: string = this.n_player.interpret(command);
+				if (verbose)
+					console.log(`Responding with: ${response}\n`);
+
+				this.socket.write(response);
+			}
 		});
 
 		this.socket.on('close', () => {

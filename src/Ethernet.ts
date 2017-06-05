@@ -24,8 +24,10 @@ export class Ethernet {
 				return this.getPlayerMoves(xml);
 			case "doubles-penalty":
 				return this.doublesPenaltyToPlayer();
-			default:
+			default: {
+				console.log(tag);
 				throw `Couldn't identify tag: ${tag}`;
+			}
 		}
 	}
 

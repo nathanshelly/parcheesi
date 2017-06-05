@@ -31,36 +31,34 @@ export class Rocky extends SelfNamingPlayer {
 
 	allMoves(board: Board, distances: number[]): _Move[][] {
 		let final_moves: _Move[][] = [];
-		this.allMovesHelper(board, distances, [], final_moves);
+		this.allMovesHelper(board, distances, [], final_moves, board);
 
-		return final_moves.filter(ms => {
-			let _board = _.cloneDeep(board);
-			let _moves = _.cloneDeep(ms);
-			let _distances = _.cloneDeep(distances);
-			let roll = new Roll(_board, this, _moves, _distances);
-
-			return roll.take();
-		});
+		return final_moves;
 	}
 
-	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][]): void {
+	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][], starting_board: Board): void {
 
 		if (final_moves.length > MAX_MOVES_TO_CONSIDER) {
 			return;
 		}
 
-		if(distances.length === 0) {
-			final_moves.push(current_moves);
-			return;
-		}
-			
 		let new_board: Board, new_distances: number[], new_current_moves: _Move[],
-				maybe_bonus: number | null, no_legal_moves: boolean = true;
+			maybe_bonus: number | null;
 
 		board.getPawnsOfColorInBase(this.color).forEach(pawn => {
 			let move: MoveEnter = new MoveEnter(pawn);
 			if (move.isLegal(board, this, distances)) {
-				no_legal_moves = false;
+
+				new_board = _.cloneDeep(board);
+				new_distances = _.cloneDeep(distances);
+				new_current_moves = _.cloneDeep(current_moves);
+				new_current_moves.push(move);
+
+				let roll = new Roll(new_board, this, new_current_moves, new_distances);
+				if (roll.take()) {
+					final_moves.push(new_current_moves);
+					return;
+				}
 
 				new_board = _.cloneDeep(board);
 				new_distances = _.cloneDeep(distances);
@@ -68,12 +66,12 @@ export class Rocky extends SelfNamingPlayer {
 				new_current_moves.push(move);
 
 				maybe_bonus = new_board.makeMove(move);
-				if(maybe_bonus !== null)
+				if (maybe_bonus !== null)
 					new_distances.push(maybe_bonus);
-				
+
 				new_distances = d.consumeMove(new_distances, move);
 
-				this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves);
+				this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_board);
 			}
 		});
 
@@ -81,8 +79,7 @@ export class Rocky extends SelfNamingPlayer {
 			distances.forEach(dist => {
 				let move: MoveForward = new MoveForward(pawn, dist);
 
-				if(move.isLegal(board, this, distances)) {
-					no_legal_moves = false;
+				if (move.isLegal(board, this, distances)) {
 
 					new_board = _.cloneDeep(board);
 					new_distances = _.cloneDeep(distances);
@@ -91,23 +88,31 @@ export class Rocky extends SelfNamingPlayer {
 					// add legal move to current move set
 					new_current_moves.push(move);
 
+					let roll = new Roll(new_board, this, new_current_moves, new_distances);
+					if (roll.take()) {
+						final_moves.push(new_current_moves);
+						return;
+					}
+
+					new_board = _.cloneDeep(board);
+					new_distances = _.cloneDeep(distances);
+					new_current_moves = _.cloneDeep(current_moves);
+					new_current_moves.push(move);
+					
 					// make move and adjust distances accordingly
 					maybe_bonus = new_board.makeMove(move);
-					if(maybe_bonus !== null)
+					if (maybe_bonus !== null)
 						new_distances.push(maybe_bonus);
-					
+
 					new_distances = d.consumeMove(new_distances, move);
-					
+
 					// recursively search for more moves
-					this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves);
+					this.allMovesHelper(new_board, new_distances, new_current_moves, final_moves, starting_board);
 				}
 			});
 		});
-
-		if(no_legal_moves)
-			final_moves.push(current_moves);
 	}
-	
+
 
 	// TODO: Encapsulate duplicate code in AllMovesHelper here
 	// allMovesIndividualMoveApplier() {

@@ -50,7 +50,7 @@ export class Roll {
 				return false;
 		}
 
-		if(this.reformedBlockade() && !this.madeAllLegalMoves())
+		if(this.reformedBlockade() || !this.madeAllLegalMoves())
 			return false;
 		
 		return true;
