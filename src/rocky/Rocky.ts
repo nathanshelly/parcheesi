@@ -4,7 +4,7 @@
 import * as _ from 'lodash'
 import * as util from 'util'
 import * as d from '../Distances'
-import * as c from '../Constants'
+import { MAX_MOVES_TO_CONSIDER } from './coach_config'
 
 import { Board } from '../Board'
 import { Roll } from '../Roll'
@@ -45,7 +45,7 @@ export class Rocky extends SelfNamingPlayer {
 
 	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][]): void {
 
-		if (final_moves.length > c.MAX_MOVES_TO_CONSIDER) {
+		if (final_moves.length > MAX_MOVES_TO_CONSIDER) {
 			return;
 		}
 

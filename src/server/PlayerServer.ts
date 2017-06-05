@@ -7,6 +7,8 @@ import { Ethernet } from '../Ethernet';
 import { FirstPawnMover } from '../FirstPawnMover'
 import { _Player } from '../_Player';
 
+import { Coach } from '../rocky/Coach'
+
 import * as config from './player_config';
 
 export class PlayerServer {
@@ -58,7 +60,9 @@ export class PlayerServer {
 }
 
 if (require.main == module) {
-	let s = new PlayerServer(new FirstPawnMover());
+	let rocky = new Coach().build_rocky();
+	let s = new PlayerServer(rocky);
+
 	s.start(
 		config.PORT,
 		false,

@@ -14,8 +14,12 @@ function prioritizeProgress(h: (Board, Color) => number[]): heur.Heuristic {
 
 export const params = {
 	learning_rate: 3,
-	n_games: 100
+	n_games: 30,
+	verbose: true
 }
+
+/* Cap on Rocky's thinking time */
+export const MAX_MOVES_TO_CONSIDER = 300;
 
 export const components: heur.HeuristicComponent[] = [
   {
@@ -31,8 +35,8 @@ export const components: heur.HeuristicComponent[] = [
 		description: "Pawns in home row"
   },
   {
-    heuristic: prioritizeProgress(heur.pawnsInMainRing),
-    weight: 20,
+    heuristic: justLength(heur.pawnsInMainRing),
+    weight: 75,
     multiplier: 1,
 		description: "Pawns in main ring"
   },

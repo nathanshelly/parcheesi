@@ -12,7 +12,7 @@ import { training_session } from './Referee'
 import * as heur from './Heuristics'
 import { components, params } from './coach_config'
 
-class Coach {
+export class Coach {
 	/* Heuristic components: Heuristic, weight, multiplier */
 	private components: heur.HeuristicComponent[];
 
@@ -28,7 +28,7 @@ class Coach {
 		};
 	}
 
-	private build_rocky(): Rocky {
+	build_rocky(): Rocky {
 		return new Rocky(this.compose_heuristic());
 	}
 
@@ -40,7 +40,7 @@ class Coach {
 		this.components[index].weight -= learn_rate;
 	}
 
-	train_rocky(learn_rate: number = params.learning_rate, n_games: number = params.n_games, verbose: boolean = false) {
+	train_rocky(learn_rate: number = params.learning_rate, n_games: number = params.n_games, verbose: boolean = params.verbose) {
 		let up = (index: number) => this.up_component_weight(index, learn_rate);
 		let down = (index: number) => this.down_component_weight(index, learn_rate);
 
