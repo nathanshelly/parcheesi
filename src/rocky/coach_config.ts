@@ -12,6 +12,11 @@ function prioritizeProgress(h: (Board, Color) => number[]): heur.Heuristic {
   return (brd: Board, col: Color) => h(brd, col).reduce((acc, offset) => acc + Math.pow(offset, 1.5));
 }
 
+export const params = {
+	learning_rate: 3,
+	n_games: 100
+}
+
 export const components: heur.HeuristicComponent[] = [
   {
     heuristic: heur.pawnsInHome,
