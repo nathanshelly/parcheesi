@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import * as c from './Constants'
+import * as d from './Distances'
 
 import { Pawn } from './Pawn'
 import { Color } from './Color';
@@ -39,6 +40,8 @@ export class Roll {
 			let move = this.moves.shift() as _Move;
 
 			if(move.isLegal(this.board, this.player, this.possible_distances)) {
+				this.possible_distances = d.consumeMove(this.possible_distances, move);
+
 				let possible_bonus: number | null = this.board.makeMove(move);
 				if(possible_bonus !== null)
 					this.possible_distances.push(possible_bonus)

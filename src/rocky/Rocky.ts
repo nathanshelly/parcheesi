@@ -6,6 +6,7 @@ import * as util from 'util'
 import * as d from '../Distances'
 
 import { Board } from '../Board'
+import { Roll } from '../Roll'
 import { Color } from '../Color'
 import { _Move } from '../_Move'
 import { MoveEnter } from '../MoveEnter'
@@ -31,7 +32,14 @@ export class Rocky extends SelfNamingPlayer {
 		let final_moves: _Move[][] = [];
 		this.allMovesHelper(board, distances, [], final_moves);
 
-		return final_moves;
+		return final_moves.filter(ms => {
+			let _board = _.cloneDeep(board);
+			let _moves = _.cloneDeep(ms);
+			let _distances = _.cloneDeep(distances);
+			let roll = new Roll(_board, this, _moves, _distances);
+
+			return roll.take();
+		});
 	}
 
 	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][]): void {
@@ -108,14 +116,13 @@ export class Rocky extends SelfNamingPlayer {
 			return this.heuristic(_brd, this.color)
 		};
 
-		console.log(brd);
-		console.log(distances);
+		let now = new Date().getTime();
+		console.log("About to compute all moves...");
 		let allMoves = this.allMoves(brd, distances);
-
-	console.log(allMoves.map((m) => util.inspect(m, false, undefined)));
 
 		let ret = _.maxBy(allMoves, goodness);
 
+		console.log(`Chose moves, took ${new Date().getTime() - now}ms`);
 		return ret ? ret : [];
 	}
 }
