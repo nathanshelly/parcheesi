@@ -47,3 +47,7 @@ export const TEST_BASE_INDEX = -1;
 
 // divide by two cuz typescript enum
 export const N_COLORS = Object.keys(Color).length / 2;
+
+// Cap on Rocky's thinking time
+export const MAX_MOVES_TO_CONSIDER = 300;
+

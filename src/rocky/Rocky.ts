@@ -4,6 +4,7 @@
 import * as _ from 'lodash'
 import * as util from 'util'
 import * as d from '../Distances'
+import * as c from '../Constants'
 
 import { Board } from '../Board'
 import { Roll } from '../Roll'
@@ -25,7 +26,7 @@ export class Rocky extends SelfNamingPlayer {
 	}
 
 	doublesPenalty(): void {
-		console.log("C'mon, champ, hit me in the face! My mom hits harder than you!");
+		// console.log("C'mon, champ, hit me in the face! My mom hits harder than you!");
 	}
 
 	allMoves(board: Board, distances: number[]): _Move[][] {
@@ -43,6 +44,11 @@ export class Rocky extends SelfNamingPlayer {
 	}
 
 	private allMovesHelper(board: Board, distances: number[], current_moves: _Move[], final_moves: _Move[][]): void {
+
+		if (final_moves.length > c.MAX_MOVES_TO_CONSIDER) {
+			return;
+		}
+
 		if(distances.length === 0) {
 			final_moves.push(current_moves);
 			return;
@@ -116,13 +122,10 @@ export class Rocky extends SelfNamingPlayer {
 			return this.heuristic(_brd, this.color)
 		};
 
-		let now = new Date().getTime();
-		console.log("About to compute all moves...");
 		let allMoves = this.allMoves(brd, distances);
 
 		let ret = _.maxBy(allMoves, goodness);
 
-		console.log(`Chose moves, took ${new Date().getTime() - now}ms`);
 		return ret ? ret : [];
 	}
 }

@@ -5,3 +5,4 @@ submission.tgz
 *.swp
 coverage
 .nyc_output
+training_output.log

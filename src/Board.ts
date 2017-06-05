@@ -222,7 +222,7 @@ export class Board {
 		let currently_blockaded_pawns = unique_blockaded_spots.map(spot => {
 			// need to cast because otherwise Typescript will think this is a
 			// heterogenous array
-			return [spot.getLivePawns().sort(), spot] as [Pawn[], _Spot];
+			return [spot.getLivePawns().sort((p1, p2) => p1.id - p2.id), spot] as [Pawn[], _Spot];
 		});
 		
 		return currently_blockaded_pawns;
