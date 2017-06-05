@@ -83,9 +83,7 @@ class Coach {
 				${rocky.name} won ${n_wins} games
 				Heuristics:
 				${this.components}
-				`,
-				(err) => console.log(err)
-			);
+				`);
 		}
 
 		if (verbose)
@@ -96,6 +94,6 @@ class Coach {
 }
 
 if (require.main == module) {
-	new Coach().train_rocky(1, 300, true);
+	new Coach().train_rocky(1, 5, false);
 }
 
