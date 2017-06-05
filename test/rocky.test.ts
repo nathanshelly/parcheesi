@@ -4,11 +4,14 @@ import { Pawn }  from '../src/Pawn'
 import { Board } from '../src/Board'
 import { Color } from '../src/Color'
 
+import * as dec from '../src/Decoder'
+
 import { _Move } from '../src/_Move'
 import { MoveEnter } from '../src/MoveEnter'
 import { MoveForward } from '../src/MoveForward'
 
 import { Rocky } from '../src/rocky/Rocky'
+import { Coach } from '../src/rocky/Coach'
 
 import 'mocha';
 import { expect } from 'chai';
@@ -18,7 +21,7 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 	
 	beforeEach(() => {
 		board = new Board();
-		rocky = new Rocky((brd: Board, col: Color) => { return 1; });
+		rocky = new Coach().build_rocky();
 		rocky.startGame(Color.blue);
 
 		pawns = [new Pawn(0, rocky.color), new Pawn(1, rocky.color),
@@ -145,4 +148,26 @@ describe('Filename: rocky.test.ts\n\nAll legal moves', () => {
 
 		expect(move_sets).to.deep.equal(expected_move_sets);
 	});
+
+	it('should find a MoveForward with distance 4 for each of two pawns in the home row in this instance we cheated on', () => {
+		let xml = "<do-move><board><start><pawn><color>yellow</color><id>3</id></pawn><pawn><color>yellow</color><id>0</id></pawn><pawn><color>red</color><id>1</id></pawn><pawn><color>green</color><id>3</id></pawn><pawn><color>blue</color><id>2</id></pawn><pawn><color>blue</color><id>1</id></pawn></start><main><piece-loc><pawn><color>red</color><id>0</id></pawn><loc>52</loc></piece-loc><piece-loc><pawn><color>blue</color><id>3</id></pawn><loc>39</loc></piece-loc><piece-loc><pawn><color>red</color><id>2</id></pawn><loc>38</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>1</id></pawn><loc>31</loc></piece-loc><piece-loc><pawn><color>yellow</color><id>2</id></pawn><loc>2</loc></piece-loc></main><home-rows><piece-loc><pawn><color>green</color><id>1</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>green</color><id>0</id></pawn><loc>1</loc></piece-loc><piece-loc><pawn><color>blue</color><id>0</id></pawn><loc>4</loc></piece-loc></home-rows><home><pawn><color>red</color><id>3</id></pawn><pawn><color>green</color><id>2</id></pawn></home></board><dice><die>4</die><die>4</die></dice></do-move>";
+
+		let [board, dice] = dec.doMoveXMLToBoardDice(xml);
+
+		let green_rocky = new Coach().build_rocky();
+		green_rocky.startGame(Color.green);
+
+		let move_sets = green_rocky.allMoves(board, dice);
+
+		expect(move_sets.length).to.equal(4);
+
+		let expected_move_sets = [
+			[new MoveForward(new Pawn(1, Color.green), 4)],
+			[new MoveForward(new Pawn(1, Color.green), 4)],
+			[new MoveForward(new Pawn(0, Color.green), 4)],
+			[new MoveForward(new Pawn(0, Color.green), 4)]
+		];
+
+		expect(move_sets).to.deep.equal(expected_move_sets);
+	})
 });

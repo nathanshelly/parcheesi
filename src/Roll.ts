@@ -78,13 +78,23 @@ export class Roll {
 		return main_ring_pawns.some(pawn => {
 			return this.possible_distances.some(distance => {
 				// TODO - test this
-				return new MoveForward(pawn, distance).isLegal(this.board, this.player, this.possible_distances);
+				let move = new MoveForward(pawn, distance)
+				let move_legal = move.isLegal(this.board, this.player, this.possible_distances);
+				
+				/* Important to only check reforms blockade if legal - otherwise danger of null */
+				return move_legal && !this.moveReformsBlockade(move);
 			});
 		});
 	}
 
-	reformedBlockade(): boolean {
-		let ending_blockades = this.board.getBlockadesOfColor(this.player.color);
+	moveReformsBlockade(move: MoveForward): boolean {
+		let _board = _.cloneDeep(this.board);
+		_board.makeMove(move);
+		return this.reformedBlockade(_board);
+	}
+
+	reformedBlockade(ending_board: Board = this.board): boolean {
+		let ending_blockades = ending_board.getBlockadesOfColor(this.player.color);
 		return this.starting_blockades.some(sb => {
 			return ending_blockades.some(eb => {
 				return _.isEqual(sb[0], eb[0]) && !_.isEqual(sb[1], eb[1]);
