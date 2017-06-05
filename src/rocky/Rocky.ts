@@ -122,13 +122,10 @@ export class Rocky extends SelfNamingPlayer {
 			return this.heuristic(_brd, this.color)
 		};
 
-		let now = new Date().getTime();
-		console.log("About to compute all moves...");
 		let allMoves = this.allMoves(brd, distances);
 
 		let ret = _.maxBy(allMoves, goodness);
 
-		console.log(`Chose moves, took ${new Date().getTime() - now}ms`);
 		return ret ? ret : [];
 	}
 }
