@@ -65,7 +65,7 @@ if (require.main == module) {
 
 	s.start(
 		config.PORT,
-		false,
+		true,
 		() => { console.log(`Player server listening on port ${config.PORT}`) },
 		() => { console.log("Player socket connected...") });
 }

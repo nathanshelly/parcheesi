@@ -8,6 +8,7 @@ import { PlayerServer } from '../server/PlayerServer';
 import { SelfNamingPlayer } from '../SelfNamingPlayer'
 import { FirstPawnMover } from '../FirstPawnMover';
 import { Rocky } from './Rocky'
+import { Coach } from './Coach'
 
 import * as config from '../server/player_config';
 
@@ -83,7 +84,7 @@ export function training_session(player: SelfNamingPlayer, num_games: number, co
 }
 
 if (require.main == module) {
-	let player = new Rocky((brd: Board, col: Color) => 1);
+	let player = new Coach().build_rocky();
 	let n_games = 20;
 	let verbose = true;
 
