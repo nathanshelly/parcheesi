@@ -1,1 +1,0 @@
-("6.9" ("3a062f0b1359bba10169487244cfee58ceee175c" . "7b847620227ba64444ad9f8b9a87e447b457e78b") #"/Users/robby/unison/proj/courses/395-2017-spring/parcheesi/parse.rkt" (collects #"games" #"parcheesi" #"moves.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"xml" #"main.rkt"))

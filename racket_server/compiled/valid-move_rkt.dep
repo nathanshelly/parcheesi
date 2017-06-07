@@ -1,0 +1,1 @@
+("6.9.0.5" ("3a062f0b1359bba10169487244cfee58ceee175c" . "e5ed47e814ebb559a9e35cc22e3ef35085e8af7b") #"/Users/sasha/.parcheesi/parcheesi/parse.rkt" (collects #"games" #"parcheesi" #"moves.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"xml" #"main.rkt"))
