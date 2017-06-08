@@ -6,3 +6,4 @@ submission.tgz
 coverage
 .nyc_output
 training_output.log
+yarn.lock

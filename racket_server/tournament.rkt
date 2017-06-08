@@ -25,8 +25,8 @@
                  (string->number (vector-ref (current-command-line-arguments) 0))))
 
 (define verbose (if (equal? (vector-length (current-command-line-arguments)) 2)
-								 #t
-								 #f))
+								 #f
+								 #t))
 
 (unless port
   (error 'tournament "expected a port number on the command line, found ~a" 
