@@ -15,7 +15,7 @@ import { _Move } from './_Move'
 import { MoveEnter } from './MoveEnter'
 import { MoveForward } from './MoveForward'
 
-var parser = new x2js();
+let parser = new x2js();
 
 export function startGameXMLToColor(start_game: string): Color {
 	let color: object = parser.xml2js(start_game);
@@ -53,7 +53,7 @@ export function pieceLocJSONToPawnAndLoc(piece_loc: object, is_loc_in_main_ring:
 export function pawnJSONToPawn(json: object): Pawn {
 	let id: number = parseInt(json["id"]);
 	let color: Color = parseInt(Color[json["color"]]);
-	
+
 	return new Pawn(id, color);
 }
 
