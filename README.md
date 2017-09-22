@@ -1,5 +1,5 @@
 # Parcheesi
-Built by Nathan Shelly and Sasha Weiss, for EECS 396 Software Development at Northwestern University, SQ17
+Built by Nathan Shelly and Sasha Weiss, for EECS 396 Software Constructionat Northwestern University, SQ17
 
 ## Overview
 This project is an implementation of the board game Parcheesi written in Typescript featuring networked play over TCP connections and Rocky, an AI opponent one can play against or add into human player games.
